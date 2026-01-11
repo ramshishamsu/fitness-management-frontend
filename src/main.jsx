@@ -8,7 +8,7 @@ import { AuthProvider } from "./context/AuthProvider";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY) : null;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
    <BrowserRouter>
