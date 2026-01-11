@@ -20,6 +20,7 @@ import UserPayments from "./pages/user/UserPayments";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import MyWorkouts from "./pages/user/MyWorkouts";
 import WorkoutLogger from "./pages/user/WorkoutLogger";
+import NutritionTracker from "./pages/user/NutritionTracker";
 import UserCheckout from "./pages/user/UserCheckout";
 import UserPlans from "./pages/user/UserPlans";
 import UserSubscription from "./pages/user/UserSubscription";
@@ -71,6 +72,7 @@ const App = () => {
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="profile" element={<UserProfile />} />
         <Route path="workout-logger" element={<WorkoutLogger />} />
+        <Route path="nutrition-tracker" element={<NutritionTracker />} />
         <Route path="my-workouts" element={<MyWorkouts />} />
         <Route path="trainers" element={<UserTrainers />} />
         <Route path="appointments" element={<UserAppointments />} />
