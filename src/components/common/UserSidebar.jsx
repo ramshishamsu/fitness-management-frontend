@@ -59,11 +59,11 @@ const UserSidebar = ({ sidebarOpen, setSidebarOpen }) => {
         <nav className="px-6 py-6 space-y-3 flex-1">
           <SideLink to="/user/dashboard" label="Dashboard" />
           <SideLink to="/user/profile" label="My Profile" />
-
           <SideLink to="/user/plans" label="Plans" />
           <SideLink to="/user/subscription" label="My Subscription" />
           <SideLink to="/user/trainers" label="Trainers" />
-          <SideLink to="/user/workouts" label="My Workouts" />
+          <SideLink to="/user/workout-logger" label="Log Workout" />
+          <SideLink to="/user/my-workouts" label="My Workouts" />
           <SideLink to="/user/appointments" label="Appointments" />
           <SideLink to="/user/payments" label="Payments" />
         </nav>

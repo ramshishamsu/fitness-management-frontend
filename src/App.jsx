@@ -19,6 +19,7 @@ import UserAppointments from "./pages/user/UserAppointments";
 import UserPayments from "./pages/user/UserPayments";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import MyWorkouts from "./pages/user/MyWorkouts";
+import WorkoutLogger from "./pages/user/WorkoutLogger";
 import UserCheckout from "./pages/user/UserCheckout";
 import UserPlans from "./pages/user/UserPlans";
 import UserSubscription from "./pages/user/UserSubscription";
@@ -69,35 +70,42 @@ const App = () => {
         <Route index element={<UserDashboard />} />
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="profile" element={<UserProfile />} />
+        <Route path="workout-logger" element={<WorkoutLogger />} />
+        <Route path="my-workouts" element={<MyWorkouts />} />
         <Route path="trainers" element={<UserTrainers />} />
         <Route path="appointments" element={<UserAppointments />} />
+        <Route path="plans" element={<UserPlans />} />
+        <Route path="subscription" element={<UserSubscription />} />
+        <Route path="checkout/:planId" element={<UserCheckout />} />
         <Route path="payments" element={<UserPayments />} />
-        <Route path="workouts" element={<MyWorkouts />} />
-         <Route path="plans" element={<UserPlans />} />
-        <Route path="/user/checkout/:planId" element={<UserCheckout />} />
-        <Route path="/user/subscription" element={<UserSubscription />} />
-        <Route path="/user/success" element={<UserPaymentSuccess />} />
+        <Route path="success" element={<UserPaymentSuccess />} />
       </Route>
 
       {/* ================= TRAINER ================= */}
       <Route path="/trainer/pending" element={<TrainerPending />} />
 
       <Route
+        path="/trainer"
+        element={
+          <TrainerProtectedRoute>
+            <TrainerLayout />
+          </TrainerProtectedRoute>
+        }
+      >
+        <Route index element={<TrainerDashboard />} />
+        <Route path="dashboard" element={<TrainerDashboard />} />
+        <Route path="profile" element={<TrainerProfile />} />
+        <Route path="users" element={<TrainerUsers />} />
+        <Route path="users/:id" element={<TrainerViewUserProfile />} />
+        <Route path="assign-workout/:id" element={<AssignWorkout />} />
+        <Route path="schedule" element={<TrainerSchedule />} />
+      </Route>
   path="/trainer"
   element={
     <TrainerProtectedRoute>
       <TrainerLayout />
     </TrainerProtectedRoute>
   }
->  <Route index element={<TrainerDashboard />} />
-  <Route path="dashboard" element={<TrainerDashboard />} />
-  <Route path="profile" element={<TrainerProfile />} />
-  <Route path="users" element={<TrainerUsers />} />
-  <Route path="users/:id" element={<TrainerViewUserProfile />} />
-  <Route path="assign-workout/:id" element={<AssignWorkout />} />
-  <Route path="schedule" element={<TrainerSchedule />} />
-</Route>
-
 
       {/* ================= ADMIN ================= */}
       <Route
@@ -109,7 +117,6 @@ const App = () => {
         }
       >
         <Route path="assign-plan" element={<AdminAssignPlan />} />
-
         <Route path="plans" element={<AdminPlans />} />
         <Route index element={<AdminDashboard />} />
         <Route path="dashboard" element={<AdminDashboard />} />
