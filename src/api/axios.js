@@ -9,7 +9,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://mainproject-4asn.onrender.com/api", // backend URL
+  baseURL: import.meta.env.VITE_API_URL + "/api", // backend URL
 });
 
 // Attach token automatically
