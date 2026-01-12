@@ -24,7 +24,7 @@ const AdminDashboard = () => {
   const fetchAdminStats = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/admin/stats');
+      const response = await axios.get('/admin/stats');
       setStats(response.data);
     } catch (error) {
       console.error('Error fetching admin stats:', error);
@@ -86,13 +86,13 @@ const AdminDashboard = () => {
           <StatCard
             title="Total Trainers"
             value={stats.totalTrainers}
-            icon={<FaDumbbell className="h-8 w-8" />}
+            icon={<Dumbbell className="h-8 w-8" />}
             color="bg-purple-600"
           />
           <StatCard
             title="Pending Trainers"
             value={stats.pendingTrainers}
-            icon={<FaExclamationTriangle className="h-8 w-8" />}
+            icon={<AlertTriangle className="h-8 w-8" />}
             color="bg-yellow-600"
           />
           <StatCard
@@ -110,7 +110,7 @@ const AdminDashboard = () => {
           <StatCard
             title="Pending Withdrawals"
             value={stats.pendingWithdrawals}
-            icon={<FaExclamationTriangle className="h-8 w-8" />}
+            icon={<AlertTriangle className="h-8 w-8" />}
             color="bg-red-600"
           />
           <StatCard
@@ -122,7 +122,7 @@ const AdminDashboard = () => {
           <StatCard
             title="Total Plans"
             value={stats.plans}
-            icon={<FaDumbbell className="h-8 w-8" />}
+            icon={<Dumbbell className="h-8 w-8" />}
             color="bg-orange-600"
           />
         </div>
