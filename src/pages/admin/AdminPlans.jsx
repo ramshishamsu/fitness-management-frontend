@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus, Edit, Trash2, Search, DollarSign, Check } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Check } from 'lucide-react';
 import axios from '../../api/axios';
 
 const AdminPlans = () => {
@@ -25,9 +25,11 @@ const AdminPlans = () => {
     try {
       setLoading(true);
       const response = await axios.get('/admin/plans');
-      setPlans(response.data.plans);
+      // Backend returns an array of plans
+      setPlans(response.data || []);
     } catch (error) {
       console.error('Error fetching plans:', error);
+      setPlans([]);
     } finally {
       setLoading(false);
     }
@@ -36,11 +38,15 @@ const AdminPlans = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // duration is entered in months in the UI; convert to days for backend
+      const months = parseInt(formData.duration, 10) || 0;
+      const durationDays = months > 0 ? months * 30 : 0;
+
       const planData = {
         ...formData,
         price: parseFloat(formData.price),
-        duration: parseInt(formData.duration),
-        features: formData.features.filter(f => f.trim() !== '')
+        duration: durationDays,
+        features: (formData.features || []).filter((f) => f.trim() !== '')
       };
 
       if (editingPlan) {
@@ -62,8 +68,9 @@ const AdminPlans = () => {
       name: plan.name,
       description: plan.description,
       price: plan.price.toString(),
-      duration: plan.duration.toString(),
-      features: plan.features.length > 0 ? plan.features : [''],
+      // Show duration in months in the UI (convert days -> months)
+      duration: plan.duration ? (plan.duration / 30).toString() : '',
+      features: plan.features && plan.features.length > 0 ? plan.features : [''],
       isActive: plan.isActive
     });
     setShowModal(true);
@@ -170,13 +177,11 @@ const AdminPlans = () => {
                   <p className="text-gray-600 mb-4">{plan.description}</p>
                   
                   <div className="flex items-center mb-4">
-                    <DollarSign className="h-5 w-5 text-green-600 mr-2" />
-                    <span className="text-2xl font-bold text-gray-900">${plan.price}</span>
-                    <span className="text-gray-500 ml-2">/{plan.duration} days</span>
+                    <span className="text-2xl font-bold text-gray-900">₹{plan.price}</span>
                   </div>
 
                   <div className="space-y-2 mb-6">
-                    {plan.features.map((feature, index) => (
+                    {(plan.features || []).map((feature, index) => (
                       <div key={index} className="flex items-center">
                         <Check className="h-4 w-4 text-green-500 mr-2" />
                         <span className="text-sm text-gray-700">{feature}</span>
@@ -238,7 +243,7 @@ const AdminPlans = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
                     <input
                       type="number"
                       required
@@ -249,14 +254,22 @@ const AdminPlans = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Duration (days)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Duration (months)</label>
                     <input
                       type="number"
                       required
+                      min="1"
                       value={formData.duration}
                       onChange={(e) => setFormData({...formData, duration: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     />
+                    <p className="text-xs text-gray-400 mt-1">Enter duration in months (e.g., 1 = 1 month)</p>
+                    {/* Show monthly price when filling/editing */}
+                    {formData.price && formData.duration && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        Monthly: ₹{(parseFloat(formData.price) / (parseFloat(formData.duration) || 1)).toFixed(2)} /month
+                      </div>
+                    )}
                   </div>
                 </div>
 

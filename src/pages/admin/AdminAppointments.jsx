@@ -22,7 +22,8 @@ const AdminAppointments = () => {
     try {
       setLoading(true);
       const res = await getAllAppointments();
-      setAppointments(res.data);
+      // API returns { appointments, pagination }
+      setAppointments(res.data?.appointments || []);
     } catch (error) {
       console.error("Failed to load appointments", error);
     } finally {

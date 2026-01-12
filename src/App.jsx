@@ -63,7 +63,7 @@ const App = () => {
       <Route
         path="/user"
         element={
-          <ProtectedRoute role="user">
+          <ProtectedRoute roles={["user"]}>
             <UserLayout />
           </ProtectedRoute>
         }
@@ -107,9 +107,9 @@ const App = () => {
       <Route
         path="/admin"
         element={
-          <ProtectedRoute role="admin">
+          <AdminProtectedRoute>
             <AdminLayout />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         }
       >
         <Route path="assign-plan" element={<AdminAssignPlan />} />

@@ -20,3 +20,6 @@ export const completeWorkout = (id) => {
 export const assignWorkout = (data) => {
   return API.post("/workouts/assign", data);
 };
+export const getUserWorkouts = (userId) => {
+  return API.get(`/workouts/user/${userId}`);
+};

@@ -8,7 +8,7 @@ const AdminAssignPlan = () => {
   const [selectedPlan, setSelectedPlan] = useState("");
 
   useEffect(() => {
-    adminApi.get("/users").then(res => setUsers(res.data));
+    adminApi.get("/users").then(res => setUsers(res.data?.users || []));
     adminApi.get("/plans").then(res => setPlans(res.data));
   }, []);
 

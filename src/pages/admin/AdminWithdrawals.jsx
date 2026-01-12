@@ -20,7 +20,8 @@ const AdminWithdrawals = () => {
     try {
       setLoading(true);
       const res = await getAllWithdrawals();
-      setWithdrawals(res.data);
+      // API returns { withdrawals, pagination }
+      setWithdrawals(res.data?.withdrawals || []);
     } catch (error) {
       console.error("Failed to load withdrawals", error);
     } finally {
@@ -96,7 +97,7 @@ const AdminWithdrawals = () => {
                 withdrawals.map((w) => (
                   <tr key={w._id} className="border-t">
                     <td className="p-3">
-                      {w.trainerId?.userId?.name || "N/A"}
+                      {w.trainer?.userId?.name || "N/A"}
                     </td>
                     <td className="p-3 font-semibold">
                       ₹{w.amount}

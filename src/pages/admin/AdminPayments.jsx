@@ -9,7 +9,8 @@ const AdminPayments = () => {
     try {
       setLoading(true);
       const res = await getAllPayments();
-      setPayments(res.data);
+      // API returns { payments, pagination }
+      setPayments(res.data?.payments || []);
     } catch (error) {
       console.error("Failed to load payments", error);
     } finally {

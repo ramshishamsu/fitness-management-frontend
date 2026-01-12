@@ -23,7 +23,7 @@ const UserTrainers = () => {
     <div className="grid md:grid-cols-3 gap-6">
       {trainers.map(trainer => (
         <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg">
-          <h2 className="font-bold">{trainer.name}</h2>
+          <h2 className="font-bold">{trainer.userId?.name || 'Unknown'}</h2>
           <p className="text-sm text-gray-400">{trainer.specialization}</p>
 
           <button

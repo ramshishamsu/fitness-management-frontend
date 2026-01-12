@@ -1,5 +1,5 @@
-import { useState } from "react";
-import Layout from "../../components/common/TrainerLayout";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { assignWorkout } from "../../api/workoutApi";
 import Loader from "../../components/common/Loader";
 
@@ -13,6 +13,8 @@ import Loader from "../../components/common/Loader";
 */
 
 const AssignWorkout = () => {
+  const { id: userIdParam } = useParams();
+
   const [form, setForm] = useState({
     user: "",
     exercise: "",
@@ -20,6 +22,12 @@ const AssignWorkout = () => {
     reps: "",
     calories: ""
   });
+
+  useEffect(() => {
+    if (userIdParam) {
+      setForm((f) => ({ ...f, user: userIdParam }));
+    }
+  }, [userIdParam]);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -71,10 +79,8 @@ const AssignWorkout = () => {
   };
 
   return (
-    <Layout>
-      <h1 className="text-2xl font-bold mb-6">
-        Assign Workout
-      </h1>
+    <div>
+      <h1 className="text-2xl font-bold mb-6">Assign Workout</h1>
 
       {loading && <Loader />}
 
@@ -97,9 +103,7 @@ const AssignWorkout = () => {
       >
         {/* USER ID */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            User ID
-          </label>
+          <label className="block text-sm font-medium mb-1">User ID</label>
           <input
             type="text"
             name="user"
@@ -113,9 +117,7 @@ const AssignWorkout = () => {
 
         {/* EXERCISE */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Exercise
-          </label>
+          <label className="block text-sm font-medium mb-1">Exercise</label>
           <input
             type="text"
             name="exercise"
@@ -129,9 +131,7 @@ const AssignWorkout = () => {
 
         {/* SETS */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Sets
-          </label>
+          <label className="block text-sm font-medium mb-1">Sets</label>
           <input
             type="number"
             name="sets"
@@ -144,9 +144,7 @@ const AssignWorkout = () => {
 
         {/* REPS */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Reps
-          </label>
+          <label className="block text-sm font-medium mb-1">Reps</label>
           <input
             type="number"
             name="reps"
@@ -159,9 +157,7 @@ const AssignWorkout = () => {
 
         {/* CALORIES */}
         <div className="mb-6">
-          <label className="block text-sm font-medium mb-1">
-            Calories
-          </label>
+          <label className="block text-sm font-medium mb-1">Calories</label>
           <input
             type="number"
             name="calories"
@@ -179,7 +175,7 @@ const AssignWorkout = () => {
           Assign Workout
         </button>
       </form>
-    </Layout>
+    </div>
   );
 };
 

@@ -1,91 +1,25 @@
-import axios from "axios";
+import axiosInstance from "./axios";
 
-/*
-|--------------------------------------------------------------------------
-| CREATE ADMIN AXIOS INSTANCE
-|--------------------------------------------------------------------------
-| - baseURL points to admin routes
-| - automatically used for all admin API calls
-*/
-const API = axios.create({
-  baseURL: "/api/admin"
-});
-// BLOCK / UNBLOCK USER
-export const toggleUserStatus = (id) =>
-  API.put(`/users/${id}/block`);
+// Helper wrapper that prefixes /admin to all calls and reuses axiosInstance (preserves auth header)
+const adminApi = {
+  get: (path, ...args) => axiosInstance.get(`/admin${path}`, ...args),
+  post: (path, ...args) => axiosInstance.post(`/admin${path}`, ...args),
+  put: (path, ...args) => axiosInstance.put(`/admin${path}`, ...args),
+  delete: (path, ...args) => axiosInstance.delete(`/admin${path}`, ...args),
+};
 
-/*
-|--------------------------------------------------------------------------
-| REQUEST INTERCEPTOR
-|--------------------------------------------------------------------------
-| - Runs BEFORE every request
-| - Attaches JWT token to Authorization header
-| - Keeps admin routes secure
-*/
-API.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
+// Convenience exports
+export const toggleUserStatus = (id) => adminApi.put(`/users/${id}/block`);
+export const getAdminStats = () => adminApi.get("/stats");
+export const getAllUsers = () => adminApi.get("/users");
+export const getAllTrainers = () => adminApi.get("/trainers");
+export const approveTrainer = (id) => adminApi.put(`/trainers/${id}/approve`);
+export const rejectTrainer = (id) => adminApi.put(`/trainers/${id}/reject`);
+export const getAllAppointments = () => adminApi.get("/appointments");
+export const getAllPayments = () => adminApi.get("/payments");
+export const getAllWithdrawals = () => adminApi.get("/withdrawals");
+export const approveWithdrawal = (id) => adminApi.put(`/withdrawals/${id}/approve`);
+export const rejectWithdrawal = (id) => adminApi.put(`/withdrawals/${id}/reject`);
 
-    if (token) {
-      // Ensure headers object exists
-      config.headers = config.headers || {};
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-export default API;
-
-export const getAdminStats = () => API.get("/stats");
-
-/*
-|--------------------------------------------------------------------------
-| USER MANAGEMENT
-|--------------------------------------------------------------------------
-*/
-export const getAllUsers = () => API.get("/users");
-
-/*
-|--------------------------------------------------------------------------
-| TRAINER MANAGEMENT
-|--------------------------------------------------------------------------
-*/
-export const getAllTrainers = () => API.get("/trainers");
-export const approveTrainer = (id) =>
-  API.put(`/trainers/${id}/approve`);
-export const rejectTrainer = (id) =>
-  API.put(`/trainers/${id}/reject`);
-
-/*
-|--------------------------------------------------------------------------
-| APPOINTMENTS
-|--------------------------------------------------------------------------
-*/
-export const getAllAppointments = () =>
-  API.get("/appointments");
-
-
-
-
-/*
-|--------------------------------------------------------------------------
-| PAYMENTS & WITHDRAWALS
-|--------------------------------------------------------------------------
-*/
-export const getAllPayments = () =>
-  API.get("/payments");
-
-export const getAllWithdrawals = () =>
-  API.get("/withdrawals");
-
-export const approveWithdrawal = (id) =>
-  API.put(`/withdrawals/${id}/approve`);
-
-export const rejectWithdrawal = (id) =>
-  API.put(`/withdrawals/${id}/reject`);
+export default adminApi;
  
