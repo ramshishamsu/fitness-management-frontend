@@ -28,6 +28,13 @@ const AdminDashboard = () => {
       setStats(response.data);
     } catch (error) {
       console.error('Error fetching admin stats:', error);
+      if (error.response?.status === 401) {
+        // Redirect to login if not authenticated
+        window.location.href = '/login';
+      } else if (error.response?.status === 403) {
+        // Redirect to home if not admin
+        window.location.href = '/';
+      }
     } finally {
       setLoading(false);
     }
@@ -147,7 +154,7 @@ const AdminDashboard = () => {
               </div>
             ) : (
               <div className="flex items-center justify-center h-full text-gray-500">
-                <FaChartLine className="h-12 w-12 mb-2" />
+                <TrendingUp className="h-12 w-12 mb-2" />
                 <p>No revenue data available</p>
               </div>
             )}
