@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaUsers, FaSearch, FaFilter, FaBan, FaCheck, FaTrash, FaEdit, FaEye, FaUserPlus } from 'react-icons/fa';
+import { Users, Search, Filter, Ban, Check, Trash, Edit, Eye, UserPlus } from 'lucide-react';
 import axios from '../../api/axios';
 
 const AdminUsers = () => {
@@ -122,7 +122,7 @@ const AdminUsers = () => {
                   placeholder="Search by name or email..."
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                <FaSearch className="absolute left-3 top-3 text-gray-400" />
+                <Search className="absolute left-3 top-3 text-gray-400" />
               </div>
             </div>
 
@@ -159,7 +159,7 @@ const AdminUsers = () => {
                 onClick={() => window.location.href = '/admin/create-user'}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
               >
-                <FaUserPlus className="mr-2" />
+                <UserPlus className="mr-2" />
                 Add User
               </button>
             </div>
@@ -249,14 +249,14 @@ const AdminUsers = () => {
                             className="text-blue-600 hover:text-blue-900"
                             title="View User Details"
                           >
-                            <FaEye />
+                            <Eye className="text-blue-600 hover:text-blue-900" />
                           </button>
                           <button
                             onClick={() => window.location.href = `/admin/users/${user._id}/edit`}
                             className="text-green-600 hover:text-green-900"
                             title="Edit User"
                           >
-                            <FaEdit />
+                            <Edit className="text-green-600 hover:text-green-900" />
                           </button>
                           <button
                             onClick={() => handleBlockUnblock(user._id)}
@@ -265,14 +265,14 @@ const AdminUsers = () => {
                             }`}
                             title={user.isBlocked ? 'Unblock User' : 'Block User'}
                           >
-                            {user.isBlocked ? <FaCheck /> : <FaBan />}
+                            {user.isBlocked ? <Check className="text-green-600 hover:text-green-900" /> : <Ban className="text-yellow-600 hover:text-yellow-900" />}
                           </button>
                           <button
                             onClick={() => handleDeleteUser(user._id)}
                             className="text-red-600 hover:text-red-900"
                             title="Delete User"
                           >
-                            <FaTrash />
+                            <Trash className="text-red-600 hover:text-red-900" />
                           </button>
                         </div>
                       </td>

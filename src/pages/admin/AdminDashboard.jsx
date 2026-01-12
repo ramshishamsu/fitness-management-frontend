@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaUsers, FaDumbbell, FaCalendarAlt, FaMoneyBillWave, FaChartLine, FaUserClock, FaExclamationTriangle } from 'react-icons/fa';
+import { Users, Dumbbell, Calendar, DollarSign, TrendingUp, Activity, AlertTriangle } from 'lucide-react';
 import axios from '../../api/axios';
 
 const AdminDashboard = () => {
@@ -73,14 +73,14 @@ const AdminDashboard = () => {
           <StatCard
             title="Total Users"
             value={stats.totalUsers}
-            icon={<FaUsers className="h-8 w-8" />}
+            icon={<Users className="h-8 w-8" />}
             color="bg-blue-600"
             trend={stats.activeUsers > 0 ? ((stats.activeUsers / stats.totalUsers) * 100) - 100 : 0}
           />
           <StatCard
             title="Active Users"
             value={stats.activeUsers}
-            icon={<FaUserClock className="h-8 w-8" />}
+            icon={<Activity className="h-8 w-8" />}
             color="bg-green-600"
           />
           <StatCard
@@ -98,13 +98,13 @@ const AdminDashboard = () => {
           <StatCard
             title="Total Appointments"
             value={stats.appointments}
-            icon={<FaCalendarAlt className="h-8 w-8" />}
+            icon={<Calendar className="h-8 w-8" />}
             color="bg-indigo-600"
           />
           <StatCard
             title="Total Payments"
             value={stats.payments}
-            icon={<FaMoneyBillWave className="h-8 w-8" />}
+            icon={<DollarSign className="h-8 w-8" />}
             color="bg-green-600"
           />
           <StatCard
@@ -116,7 +116,7 @@ const AdminDashboard = () => {
           <StatCard
             title="Total Revenue"
             value={`$${stats.totalRevenue.toLocaleString()}`}
-            icon={<FaChartLine className="h-8 w-8" />}
+            icon={<TrendingUp className="h-8 w-8" />}
             color="bg-emerald-600"
           />
           <StatCard
