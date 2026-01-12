@@ -23,9 +23,24 @@ const AssignWorkout = () => {
     calories: ""
   });
 
+  const [userName, setUserName] = useState("");
+
   useEffect(() => {
     if (userIdParam) {
       setForm((f) => ({ ...f, user: userIdParam }));
+
+      // Fetch user name for display (helpful when opening from modal)
+      (async () => {
+        try {
+          const res = await fetch(`/api/users/${userIdParam}`);
+          if (res.ok) {
+            const data = await res.json();
+            setUserName(data.name || "");
+          }
+        } catch (err) {
+          // ignore -- optional enhancement
+        }
+      })();
     }
   }, [userIdParam]);
 
@@ -104,15 +119,32 @@ const AssignWorkout = () => {
         {/* USER ID */}
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">User ID</label>
-          <input
-            type="text"
-            name="user"
-            value={form.user}
-            onChange={handleChange}
-            required
-            placeholder="Enter User ID"
-            className="w-full border px-3 py-2 rounded"
-          />
+
+          {/* when opened with a user id, show read-only id + name */}
+          {userIdParam ? (
+            <div>
+              <input
+                type="text"
+                name="user"
+                value={form.user}
+                readOnly
+                className="w-full border px-3 py-2 rounded bg-neutral-900 text-neutral-200"
+              />
+              {userName && (
+                <div className="text-sm text-neutral-400 mt-1">{userName}</div>
+              )}
+            </div>
+          ) : (
+            <input
+              type="text"
+              name="user"
+              value={form.user}
+              onChange={handleChange}
+              required
+              placeholder="Enter User ID"
+              className="w-full border px-3 py-2 rounded"
+            />
+          )}
         </div>
 
         {/* EXERCISE */}
@@ -125,6 +157,7 @@ const AssignWorkout = () => {
             onChange={handleChange}
             required
             placeholder="Push Ups"
+            autoFocus
             className="w-full border px-3 py-2 rounded"
           />
         </div>

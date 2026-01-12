@@ -21,6 +21,6 @@ export const requestWithdrawal = async (amount) => {
 export const getMyWithdrawals = async () => {
   return API.get("/trainers/withdrawals");
 };
-export const getTrainerUsers = () => {
- return API.get("/trainers/users");
+export const getTrainerUsers = (params) => {
+  return API.get("/trainers/users", { params });
 };

@@ -5,16 +5,25 @@ import { Link } from "react-router-dom";
 
 const TrainerUsers = () => {
   const [users, setUsers] = useState([]);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    getTrainerUsers().then((res) => {
+    getTrainerUsers(showAll ? { all: "true" } : undefined).then((res) => {
       setUsers(res.data);
     });
-  }, []);
+  }, [showAll]);
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">My Clients</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold">{showAll ? "All Users" : "My Clients"}</h2>
+        <button
+          onClick={() => setShowAll((s) => !s)}
+          className="px-3 py-1 text-sm bg-neutral-800 rounded"
+        >
+          {showAll ? "Show Assigned Clients" : "Show All Users"}
+        </button>
+      </div>
 
       {users.length === 0 ? (
         <div className="text-neutral-400">No clients found yet.</div>
