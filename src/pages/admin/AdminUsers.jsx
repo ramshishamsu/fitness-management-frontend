@@ -26,7 +26,7 @@ const AdminUsers = () => {
         ...(statusFilter && { status })
       });
 
-      const response = await axios.get(`/api/admin/users?${params}`);
+      const response = await axios.get(`/admin/users?${params}`);
       setUsers(response.data.users);
       setTotalPages(response.data.pagination.pages);
     } catch (error) {
@@ -38,7 +38,7 @@ const AdminUsers = () => {
 
   const handleBlockUnblock = async (userId) => {
     try {
-      await axios.put(`/api/admin/users/${userId}/block`);
+      await axios.put(`/admin/users/${userId}/toggle-block`);
       fetchUsers(); // Refresh the list
     } catch (error) {
       console.error('Error blocking/unblocking user:', error);
@@ -48,7 +48,7 @@ const AdminUsers = () => {
   const handleDeleteUser = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
       try {
-        await axios.delete(`/api/admin/users/${userId}`);
+        await axios.delete(`/admin/users/${userId}`);
         fetchUsers(); // Refresh the list
       } catch (error) {
         console.error('Error deleting user:', error);

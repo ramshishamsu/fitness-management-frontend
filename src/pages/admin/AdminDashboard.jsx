@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Dumbbell, Calendar, DollarSign, TrendingUp, Activity, AlertTriangle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Users, Dumbbell, Calendar, DollarSign, TrendingUp, Activity, AlertTriangle, CreditCard, UserCheck, FileText, Settings } from 'lucide-react';
 import axios from '../../api/axios';
 
 const AdminDashboard = () => {
@@ -164,17 +165,17 @@ const AdminDashboard = () => {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">User Management</h3>
             <div className="space-y-3">
-              <a
-                href="/admin/users"
+              <Link
+                to="/admin/users"
                 className="flex items-center justify-between p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
               >
                 <span className="text-blue-700 font-medium">Manage Users</span>
                 <Users className="text-blue-500" />
-              </a>
-              <a
-                href="/admin/trainers"
+              </Link>
+              <Link
+                to="/admin/trainers"
                 className="flex items-center justify-between p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
               >
                 <span className="text-purple-700 font-medium">Trainer Approvals</span>
@@ -183,9 +184,22 @@ const AdminDashboard = () => {
                     {stats.pendingTrainers}
                   </span>
                 )}
-              </a>
-              <a
-                href="/admin/withdrawals"
+              </Link>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Financial Management</h3>
+            <div className="space-y-3">
+              <Link
+                to="/admin/payments"
+                className="flex items-center justify-between p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+              >
+                <span className="text-green-700 font-medium">Payments</span>
+                <DollarSign className="text-green-500" />
+              </Link>
+              <Link
+                to="/admin/withdrawals"
                 className="flex items-center justify-between p-3 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
               >
                 <span className="text-red-700 font-medium">Withdrawal Requests</span>
@@ -194,43 +208,72 @@ const AdminDashboard = () => {
                     {stats.pendingWithdrawals}
                   </span>
                 )}
-              </a>
+              </Link>
+              <Link
+                to="/admin/plans"
+                className="flex items-center justify-between p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
+              >
+                <span className="text-orange-700 font-medium">Manage Plans</span>
+                <FileText className="text-orange-500" />
+              </Link>
             </div>
           </div>
 
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">System Health</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Operations</h3>
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                <span className="text-green-700 font-medium">System Status</span>
-                <span className="text-green-600">● Operational</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                <span className="text-blue-700 font-medium">Database</span>
-                <span className="text-blue-600">● Connected</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                <span className="text-purple-700 font-medium">Last Backup</span>
-                <span className="text-purple-600">2 hours ago</span>
-              </div>
+              <Link
+                to="/admin/appointments"
+                className="flex items-center justify-between p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
+              >
+                <span className="text-indigo-700 font-medium">Appointments</span>
+                <Calendar className="text-indigo-500" />
+              </Link>
+              <Link
+                to="/admin/assign-plan"
+                className="flex items-center justify-between p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors"
+              >
+                <span className="text-teal-700 font-medium">Assign Plan</span>
+                <UserCheck className="text-teal-500" />
+              </Link>
             </div>
           </div>
+        </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-            <div className="space-y-2">
-              <div className="flex items-center p-2 bg-gray-50 rounded">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-                <span className="text-sm text-gray-700">New user registration spike detected</span>
-              </div>
-              <div className="flex items-center p-2 bg-yellow-50 rounded">
-                <div className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
-                <span className="text-sm text-gray-700">Payment processing delay reported</span>
-              </div>
-              <div className="flex items-center p-2 bg-blue-50 rounded">
-                <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                <span className="text-sm text-gray-700">System update completed</span>
-              </div>
+        {/* System Health */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">System Health</h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+              <span className="text-green-700 font-medium">System Status</span>
+              <span className="text-green-600">● Operational</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+              <span className="text-blue-700 font-medium">Database</span>
+              <span className="text-blue-600">● Connected</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+              <span className="text-purple-700 font-medium">Last Backup</span>
+              <span className="text-purple-600">2 hours ago</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+          <div className="space-y-3">
+            <div className="flex items-center p-2 bg-green-50 rounded">
+              <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+              <span className="text-sm text-gray-700">New user registration</span>
+            </div>
+            <div className="flex items-center p-2 bg-yellow-50 rounded">
+              <div className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
+              <span className="text-sm text-gray-700">Payment processing delay reported</span>
+            </div>
+            <div className="flex items-center p-2 bg-blue-50 rounded">
+              <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+              <span className="text-sm text-gray-700">System update completed</span>
             </div>
           </div>
         </div>
