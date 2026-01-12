@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPlus, FaTrash, FaEdit, FaSearch, FaFilter } from 'react-icons/fa';
+import { Plus, Trash, Edit, Search, Filter } from 'lucide-react';
 import axios from '../api/axios';
 
 const WorkoutLogger = () => {
@@ -237,7 +237,7 @@ const WorkoutLogger = () => {
                   onClick={() => setShowExerciseLibrary(true)}
                   className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center"
                 >
-                  <FaPlus className="mr-2" />
+                  <Plus className="mr-2" />
                   Add from Library
                 </button>
               </div>
@@ -251,7 +251,7 @@ const WorkoutLogger = () => {
                       onClick={() => removeExercise(index)}
                       className="text-red-600 hover:text-red-800"
                     >
-                      <FaTrash />
+                      <Trash />
                     </button>
                   </div>
 
@@ -344,7 +344,7 @@ const WorkoutLogger = () => {
                   }}
                   className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
                 >
-                  <FaPlus className="mr-2" />
+                  <Plus className="mr-2" />
                   Add Custom Exercise
                 </button>
               </div>
@@ -519,13 +519,13 @@ const WorkoutLogger = () => {
                         onClick={() => navigate(`/workouts/${workout._id}`)}
                         className="text-blue-600 hover:text-blue-800"
                       >
-                        <FaEdit />
+                        <Edit />
                       </button>
                       <button
                         onClick={() => deleteWorkout(workout._id)}
                         className="text-red-600 hover:text-red-800"
                       >
-                        <FaTrash />
+                        <Trash />
                       </button>
                     </div>
                   </div>
