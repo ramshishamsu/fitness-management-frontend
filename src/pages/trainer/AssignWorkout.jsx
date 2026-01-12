@@ -87,7 +87,17 @@ const AssignWorkout = () => {
     setLoading(true);
 
     try {
-      await axios.post('workouts/assign', form);
+      // Extract first exercise for simple assignment
+      const firstExercise = form.exercises[0];
+      const assignmentData = {
+        user: form.user,
+        exercise: firstExercise.name,
+        sets: firstExercise.sets,
+        reps: firstExercise.reps,
+        calories: firstExercise.calories
+      };
+
+      await axios.post('workouts/assign', assignmentData);
       setMessage("Workout assigned successfully ✅");
     } catch (err) {
       setError(
