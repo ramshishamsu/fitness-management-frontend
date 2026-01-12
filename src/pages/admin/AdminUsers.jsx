@@ -1,174 +1,321 @@
-import { useEffect, useState } from "react";
-import AdminLayout from "../../components/common/AdminLayout";
-import {
-  getAllUsers,
-  toggleUserStatus
-} from "../../api/adminApi";
+import React, { useState, useEffect } from 'react';
+import { FaUsers, FaSearch, FaFilter, FaBan, FaCheck, FaTrash, FaEdit, FaEye, FaUserPlus } from 'react-icons/fa';
+import axios from '../../api/axios';
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN USERS MANAGEMENT PAGE
-|--------------------------------------------------------------------------
-| - View all users
-| - Block / Unblock users
-| - Admin only
-*/
 const AdminUsers = () => {
-  // Store users list
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
-  // Loading state
-  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetchUsers();
+  }, [currentPage, searchTerm, roleFilter, statusFilter]);
 
-  /*
-  |--------------------------------------------------------------------------
-  | FETCH ALL USERS
-  |--------------------------------------------------------------------------
-  */
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await getAllUsers();
-      setUsers(res.data); // backend returns users array
-    } catch (err) {
-      console.error("Failed to fetch users:", err);
+      const params = new URLSearchParams({
+        page: currentPage,
+        limit: 10,
+        ...(searchTerm && { search: searchTerm }),
+        ...(roleFilter && { role }),
+        ...(statusFilter && { status })
+      });
+
+      const response = await axios.get(`/api/admin/users?${params}`);
+      setUsers(response.data.users);
+      setTotalPages(response.data.pagination.pages);
+    } catch (error) {
+      console.error('Error fetching users:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | BLOCK / UNBLOCK USER
-  |--------------------------------------------------------------------------
-  */
-  const handleBlockToggle = async (userId) => {
-    const confirmAction = window.confirm(
-      "Are you sure you want to change this user's status?"
-    );
-
-    if (!confirmAction) return;
-
+  const handleBlockUnblock = async (userId) => {
     try {
-      await toggleUserStatus(userId); // API call
-      fetchUsers(); // refresh users list
+      await axios.put(`/api/admin/users/${userId}/block`);
+      fetchUsers(); // Refresh the list
     } catch (error) {
-      console.error("Block/Unblock failed:", error);
-      alert("Action failed. Please try again.");
+      console.error('Error blocking/unblocking user:', error);
     }
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | LOAD USERS ON PAGE LOAD
-  |--------------------------------------------------------------------------
-  */
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+      try {
+        await axios.delete(`/api/admin/users/${userId}`);
+        fetchUsers(); // Refresh the list
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
+    }
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
+  const handleRoleFilter = (e) => {
+    setRoleFilter(e.target.value);
+    setCurrentPage(1); // Reset to first page when filtering
+  };
+
+  const handleStatusFilter = (e) => {
+    setStatusFilter(e.target.value);
+    setCurrentPage(1); // Reset to first page when filtering
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      active: { color: 'bg-green-100 text-green-800', text: 'Active' },
+      blocked: { color: 'bg-red-100 text-red-800', text: 'Blocked' },
+      pending: { color: 'bg-yellow-100 text-yellow-800', text: 'Pending' }
+    };
+    return statusConfig[status] || { color: 'bg-gray-100 text-gray-800', text: status };
+  };
+
+  const getRoleBadge = (role) => {
+    const roleConfig = {
+      admin: { color: 'bg-purple-100 text-purple-800', text: 'Admin' },
+      trainer: { color: 'bg-blue-100 text-blue-800', text: 'Trainer' },
+      user: { color: 'bg-gray-100 text-gray-800', text: 'User' }
+    };
+    return roleConfig[role] || { color: 'bg-gray-100 text-gray-800', text: role };
+  };
+
+  if (loading && users.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
-    <>
-      {/* PAGE HEADER */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">
-          User Management
-        </h1>
-        <p className="text-gray-500">
-          View and manage platform users
-        </p>
-      </div>
-
-      {/* LOADING STATE */}
-      {loading ? (
-        <div className="text-center py-10 text-gray-500">
-          Loading users...
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
+          <p className="text-gray-600">Manage all registered users and their permissions</p>
         </div>
-      ) : (
-        <div className="bg-white shadow rounded-lg overflow-x-auto">
-          <table className="w-full text-sm">
-            {/* TABLE HEADER */}
-            <thead className="bg-gray-100 text-gray-700">
-              <tr>
-                <th className="p-3 text-left">Name</th>
-                <th className="p-3 text-left">Email</th>
-                <th className="p-3 text-left">Role</th>
-                <th className="p-3 text-left">Status</th>
-                <th className="p-3 text-center">Actions</th>
-              </tr>
-            </thead>
 
-            {/* TABLE BODY */}
-            <tbody>
-              {users.map((user) => (
-                <tr
-                  key={user._id}
-                  className="border-t hover:bg-gray-50"
-                >
-                  {/* NAME */}
-                  <td className="p-3 font-medium">
-                    {user.name}
-                  </td>
+        {/* Filters and Search */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Search Users</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  placeholder="Search by name or email..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <FaSearch className="absolute left-3 top-3 text-gray-400" />
+              </div>
+            </div>
 
-                  {/* EMAIL */}
-                  <td className="p-3">
-                    {user.email}
-                  </td>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Role Filter</label>
+              <select
+                value={roleFilter}
+                onChange={handleRoleFilter}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">All Roles</option>
+                <option value="user">Users</option>
+                <option value="trainer">Trainers</option>
+                <option value="admin">Admins</option>
+              </select>
+            </div>
 
-                  {/* ROLE */}
-                  <td className="p-3 capitalize">
-                    {user.role}
-                  </td>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status Filter</label>
+              <select
+                value={statusFilter}
+                onChange={handleStatusFilter}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="blocked">Blocked</option>
+                <option value="pending">Pending</option>
+              </select>
+            </div>
 
-                  {/* STATUS */}
-                  <td className="p-3">
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-semibold
-                        ${
-                          user.isBlocked
-                            ? "bg-red-100 text-red-600"
-                            : "bg-green-100 text-green-600"
-                        }`}
-                    >
-                      {user.isBlocked ? "Blocked" : "Active"}
-                    </span>
-                  </td>
+            <div className="flex items-end">
+              <button
+                onClick={() => window.location.href = '/admin/create-user'}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+              >
+                <FaUserPlus className="mr-2" />
+                Add User
+              </button>
+            </div>
+          </div>
+        </div>
 
-                  {/* ACTION BUTTON (FIXED ✅) */}
-                  <td className="p-3 text-center">
-                    <button
-                      onClick={() =>
-                        handleBlockToggle(user._id)
-                      }
-                      className={`px-3 py-1 text-xs rounded font-semibold
-                        ${
-                          user.isBlocked
-                            ? "bg-green-600 text-white"
-                            : "bg-yellow-500 text-white"
-                        }`}
-                    >
-                      {user.isBlocked ? "Unblock" : "Block"}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-
-              {/* EMPTY STATE */}
-              {users.length === 0 && (
+        {/* Users Table */}
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
                 <tr>
-                  <td
-                    colSpan="5"
-                    className="text-center py-6 text-gray-500"
-                  >
-                    No users found
-                  </td>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subscription</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {loading ? (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-4 text-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+                    </td>
+                  </tr>
+                ) : users.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+                      No users found matching your criteria
+                    </td>
+                  </tr>
+                ) : (
+                  users.map((user) => (
+                    <tr key={user._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                            {user.profileImage ? (
+                              <img
+                                src={user.profileImage}
+                                alt={user.name}
+                                className="h-10 w-10 rounded-full object-cover"
+                              />
+                            ) : (
+                              <FaUsers className="text-gray-400" />
+                            )}
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                            <div className="text-sm text-gray-500">{user.email}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getRoleBadge(user.role).color}`}>
+                          {getRoleBadge(user.role).text}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(user.status).color}`}>
+                          {getStatusBadge(user.status).text}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {user.subscription ? (
+                          <div>
+                            <div className="text-sm text-gray-900">
+                              {user.subscription.plan?.name || 'Active Plan'}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              Expires: {new Date(user.subscription.endDate).toLocaleDateString()}
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-sm text-gray-500">No subscription</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(user.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => window.location.href = `/admin/users/${user._id}`}
+                            className="text-blue-600 hover:text-blue-900"
+                            title="View User Details"
+                          >
+                            <FaEye />
+                          </button>
+                          <button
+                            onClick={() => window.location.href = `/admin/users/${user._id}/edit`}
+                            className="text-green-600 hover:text-green-900"
+                            title="Edit User"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            onClick={() => handleBlockUnblock(user._id)}
+                            className={`${
+                              user.isBlocked ? 'text-green-600 hover:text-green-900' : 'text-yellow-600 hover:text-yellow-900'
+                            }`}
+                            title={user.isBlocked ? 'Unblock User' : 'Block User'}
+                          >
+                            {user.isBlocked ? <FaCheck /> : <FaBan />}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteUser(user._id)}
+                            className="text-red-600 hover:text-red-900"
+                            title="Delete User"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                
+                <span className="text-sm text-gray-700">
+                  Page {currentPage} of {totalPages}
+                </span>
+                
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+              
+              <div className="text-sm text-gray-700">
+                Showing {users.length} of {totalPages * 10} users
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 
