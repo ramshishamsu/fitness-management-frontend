@@ -102,12 +102,6 @@ const App = () => {
         <Route path="assign-workout/:id" element={<AssignWorkout />} />
         <Route path="schedule" element={<TrainerSchedule />} />
       </Route>
-  path="/trainer"
-  element={
-    <TrainerProtectedRoute>
-      <TrainerLayout />
-    </TrainerProtectedRoute>
-  }
 
       {/* ================= ADMIN ================= */}
       <Route
