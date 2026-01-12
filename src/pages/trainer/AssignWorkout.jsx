@@ -87,7 +87,7 @@ const AssignWorkout = () => {
     setLoading(true);
 
     try {
-      await axios.post('/api/workouts/assign', form);
+      await axios.post('workouts/assign', form);
       setMessage("Workout assigned successfully ✅");
     } catch (err) {
       setError(
