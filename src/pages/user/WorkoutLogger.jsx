@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Trash, Edit, Search, Filter } from 'lucide-react';
-import axios from '../api/axios';
+import axios from '../../api/axios';
 
 const WorkoutLogger = () => {
   const navigate = useNavigate();
