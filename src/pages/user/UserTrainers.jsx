@@ -53,7 +53,7 @@ const UserTrainers = () => {
   return (
     <UserLayout>
       <div className="p-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold mb-8 text-white">Available Trainers</h1>
           
           {/* Debug state */}
@@ -65,21 +65,21 @@ const UserTrainers = () => {
               <p className="text-gray-400 text-sm mt-2">Check browser console for API errors</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {trainers.map(trainer => (
-                <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg">
+                <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg hover:scale-105">
                   <div className="mb-4">
                     {trainer.profileImage && (
                       <img 
                         src={trainer.profileImage} 
                         alt={trainer.userId?.name || 'Trainer'}
-                        className="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-2 border-gray-600"
+                        className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-2 border-gray-600"
                       />
                     )}
                     <h3 className="text-xl font-bold text-white mb-2 text-center">
                       {trainer.userId?.name || 'Trainer'}
                     </h3>
-                    <p className="text-gray-300 mb-4 text-center">
+                    <p className="text-gray-300 mb-4 text-center text-sm">
                       {trainer.specialization || 'Fitness Trainer'}
                     </p>
                     <div className="text-center text-sm text-gray-400 space-y-1">
