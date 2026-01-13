@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Search, DollarSign, Check, CreditCard, Clock, Star } from 'lucide-react';
+import { Search, Check, CreditCard, Clock, Star } from 'lucide-react';
 import axios from '../../api/axios';
 import { useNavigate } from "react-router-dom";
 
@@ -105,8 +105,7 @@ const UserPlans = () => {
                   <p className="text-gray-600 mb-6">{plan.description}</p>
                   
                   <div className="flex items-center mb-6">
-                    <DollarSign className="h-6 w-6 text-green-600 mr-2" />
-                    <span className="text-3xl font-bold text-gray-900">${plan.price}</span>
+                    <span className="text-3xl font-bold text-gray-900">₹{plan.price}</span>
                     <span className="text-gray-500 ml-2">/{plan.duration} days</span>
                   </div>
 
@@ -137,7 +136,7 @@ const UserPlans = () => {
             <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <DollarSign className="h-8 w-8 text-blue-600" />
+                  <span className="text-blue-600 font-bold">₹</span>
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 mb-2">Confirm Purchase</h2>
                 <p className="text-gray-600 mb-4">You're about to purchase the {selectedPlan.name} plan</p>
@@ -148,12 +147,12 @@ const UserPlans = () => {
                     <span className="font-medium">{selectedPlan.name}</span>
                   </div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-600">Duration:</span>
+                    <span className="font-medium">{selectedPlan.name}</span>
                     <span className="font-medium">{selectedPlan.duration} days</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Total:</span>
-                    <span className="text-2xl font-bold text-green-600">${selectedPlan.price}</span>
+                    <span className="text-2xl font-bold text-green-600">₹{selectedPlan.price}</span>
                   </div>
                 </div>
               </div>
