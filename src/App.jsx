@@ -24,6 +24,7 @@ import UserCheckout from "./pages/user/UserCheckout";
 import UserPlans from "./pages/user/UserPlans";
 import UserSubscription from "./pages/user/UserSubscription";
 import UserPaymentSuccess from "./pages/user/UserPaymentSuccess";
+import UserPaymentCancel from "./pages/user/UserPaymentCancel";
 
 // TRAINER
 import TrainerPending from "./pages/trainerStatus/TrainerPending";
@@ -79,6 +80,7 @@ const App = () => {
         <Route path="checkout/:planId" element={<UserCheckout />} />
         <Route path="payments" element={<UserPayments />} />
         <Route path="success" element={<UserPaymentSuccess />} />
+        <Route path="cancel" element={<UserPaymentCancel />} />
       </Route>
 
       {/* ================= TRAINER ================= */}
