@@ -3,6 +3,7 @@ import axiosInstance from "../../api/axios";
 import { CheckCircle2, Circle, Dumbbell } from "lucide-react";
 import UserLayout from "../../components/common/UserLayout";
 
+
 const MyWorkouts = () => {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -236,9 +237,8 @@ const MyWorkouts = () => {
           </p>
         </div>
       )}
-      </div>
-    </UserLayout>
-  );
-};
+    </div>
+  </UserLayout>
+);
 
 export default MyWorkouts;
