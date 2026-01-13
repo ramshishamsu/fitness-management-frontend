@@ -6,16 +6,28 @@ const MyWorkouts = () => {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterCompleted, setFilterCompleted] = useState(null);
+  const [error, setError] = useState(null);
+  const [requiresSubscription, setRequiresSubscription] = useState(false);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
+    setRequiresSubscription(false);
     const params = filterCompleted !== null ? { completed: filterCompleted } : {};
     axiosInstance
       .get("/workouts/my", { params })
       .then((res) => {
         setWorkouts(Array.isArray(res.data) ? res.data : res.data.workouts || []);
       })
-      .catch((err) => console.error("Failed to fetch workouts:", err))
+      .catch((err) => {
+        console.error("Failed to fetch workouts:", err);
+        if (err.response?.data?.requiresSubscription) {
+          setRequiresSubscription(true);
+          setError(err.response.data.message);
+        } else {
+          setError("Failed to load workouts");
+        }
+      })
       .finally(() => setLoading(false));
   }, [filterCompleted]);
 
@@ -29,42 +41,73 @@ const MyWorkouts = () => {
         <p className="text-neutral-400">Track your assigned and completed workouts</p>
       </div>
 
+      {/* Subscription Required Message */}
+      {requiresSubscription && (
+        <div className="mb-8 p-6 bg-red-900 bg-opacity-20 border border-red-700 rounded-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold">!</span>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-red-300 mb-1">Subscription Required</h3>
+              <p className="text-red-400">{error}</p>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <button
+              onClick={() => window.location.href = '/user/plans'}
+              className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-600 transition"
+            >
+              View Plans
+            </button>
+            <button
+              onClick={() => window.location.href = '/user/subscription'}
+              className="px-6 py-3 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600 transition"
+            >
+              Manage Subscription
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Filter Tabs */}
-      <div className="flex gap-2 mb-6">
-        <button
-          onClick={() => setFilterCompleted(null)}
-          className={`px-4 py-2 rounded transition ${
-            filterCompleted === null
-              ? "bg-primary text-white"
-              : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-          }`}
-        >
-          All
-        </button>
-        <button
-          onClick={() => setFilterCompleted(false)}
-          className={`px-4 py-2 rounded transition ${
-            filterCompleted === false
-              ? "bg-primary text-white"
-              : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-          }`}
-        >
-          Pending
-        </button>
-        <button
-          onClick={() => setFilterCompleted(true)}
-          className={`px-4 py-2 rounded transition ${
-            filterCompleted === true
-              ? "bg-primary text-white"
-              : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-          }`}
-        >
-          Completed
-        </button>
-      </div>
+      {!requiresSubscription && (
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setFilterCompleted(null)}
+            className={`px-4 py-2 rounded transition ${
+              filterCompleted === null
+                ? "bg-primary text-white"
+                : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+            }`}
+          >
+            All
+          </button>
+          <button
+            onClick={() => setFilterCompleted(false)}
+            className={`px-4 py-2 rounded transition ${
+              filterCompleted === false
+                ? "bg-primary text-white"
+                : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+            }`}
+          >
+            Pending
+          </button>
+          <button
+            onClick={() => setFilterCompleted(true)}
+            className={`px-4 py-2 rounded transition ${
+              filterCompleted === true
+                ? "bg-primary text-white"
+                : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+            }`}
+          >
+            Completed
+          </button>
+        </div>
+      )}
 
       {/* Assigned Workouts Section */}
-      {assignedWorkouts.length > 0 && (
+      {!requiresSubscription && assignedWorkouts.length > 0 && (
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
             <Dumbbell className="text-primary" size={24} />
@@ -81,6 +124,11 @@ const MyWorkouts = () => {
                     <h3 className="text-xl font-semibold">{workout.title}</h3>
                     {workout.description && (
                       <p className="text-neutral-400 text-sm mt-1">{workout.description}</p>
+                    )}
+                    {workout.trainer && workout.trainer.name && (
+                      <p className="text-primary text-sm mt-2">
+                        Assigned by: <span className="font-medium">{workout.trainer.name}</span>
+                      </p>
                     )}
                   </div>
                   <span className="flex items-center gap-2 px-3 py-1 bg-orange-900 bg-opacity-30 text-orange-300 text-xs rounded-full">
@@ -121,7 +169,7 @@ const MyWorkouts = () => {
       )}
 
       {/* Completed Workouts Section */}
-      {completedWorkouts.length > 0 && (
+      {!requiresSubscription && completedWorkouts.length > 0 && (
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
             <CheckCircle2 className="text-green-500" size={24} />
@@ -138,6 +186,11 @@ const MyWorkouts = () => {
                     <h3 className="text-xl font-semibold text-neutral-300">{workout.title}</h3>
                     {workout.description && (
                       <p className="text-neutral-500 text-sm mt-1">{workout.description}</p>
+                    )}
+                    {workout.trainer && workout.trainer.name && (
+                      <p className="text-primary text-sm mt-2">
+                        Assigned by: <span className="font-medium">{workout.trainer.name}</span>
+                      </p>
                     )}
                   </div>
                   <span className="flex items-center gap-2 px-3 py-1 bg-green-900 bg-opacity-30 text-green-300 text-xs rounded-full">
@@ -168,7 +221,7 @@ const MyWorkouts = () => {
       )}
 
       {/* Empty State */}
-      {!loading && workouts.length === 0 && (
+      {!loading && !requiresSubscription && workouts.length === 0 && (
         <div className="text-center py-12">
           <Dumbbell className="mx-auto mb-4 text-neutral-600" size={48} />
           <h3 className="text-xl font-semibold text-neutral-400 mb-2">No workouts yet</h3>
