@@ -47,9 +47,9 @@ const UserPlans = () => {
 
       console.log('Payment response:', response.data);
 
-      if (response.data.sessionUrl) {
-        console.log('Redirecting to Stripe:', response.data.sessionUrl);
-        window.location.href = response.data.sessionUrl;
+      if (response.data.url) {
+        console.log('Redirecting to Stripe:', response.data.url);
+        window.location.href = response.data.url;
       } else {
         console.error('No session URL returned:', response.data);
         alert('Payment initialization failed. Please try again.');
