@@ -11,7 +11,7 @@ import Loader from "../../components/common/Loader";
 | - Fetches data from backend using API
 */
 
-const Appointments = () => {
+const UserAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -67,7 +67,7 @@ const Appointments = () => {
   );
 };
 
-export default Appointments;
+export default UserAppointments;
 
 /*
 |--------------------------------------------------------------------------

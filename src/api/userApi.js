@@ -8,7 +8,7 @@ import axiosInstance from "./axios";
 
 // 👥 Get all approved trainers
 export const getAllTrainers = () => {
-  return axiosInstance.get("/trainers");
+  return axiosInstance.get("/admin/public-trainers");
 };
 
 // 📝 Register user
