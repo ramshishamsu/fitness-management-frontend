@@ -8,7 +8,12 @@ import axiosInstance from "./axios";
 
 // 👥 Get all approved trainers
 export const getAllTrainers = () => {
-  return axiosInstance.get("/admin/public-trainers");
+  return axiosInstance.get("/admin/public-trainers", {
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
+    }
+  });
 };
 
 // 📝 Register user

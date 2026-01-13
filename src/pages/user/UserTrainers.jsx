@@ -52,7 +52,7 @@ const UserTrainers = () => {
 
   return (
     <UserLayout>
-      <div className="min-h-screen bg-gray-900 text-white p-6">
+      <div className="p-6">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold mb-8 text-white">Available Trainers</h1>
           
@@ -62,9 +62,10 @@ const UserTrainers = () => {
           {trainers.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-300">No trainers available at the moment.</p>
+              <p className="text-gray-400 text-sm mt-2">Check browser console for API errors</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {trainers.map(trainer => (
                 <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg">
                   <div className="mb-4">
