@@ -19,7 +19,7 @@ const UserPlans = () => {
     try {
       setLoading(true);
       const response = await axios.get('/plans');
-      setPlans(response.data.plans);
+      setPlans(response.data);
     } catch (error) {
       console.error('Error fetching plans:', error);
     } finally {
