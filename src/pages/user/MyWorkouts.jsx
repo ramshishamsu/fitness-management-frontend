@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axios";
 import { CheckCircle2, Circle, Dumbbell } from "lucide-react";
+import UserLayout from "../../components/common/UserLayout";
 
 const MyWorkouts = () => {
   const [workouts, setWorkouts] = useState([]);
@@ -14,10 +15,14 @@ const MyWorkouts = () => {
     setError(null);
     setRequiresSubscription(false);
     const params = filterCompleted !== null ? { completed: filterCompleted } : {};
+    console.log('🔍 Fetching workouts with params:', params);
     axiosInstance
       .get("/workouts/my", { params })
       .then((res) => {
-        setWorkouts(Array.isArray(res.data) ? res.data : res.data.workouts || []);
+        console.log('✅ Workouts response:', res.data);
+        const workoutData = Array.isArray(res.data) ? res.data : res.data.workouts || [];
+        setWorkouts(workoutData);
+        console.log('✅ Workouts set:', workoutData.length, 'workouts');
       })
       .catch((err) => {
         console.error("Failed to fetch workouts:", err);
@@ -35,11 +40,12 @@ const MyWorkouts = () => {
   const completedWorkouts = workouts.filter((w) => w.completed);
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">My Workouts</h1>
-        <p className="text-neutral-400">Track your assigned and completed workouts</p>
-      </div>
+    <UserLayout>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 text-white">My Workouts</h1>
+          <p className="text-neutral-400">Track your assigned and completed workouts</p>
+        </div>
 
       {/* Subscription Required Message */}
       {requiresSubscription && (
@@ -230,7 +236,8 @@ const MyWorkouts = () => {
           </p>
         </div>
       )}
-    </div>
+      </div>
+    </UserLayout>
   );
 };
 
