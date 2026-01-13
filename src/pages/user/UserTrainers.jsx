@@ -8,6 +8,7 @@ const UserTrainers = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('🔍 UserTrainers component mounted');
     loadTrainers();
   }, []);
 
