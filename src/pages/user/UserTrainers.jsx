@@ -13,11 +13,19 @@ const UserTrainers = () => {
 
   const loadTrainers = async () => {
     try {
+      console.log('🔍 Loading trainers from API...');
       const res = await getAllTrainers();
-      console.log('Trainers response:', res.data);
+      console.log('✅ API Response:', res);
+      console.log('✅ Response data:', res.data);
+      console.log('✅ Trainers array:', res.data?.trainers);
+      console.log('✅ Trainers count:', res.data?.trainers?.length || 0);
+      
       setTrainers(res.data.trainers || res.data || []);
     } catch (error) {
-      console.error('Error loading trainers:', error);
+      console.error('❌ Error loading trainers:', error);
+      console.error('❌ Error response:', error.response);
+      console.error('❌ Error status:', error.response?.status);
+      setTrainers([]);
     } finally {
       setLoading(false);
     }
