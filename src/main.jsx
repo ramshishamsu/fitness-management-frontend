@@ -1,21 +1,14 @@
 import "./index.css";
-
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AuthProvider } from "./context/AuthProvider";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-
-const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY) : null;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-   <BrowserRouter>
+  <BrowserRouter>
     <AuthProvider>
-      <Elements stripe={stripePromise}>
       <App />
-      </Elements>
     </AuthProvider>
   </BrowserRouter>
 );
