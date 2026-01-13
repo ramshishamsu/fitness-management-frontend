@@ -6,7 +6,7 @@ import API from "./axios";
 |--------------------------------------------------------------------------
 */
 
-// 💳 Create Stripe checkout session
+// 💳 Create Razorpay order
 export const createCheckoutSession = (data) => {
   return API.post("/payments/checkout", data);
 };
