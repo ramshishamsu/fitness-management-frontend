@@ -77,6 +77,7 @@ const UserPlans = () => {
           name: 'Fitness Management System',
           description: selectedPlan.name,
           order_id: response.data.orderId,
+          notes: response.data.notes,
           handler: function (razorpayResponse) {
             console.log('Razorpay payment successful:', razorpayResponse);
             // Payment successful, redirect to success page
@@ -85,11 +86,14 @@ const UserPlans = () => {
           modal: {
             ondismiss: function() {
               console.log('Payment modal dismissed');
-            }
+            },
+            escape: true,
+            backdropclose: false
           },
           prefill: {
             name: 'User', // You can get this from user context
             email: 'user@example.com', // You can get this from user context
+            contact: '9999999999'
           },
           theme: {
             color: '#3399cc'
@@ -97,6 +101,14 @@ const UserPlans = () => {
         };
 
         const razorpay = new window.Razorpay(options);
+        razorpay.on('payment.failed', function (response) {
+          console.error('Razorpay payment failed:', response);
+          alert('Payment failed. Please try again.');
+        });
+        razorpay.on('payment.cancel', function (response) {
+          console.log('Razorpay payment cancelled:', response);
+          alert('Payment cancelled.');
+        });
         razorpay.open();
       } else {
         console.error('No order ID returned:', response.data);
