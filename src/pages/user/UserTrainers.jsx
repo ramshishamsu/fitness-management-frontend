@@ -3,7 +3,6 @@ import { getAllTrainers } from "../../api/userApi";
 import axiosInstance from "../../api/axios";
 import UserLayout from "../../components/common/UserLayout";
 
-
 const UserTrainers = () => {
   const [trainers, setTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +20,7 @@ const UserTrainers = () => {
       console.log('✅ Response data:', res.data);
       console.log('✅ Trainers array:', res.data?.trainers);
       console.log('✅ Trainers count:', res.data?.trainers?.length || 0);
-      
+
       setTrainers(res.data.trainers || res.data || []);
     } catch (error) {
       console.error('❌ Error loading trainers:', error);
@@ -35,11 +34,19 @@ const UserTrainers = () => {
 
   const bookTrainer = async (trainerId) => {
     try {
-      await axiosInstance.post("/appointments", { trainerId });
-      alert("Appointment request sent successfully!");
+      console.log('🔍 Booking trainer:', trainerId);
+      const response = await axiosInstance.post("/appointments", {
+        trainerId: trainerId,
+        date: new Date().toISOString().split('T')[0],
+        time: "10:00 AM",
+        notes: "Booking from trainers page"
+      });
+      console.log('✅ Appointment booked:', response.data);
+      alert("Appointment booked successfully!");
     } catch (error) {
-      console.error('Error booking trainer:', error);
-      alert("Failed to book appointment");
+      console.error('❌ Error booking trainer:', error);
+      console.error('❌ Error details:', error.response?.data);
+      alert("Failed to book appointment: " + (error.response?.data?.message || error.message));
     }
   };
 
@@ -66,7 +73,7 @@ const UserTrainers = () => {
               <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg hover:scale-105">
                 <div className="mb-4">
                   <img 
-                    src={trainer.profileImage || `https://picsum.photos/seed/trainer${index}/200/200.jpg`}
+                    src={trainer.profileImage || `https://picsum.photos/seed/${trainer._id}/200/200.jpg`}
                     alt={trainer.userId?.name || 'Trainer'}
                     className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-2 border-gray-600"
                   />
