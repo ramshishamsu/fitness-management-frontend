@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllTrainers } from "../../api/userApi";
 import axiosInstance from "../../api/axios";
-import UserLayout from "../../components/common/UserLayout";
+
 
 const UserTrainers = () => {
   const [trainers, setTrainers] = useState([]);
@@ -59,7 +59,7 @@ const UserTrainers = () => {
   }
 
   return (
-    <UserLayout>
+    
       <div className="max-w-7xl mx-auto px-6">
         <h1 className="text-3xl font-bold mb-8 text-white">Available Trainers</h1>
         
@@ -99,7 +99,7 @@ const UserTrainers = () => {
           </div>
         )}
       </div>
-    </UserLayout>
+   
   );
 };
 
