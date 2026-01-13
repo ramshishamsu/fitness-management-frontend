@@ -18,7 +18,9 @@ const UserPlans = () => {
   const fetchPlans = async () => {
     try {
       setLoading(true);
+      console.log('Fetching plans from /plans...');
       const response = await axios.get('/plans');
+      console.log('Plans response:', response.data);
       setPlans(response.data);
     } catch (error) {
       console.error('Error fetching plans:', error);
