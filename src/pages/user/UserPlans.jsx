@@ -116,7 +116,9 @@ const UserPlans = () => {
                   
                   <div className="flex items-center mb-6">
                     <span className="text-3xl font-bold text-gray-900">₹{plan.price}</span>
-                    <span className="text-gray-500 ml-2">/{plan.duration} days</span>
+                    <span className="text-gray-500 ml-2">
+                      {plan.duration >= 30 ? `${plan.duration/30} month${plan.duration > 30 ? 's' : ''}` : `${plan.duration} days`}
+                    </span>
                   </div>
 
                   <div className="space-y-3 mb-6">
@@ -157,8 +159,10 @@ const UserPlans = () => {
                     <span className="font-medium">{selectedPlan.name}</span>
                   </div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium">{selectedPlan.name}</span>
-                    <span className="font-medium">{selectedPlan.duration} days</span>
+                    <span className="font-medium">Duration:</span>
+                    <span className="font-medium">
+                      {selectedPlan.duration >= 30 ? `${selectedPlan.duration/30} month${selectedPlan.duration > 30 ? 's' : ''}` : `${selectedPlan.duration} days`}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Total:</span>
