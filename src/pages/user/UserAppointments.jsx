@@ -32,36 +32,38 @@ const UserAppointments = () => {
 
   return (
     <UserLayout>
-      <h1 className="text-2xl font-bold mb-6">
-        My Appointments
-      </h1>
+      <div className="max-w-7xl mx-auto px-6">
+        <h1 className="text-2xl font-bold mb-6 text-white">
+          My Appointments
+        </h1>
 
-      {/* Loader */}
-      {loading && <Loader />}
+        {/* Loader */}
+        {loading && <Loader />}
 
-      {/* Empty state */}
-      {!loading && appointments.length === 0 && (
-        <p className="text-gray-500">
-          No appointments booked yet.
-        </p>
-      )}
+        {/* Empty state */}
+        {!loading && appointments.length === 0 && (
+          <p className="text-gray-500">
+            No appointments booked yet.
+          </p>
+        )}
 
-      {/* Appointment list */}
-      <div className="space-y-4">
-        {appointments.map((a) => (
-          <div
-            key={a._id}
-            className="bg-white p-4 rounded border shadow-sm"
-          >
-            <p><b>Trainer:</b> {a.trainer?.name}</p>
-            <p><b>Date:</b> {a.date}</p>
-            <p><b>Time:</b> {a.time}</p>
-            <p>
+        {/* Appointment list */}
+        <div className="space-y-4">
+          {appointments.map((a) => (
+            <div
+              key={a._id}
+              className="bg-white p-4 rounded border shadow-sm"
+            >
+              <p><b>Trainer:</b> {a.trainer?.name}</p>
+              <p><b>Date:</b> {a.date}</p>
+              <p><b>Time:</b> {a.time}</p>
+              <p>
               <b>Status:</b>{" "}
               <StatusBadge status={a.status} />
             </p>
           </div>
         ))}
+        </div>
       </div>
     </UserLayout>
   );

@@ -28,8 +28,8 @@ const UserPayments = () => {
 
   return (
     <UserLayout>
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">My Payments</h1>
+      <div className="max-w-7xl mx-auto px-6">
+        <h1 className="text-2xl font-bold mb-6 text-white">My Payments</h1>
 
         {loading && <Loader />}
 
