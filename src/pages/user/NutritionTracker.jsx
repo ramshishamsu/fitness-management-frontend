@@ -38,7 +38,7 @@ const NutritionTracker = () => {
   const loadNutritionLogs = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/nutrition/logs', { params: filters });
+      const response = await axios.get('/nutrition/logs', { params: filters });
       setNutritionLogs(response.data.logs || []);
     } catch (error) {
       console.error('Error loading nutrition logs:', error);
@@ -49,7 +49,7 @@ const NutritionTracker = () => {
 
   const loadGoals = async () => {
     try {
-      const response = await axios.get('/api/nutrition/goals');
+      const response = await axios.get('/nutrition/goals');
       setGoals(response.data.goals || []);
     } catch (error) {
       console.error('Error loading goals:', error);
@@ -58,7 +58,7 @@ const NutritionTracker = () => {
 
   const loadInsights = async () => {
     try {
-      const response = await axios.get('/api/nutrition/insights', { params: filters });
+      const response = await axios.get('/nutrition/insights', { params: filters });
       setInsights(response.data);
     } catch (error) {
       console.error('Error loading insights:', error);
@@ -69,7 +69,7 @@ const NutritionTracker = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await axios.post('/api/nutrition/log-meal', mealForm);
+      await axios.post('/nutrition/log-meal', mealForm);
       setShowAddMeal(false);
       setMealForm({
         date: new Date().toISOString().split('T')[0],
@@ -89,7 +89,7 @@ const NutritionTracker = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await axios.post('/api/nutrition/goals', goalForm);
+      await axios.post('/nutrition/goals', goalForm);
       setShowAddGoal(false);
       setGoalForm({
         title: '',
@@ -146,7 +146,7 @@ const NutritionTracker = () => {
   const deleteGoal = async (goalId) => {
     if (window.confirm('Are you sure you want to delete this goal?')) {
       try {
-        await axios.delete(`/api/nutrition/goals/${goalId}`);
+        await axios.delete(`/nutrition/goals/${goalId}`);
         loadGoals();
       } catch (error) {
         console.error('Error deleting goal:', error);
