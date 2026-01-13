@@ -58,6 +58,12 @@ const UserTrainers = () => {
         {/* Debug state */}
         {console.log('🔍 Trainers state:', trainers.length, trainers)}
         
+        {/* Visual debug info */}
+        <div className="mb-4 p-4 bg-gray-700 rounded">
+          <p className="text-white">Debug: Trainers count = {trainers.length}</p>
+          <p className="text-white">Debug: Loading = {loading.toString()}</p>
+        </div>
+        
         {trainers.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-300">No trainers available at the moment.</p>
