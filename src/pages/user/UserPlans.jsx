@@ -38,17 +38,25 @@ const UserPlans = () => {
     if (!selectedPlan) return;
     
     try {
+      console.log('Starting payment process for plan:', selectedPlan);
       const response = await axios.post('/payments/checkout', {
         planId: selectedPlan._id,
         planName: selectedPlan.name,
         amount: selectedPlan.price
       });
 
+      console.log('Payment response:', response.data);
+
       if (response.data.sessionUrl) {
+        console.log('Redirecting to Stripe:', response.data.sessionUrl);
         window.location.href = response.data.sessionUrl;
+      } else {
+        console.error('No session URL returned:', response.data);
+        alert('Payment initialization failed. Please try again.');
       }
     } catch (error) {
       console.error('Error creating payment session:', error);
+      alert('Payment failed: ' + error.message);
     }
   };
 
