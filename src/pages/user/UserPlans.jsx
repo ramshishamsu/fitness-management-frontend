@@ -3,6 +3,18 @@ import { Search, Check, CreditCard, Clock, Star } from 'lucide-react';
 import axios from '../../api/axios';
 import { useNavigate } from "react-router-dom";
 
+// Load Razorpay script
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
 const UserPlans = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -38,24 +50,60 @@ const UserPlans = () => {
     if (!selectedPlan) return;
     
     try {
-      console.log('Starting payment process for plan:', selectedPlan);
+      console.log('Starting Razorpay payment for plan:', selectedPlan);
+      
+      // Load Razorpay script
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        alert('Failed to load payment gateway. Please try again.');
+        return;
+      }
+
+      // Create order
       const response = await axios.post('/payments/checkout', {
         planId: selectedPlan._id,
         planName: selectedPlan.name,
         amount: selectedPlan.price
       });
 
-      console.log('Payment response:', response.data);
+      console.log('Razorpay order response:', response.data);
 
-      if (response.data.url) {
-        console.log('Redirecting to Stripe:', response.data.url);
-        window.location.href = response.data.url;
+      if (response.data.orderId) {
+        // Initialize Razorpay checkout
+        const options = {
+          key: response.data.keyId,
+          amount: response.data.amount,
+          currency: response.data.currency,
+          name: 'Fitness Management System',
+          description: selectedPlan.name,
+          order_id: response.data.orderId,
+          handler: function (razorpayResponse) {
+            console.log('Razorpay payment successful:', razorpayResponse);
+            // Payment successful, redirect to success page
+            window.location.href = '/user/success';
+          },
+          modal: {
+            ondismiss: function() {
+              console.log('Payment modal dismissed');
+            }
+          },
+          prefill: {
+            name: 'User', // You can get this from user context
+            email: 'user@example.com', // You can get this from user context
+          },
+          theme: {
+            color: '#3399cc'
+          }
+        };
+
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
       } else {
-        console.error('No session URL returned:', response.data);
+        console.error('No order ID returned:', response.data);
         alert('Payment initialization failed. Please try again.');
       }
     } catch (error) {
-      console.error('Error creating payment session:', error);
+      console.error('Error creating Razorpay order:', error);
       alert('Payment failed: ' + error.message);
     }
   };
