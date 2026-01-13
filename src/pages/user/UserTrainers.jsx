@@ -3,6 +3,7 @@ import { getAllTrainers } from "../../api/userApi";
 import axiosInstance from "../../api/axios";
 import UserLayout from "../../components/common/UserLayout";
 
+
 const UserTrainers = () => {
   const [trainers, setTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -52,38 +53,25 @@ const UserTrainers = () => {
 
   return (
     <UserLayout>
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6">
         <h1 className="text-3xl font-bold mb-8 text-white">Available Trainers</h1>
         
-        {/* Debug state */}
-        {console.log('🔍 Trainers state:', trainers.length, trainers)}
-        
-        {/* Visual debug info */}
-        <div className="mb-4 p-4 bg-gray-700 rounded relative z-20">
-          <p className="text-white">Debug: Trainers count = {trainers.length}</p>
-          <p className="text-white">Debug: Loading = {loading.toString()}</p>
-          <p className="text-yellow-300">Debug: Component is rendering!</p>
-        </div>
-        
         {trainers.length === 0 ? (
-          <div className="text-center py-12 relative z-10">
+          <div className="text-center py-12">
             <p className="text-gray-300">No trainers available at the moment.</p>
-            <p className="text-gray-400 text-sm mt-2">Check browser console for API errors</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {trainers.map((trainer, index) => (
-              <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg hover:scale-105 relative z-10">
+              <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg hover:scale-105">
                 <div className="mb-4">
-                  {trainer.profileImage && (
-                    <img 
-                      src={trainer.profileImage} 
-                      alt={trainer.userId?.name || 'Trainer'}
-                      className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-2 border-gray-600"
-                    />
-                  )}
+                  <img 
+                    src={trainer.profileImage || `https://picsum.photos/seed/trainer${index}/200/200.jpg`}
+                    alt={trainer.userId?.name || 'Trainer'}
+                    className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-2 border-gray-600"
+                  />
                   <h3 className="text-xl font-bold text-white mb-2 text-center">
-                    {trainer.userId?.name || 'Trainer'} (Card {index + 1})
+                    {trainer.userId?.name || 'Trainer'}
                   </h3>
                   <p className="text-gray-300 mb-4 text-center text-sm">
                     {trainer.specialization || 'Fitness Trainer'}
