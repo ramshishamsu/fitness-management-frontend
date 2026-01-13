@@ -36,7 +36,7 @@ const UserPlans = () => {
     if (!selectedPlan) return;
     
     try {
-      const response = await axios.post('/payments/create-session', {
+      const response = await axios.post('/payments/checkout', {
         planId: selectedPlan._id,
         planName: selectedPlan.name,
         amount: selectedPlan.price
