@@ -54,39 +54,38 @@ const UserTrainers = () => {
     <UserLayout>
       <div className="min-h-screen bg-gray-900 text-white p-6">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">Available Trainers</h1>
+          <h1 className="text-3xl font-bold mb-8 text-white">Available Trainers</h1>
           
           {trainers.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-400">No trainers available at the moment.</p>
+              <p className="text-gray-300">No trainers available at the moment.</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
               {trainers.map(trainer => (
-                <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-colors">
+                <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg">
                   <div className="mb-4">
                     {trainer.profileImage && (
                       <img 
                         src={trainer.profileImage} 
                         alt={trainer.userId?.name || 'Trainer'}
-                        className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+                        className="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-2 border-gray-600"
                       />
                     )}
-                    <h2 className="text-xl font-bold mb-2 text-center">
+                    <h3 className="text-xl font-bold text-white mb-2 text-center">
                       {trainer.userId?.name || 'Trainer'}
-                    </h2>
-                    <p className="text-gray-400 mb-2 text-center">
+                    </h3>
+                    <p className="text-gray-300 mb-4 text-center">
                       {trainer.specialization || 'Fitness Trainer'}
                     </p>
-                    <div className="text-center text-sm text-gray-500">
+                    <div className="text-center text-sm text-gray-400 space-y-1">
                       <p>🎯 {trainer.experience} years experience</p>
                       <p>⭐ {trainer.rating || '4.5'} rating</p>
                     </div>
                   </div>
-                  
                   <button
                     onClick={() => bookTrainer(trainer._id)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-colors font-medium"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-all duration-200 font-medium"
                   >
                     Book Appointment
                   </button>
