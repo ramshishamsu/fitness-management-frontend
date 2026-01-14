@@ -73,18 +73,21 @@ const UserTrainers = () => {
               <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg hover:scale-105">
                 <div className="mb-4">
                   <img 
-                    src={trainer.profileImage || `https://picsum.photos/seed/${trainer._id}/200/200.jpg`}
-                    alt={trainer.userId?.name || 'Trainer'}
+                    src={trainer.profileImage || `https://picsum.photos/seed/trainer${index}/200/200.jpg`}
+                    alt={trainer.name || 'Trainer'}
                     className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-2 border-gray-600"
+                    onError={(e) => {
+                      e.target.src = `https://picsum.photos/seed/default${index}/200/200.jpg`;
+                    }}
                   />
                   <h3 className="text-xl font-bold text-white mb-2 text-center">
-                    {trainer.userId?.name || 'Trainer'}
+                    {trainer.userId?.name || trainer.name || 'Trainer'}
                   </h3>
                   <p className="text-gray-300 mb-4 text-center text-sm">
                     {trainer.specialization || 'Fitness Trainer'}
                   </p>
                   <div className="text-center text-sm text-gray-400 space-y-1">
-                    <p>🎯 {trainer.experience} years experience</p>
+                    <p>🎯 {trainer.experience || '5'} years experience</p>
                     <p>⭐ {trainer.rating || '4.5'} rating</p>
                   </div>
                 </div>
