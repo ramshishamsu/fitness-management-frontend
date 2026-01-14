@@ -114,9 +114,11 @@ const UserSubscription = () => {
                 <div>
                   <p className="text-sm text-gray-500">Duration</p>
                   <p className="font-semibold text-gray-900">
-                    {subscription.planId?.duration >= 30 
-                      ? `${subscription.planId.duration/30} month${subscription.planId.duration > 30 ? 's' : ''}`
-                      : `${subscription.planId.duration} days`
+                    {subscription.planId?.duration 
+                      ? subscription.planId.duration >= 30 
+                        ? `${subscription.planId.duration/30} month${subscription.planId.duration > 30 ? 's' : ''}`
+                        : `${subscription.planId.duration} days`
+                      : '30 days'
                     }
                   </p>
                 </div>
