@@ -29,10 +29,8 @@ const UserPlans = () => {
 
   const fetchPlans = async () => {
     try {
-      setLoading(true);
-      console.log('Fetching plans from /plans...');
-      const response = await axios.get('/plans');
-      console.log('Plans response:', response.data);
+      setLoading(true); 
+      const response = await axios.get("/plans");
       setPlans(response.data);
     } catch (error) {
       console.error('Error fetching plans:', error);
@@ -48,10 +46,10 @@ const UserPlans = () => {
 
   const handlePayment = async () => {
     if (!selectedPlan) return;
-    
+
     try {
       console.log('Starting Razorpay payment for plan:', selectedPlan);
-      
+
       // Load Razorpay script
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
@@ -84,7 +82,7 @@ const UserPlans = () => {
             window.location.href = '/user/success';
           },
           modal: {
-            ondismiss: function() {
+            ondismiss: function () {
               console.log('Payment modal dismissed');
             },
             escape: true,
@@ -120,12 +118,10 @@ const UserPlans = () => {
     }
   };
 
-  const filteredPlans = plans.filter(plan => 
-    plan.isActive && (
-      plan.name.toLowerCase().includes(search.toLowerCase()) ||
-      plan.description.toLowerCase().includes(search.toLowerCase())
-    )
+  const filteredPlans = plans.filter(plan =>
+    plan.name.toLowerCase().includes(search.toLowerCase())
   );
+
 
   if (loading) {
     return (
@@ -171,14 +167,20 @@ const UserPlans = () => {
                       Popular
                     </span>
                   </div>
-                  
-                  <p className="text-gray-600 mb-6">{plan.description}</p>
-                  
+
+                  <p className="text-gray-600 mb-6">
+                    {plan.description || "No description available"}
+                  </p>
+
+
                   <div className="flex items-center mb-6">
                     <span className="text-3xl font-bold text-gray-900">₹{plan.price}</span>
                     <span className="text-gray-500 ml-2">
-                      {plan.duration >= 30 ? `${plan.duration/30} month${plan.duration > 30 ? 's' : ''}` : `${plan.duration} days`}
+                      {plan.duration >= 30
+                        ? `${plan.duration / 30} month${plan.duration > 30 ? "s" : ""}`
+                        : `${plan.duration} days`}
                     </span>
+
                   </div>
 
                   <div className="space-y-3 mb-6">
@@ -212,7 +214,7 @@ const UserPlans = () => {
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 mb-2">Confirm Purchase</h2>
                 <p className="text-gray-600 mb-4">You're about to purchase the {selectedPlan.name} plan</p>
-                
+
                 <div className="bg-gray-50 rounded-lg p-4 mb-4">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-600">Plan:</span>
@@ -221,7 +223,7 @@ const UserPlans = () => {
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">Duration:</span>
                     <span className="font-medium">
-                      {selectedPlan.duration >= 30 ? `${selectedPlan.duration/30} month${selectedPlan.duration > 30 ? 's' : ''}` : `${selectedPlan.duration} days`}
+                      {selectedPlan.duration >= 30 ? `${selectedPlan.duration / 30} month${selectedPlan.duration > 30 ? 's' : ''}` : `${selectedPlan.duration} days`}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -240,7 +242,7 @@ const UserPlans = () => {
                   Proceed to Payment
                 </button>
                 <button
-                  onClick={() => {setShowPaymentModal(false); setSelectedPlan(null);}}
+                  onClick={() => { setShowPaymentModal(false); setSelectedPlan(null); }}
                   className="flex-1 px-4 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-medium"
                 >
                   Cancel
