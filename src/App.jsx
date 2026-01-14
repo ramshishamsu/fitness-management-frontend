@@ -22,7 +22,6 @@ import MyWorkouts from "./pages/user/MyWorkouts";
 import NutritionTracker from "./pages/user/NutritionTracker";
 import UserCheckout from "./pages/user/UserCheckout";
 import UserPlans from "./pages/user/UserPlans";
-import UserSubscription from "./pages/user/UserSubscription";
 import UserPaymentSuccess from "./pages/user/UserPaymentSuccess";
 import UserPaymentCancel from "./pages/user/UserPaymentCancel";
 
@@ -76,7 +75,6 @@ const App = () => {
         <Route path="trainers" element={<UserTrainers />} />
         <Route path="appointments" element={<UserAppointments />} />
         <Route path="plans" element={<UserPlans />} />
-        <Route path="subscription" element={<UserSubscription />} />
         <Route path="checkout/:planId" element={<UserCheckout />} />
         <Route path="payments" element={<UserPayments />} />
         <Route path="success" element={<UserPaymentSuccess />} />
