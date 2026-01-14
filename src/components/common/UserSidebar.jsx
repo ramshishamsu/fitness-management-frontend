@@ -60,7 +60,6 @@ const UserSidebar = ({ sidebarOpen, setSidebarOpen }) => {
           <SideLink to="/user/dashboard" label="Dashboard" />
           <SideLink to="/user/profile" label="My Profile" />
           <SideLink to="/user/plans" label="Plans" />
-          <SideLink to="/user/subscription" label="My Subscription" />
           <SideLink to="/user/trainers" label="Trainers" />
           <SideLink to="/user/my-workouts" label="My Workouts" />
           <SideLink to="/user/nutrition-tracker" label="Nutrition" />
