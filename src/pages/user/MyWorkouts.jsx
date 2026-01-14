@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axios";
 import { CheckCircle2, Circle, Dumbbell } from "lucide-react";
-import UserLayout from "../../components/common/UserLayout";
-
 
 const MyWorkouts = () => {
   const [workouts, setWorkouts] = useState([]);
@@ -15,18 +13,20 @@ const MyWorkouts = () => {
     setLoading(true);
     setError(null);
     setRequiresSubscription(false);
-    const params = filterCompleted !== null ? { completed: filterCompleted } : {};
-    console.log('🔍 Fetching workouts with params:', params);
+
+    const params =
+      filterCompleted !== null ? { completed: filterCompleted } : {};
+
     axiosInstance
       .get("/workouts/my", { params })
       .then((res) => {
-        console.log('✅ Workouts response:', res.data);
-        const workoutData = Array.isArray(res.data) ? res.data : res.data.workouts || [];
-        setWorkouts(workoutData);
-        console.log('✅ Workouts set:', workoutData.length, 'workouts');
+        const data = Array.isArray(res.data)
+          ? res.data
+          : res.data.workouts || [];
+
+        setWorkouts(data);
       })
       .catch((err) => {
-        console.error("Failed to fetch workouts:", err);
         if (err.response?.data?.requiresSubscription) {
           setRequiresSubscription(true);
           setError(err.response.data.message);
@@ -37,39 +37,41 @@ const MyWorkouts = () => {
       .finally(() => setLoading(false));
   }, [filterCompleted]);
 
-  const assignedWorkouts = workouts.filter((w) => w.trainer && !w.completed);
+  const assignedWorkouts = workouts.filter(
+    (w) => w.trainer && !w.completed
+  );
   const completedWorkouts = workouts.filter((w) => w.completed);
 
   return (
-    <UserLayout>
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-white">My Workouts</h1>
-          <p className="text-neutral-400">Track your assigned and completed workouts</p>
-        </div>
+    <div className="max-w-7xl mx-auto px-6">
+      {/* HEADER */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-2 text-white">
+          My Workouts
+        </h1>
+        <p className="text-neutral-400">
+          Track your assigned and completed workouts
+        </p>
+      </div>
 
-      {/* Subscription Required Message */}
+      {/* SUBSCRIPTION REQUIRED */}
       {requiresSubscription && (
-        <div className="mb-8 p-6 bg-red-900 bg-opacity-20 border border-red-700 rounded-lg">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold">!</span>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold text-red-300 mb-1">Subscription Required</h3>
-              <p className="text-red-400">{error}</p>
-            </div>
-          </div>
+        <div className="mb-8 p-6 bg-red-900/20 border border-red-700 rounded-lg">
+          <h3 className="text-xl font-semibold text-red-300 mb-2">
+            Subscription Required
+          </h3>
+          <p className="text-red-400 mb-4">{error}</p>
+
           <div className="flex gap-4">
             <button
-              onClick={() => window.location.href = '/user/plans'}
-              className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-600 transition"
+              onClick={() => (window.location.href = "/user/plans")}
+              className="px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-700"
             >
               View Plans
             </button>
             <button
-              onClick={() => window.location.href = '/user/subscription'}
-              className="px-6 py-3 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600 transition"
+              onClick={() => (window.location.href = "/user/subscription")}
+              className="px-6 py-3 bg-neutral-700 rounded-lg hover:bg-neutral-600"
             >
               Manage Subscription
             </button>
@@ -77,168 +79,101 @@ const MyWorkouts = () => {
         </div>
       )}
 
-      {/* Filter Tabs */}
+      {/* FILTERS */}
       {!requiresSubscription && (
         <div className="flex gap-2 mb-6">
-          <button
-            onClick={() => setFilterCompleted(null)}
-            className={`px-4 py-2 rounded transition ${
-              filterCompleted === null
-                ? "bg-primary text-white"
-                : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-            }`}
-          >
-            All
-          </button>
-          <button
-            onClick={() => setFilterCompleted(false)}
-            className={`px-4 py-2 rounded transition ${
-              filterCompleted === false
-                ? "bg-primary text-white"
-                : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-            }`}
-          >
-            Pending
-          </button>
-          <button
-            onClick={() => setFilterCompleted(true)}
-            className={`px-4 py-2 rounded transition ${
-              filterCompleted === true
-                ? "bg-primary text-white"
-                : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-            }`}
-          >
-            Completed
-          </button>
+          {[
+            { label: "All", value: null },
+            { label: "Pending", value: false },
+            { label: "Completed", value: true },
+          ].map((f) => (
+            <button
+              key={f.label}
+              onClick={() => setFilterCompleted(f.value)}
+              className={`px-4 py-2 rounded transition ${
+                filterCompleted === f.value
+                  ? "bg-blue-600 text-white"
+                  : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
         </div>
       )}
 
-      {/* Assigned Workouts Section */}
+      {/* ASSIGNED WORKOUTS */}
       {!requiresSubscription && assignedWorkouts.length > 0 && (
-        <div className="mb-8">
+        <section className="mb-10">
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <Dumbbell className="text-primary" size={24} />
+            <Dumbbell className="text-blue-500" />
             Assigned Workouts
           </h2>
+
           <div className="grid gap-4">
             {assignedWorkouts.map((workout) => (
               <div
                 key={workout._id}
-                className="bg-gradient-to-r from-neutral-900 to-neutral-800 p-6 rounded-lg border border-neutral-700 hover:border-primary transition"
+                className="bg-neutral-900 p-6 rounded-lg border border-neutral-700"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-semibold">{workout.title}</h3>
-                    {workout.description && (
-                      <p className="text-neutral-400 text-sm mt-1">{workout.description}</p>
-                    )}
-                    {workout.trainer && workout.trainer.name && (
-                      <p className="text-primary text-sm mt-2">
-                        Assigned by: <span className="font-medium">{workout.trainer.name}</span>
-                      </p>
-                    )}
-                  </div>
-                  <span className="flex items-center gap-2 px-3 py-1 bg-orange-900 bg-opacity-30 text-orange-300 text-xs rounded-full">
-                    <Circle size={12} fill="currentColor" />
-                    Pending
-                  </span>
-                </div>
-
-                {/* Exercises */}
-                {workout.exercises && workout.exercises.length > 0 && (
-                  <div className="space-y-2 mb-4 bg-black bg-opacity-20 p-4 rounded">
-                    {workout.exercises.map((ex, idx) => (
-                      <div key={idx} className="flex items-center justify-between text-sm">
-                        <span className="font-medium">{ex.name}</span>
-                        <div className="flex gap-4 text-neutral-400">
-                          {ex.sets && <span>{ex.sets} sets</span>}
-                          {ex.reps && <span>{ex.reps} reps</span>}
-                          {ex.calories && <span>{ex.calories} cal</span>}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <h3 className="text-xl font-semibold">
+                  {workout.title}
+                </h3>
+                {workout.description && (
+                  <p className="text-neutral-400 text-sm mt-1">
+                    {workout.description}
+                  </p>
                 )}
 
-                {/* Stats */}
-                <div className="flex gap-4 text-sm text-neutral-400">
-                  {workout.totalDuration && (
-                    <span>⏱️ {workout.totalDuration} min</span>
-                  )}
-                  {workout.totalCalories && (
-                    <span>🔥 {workout.totalCalories} cal</span>
-                  )}
-                </div>
+                <span className="inline-flex items-center gap-2 mt-3 px-3 py-1 text-xs rounded-full bg-orange-900/30 text-orange-300">
+                  <Circle size={12} fill="currentColor" />
+                  Pending
+                </span>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Completed Workouts Section */}
+      {/* COMPLETED WORKOUTS */}
       {!requiresSubscription && completedWorkouts.length > 0 && (
-        <div className="mb-8">
+        <section>
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <CheckCircle2 className="text-green-500" size={24} />
+            <CheckCircle2 className="text-green-500" />
             Completed Workouts
           </h2>
+
           <div className="grid gap-4">
             {completedWorkouts.map((workout) => (
               <div
                 key={workout._id}
-                className="bg-gradient-to-r from-neutral-900 to-neutral-800 p-6 rounded-lg border border-neutral-700 border-opacity-50 opacity-75"
+                className="bg-neutral-900 p-6 rounded-lg border border-neutral-700 opacity-70"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-semibold text-neutral-300">{workout.title}</h3>
-                    {workout.description && (
-                      <p className="text-neutral-500 text-sm mt-1">{workout.description}</p>
-                    )}
-                    {workout.trainer && workout.trainer.name && (
-                      <p className="text-primary text-sm mt-2">
-                        Assigned by: <span className="font-medium">{workout.trainer.name}</span>
-                      </p>
-                    )}
-                  </div>
-                  <span className="flex items-center gap-2 px-3 py-1 bg-green-900 bg-opacity-30 text-green-300 text-xs rounded-full">
-                    <CheckCircle2 size={12} />
-                    Completed
-                  </span>
-                </div>
+                <h3 className="text-xl font-semibold text-neutral-300">
+                  {workout.title}
+                </h3>
 
-                {/* Exercises */}
-                {workout.exercises && workout.exercises.length > 0 && (
-                  <div className="space-y-2 mb-4 bg-black bg-opacity-20 p-4 rounded">
-                    {workout.exercises.map((ex, idx) => (
-                      <div key={idx} className="flex items-center justify-between text-sm">
-                        <span className="font-medium text-neutral-400">{ex.name}</span>
-                        <div className="flex gap-4 text-neutral-500">
-                          {ex.sets && <span>{ex.sets} sets</span>}
-                          {ex.reps && <span>{ex.reps} reps</span>}
-                          {ex.calories && <span>{ex.calories} cal</span>}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <span className="inline-flex items-center gap-2 mt-3 px-3 py-1 text-xs rounded-full bg-green-900/30 text-green-300">
+                  <CheckCircle2 size={12} />
+                  Completed
+                </span>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Empty State */}
+      {/* EMPTY */}
       {!loading && !requiresSubscription && workouts.length === 0 && (
         <div className="text-center py-12">
           <Dumbbell className="mx-auto mb-4 text-neutral-600" size={48} />
-          <h3 className="text-xl font-semibold text-neutral-400 mb-2">No workouts yet</h3>
           <p className="text-neutral-500">
-            Your assigned workouts will appear here. Connect with a trainer to get started!
+            No workouts yet. Connect with a trainer to get started!
           </p>
         </div>
       )}
     </div>
-  </UserLayout>
-);
+  );
+};
 
 export default MyWorkouts;
