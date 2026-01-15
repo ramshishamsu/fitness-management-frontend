@@ -39,7 +39,7 @@ const NutritionTracker = () => {
     try {
       setLoading(true);
       const response = await axios.get('/nutrition/logs', { params: filters });
-      setNutritionLogs(response.data.logs || []);
+      setNutritionLogs(response.data.nutritionLogs || []);
     } catch (error) {
       console.error('Error loading nutrition logs:', error);
     } finally {
@@ -234,24 +234,92 @@ const NutritionTracker = () => {
             <div className="space-y-4">
               {nutritionLogs.map((log) => (
                 <div key={log._id} className="border rounded-lg p-4 hover:shadow-md">
-                  <div className="flex justify-between items-start mb-2">
+                  <div className="flex justify-between items-start mb-4">
                     <div>
                       <h4 className="font-medium text-lg">{new Date(log.date).toLocaleDateString()}</h4>
                       <p className="text-sm text-gray-600">
-                        Total: {log.dailyTotals?.calories || 0} cal
-                        Protein: {log.dailyTotals?.protein || 0}g
-                        Carbs: {log.dailyTotals?.carbs || 0}g
-                        Fat: {log.dailyTotals?.fat || 0}g
+                        Water: {log.waterIntake || 0}L
+                        {log.notes && <span> • {log.notes}</span>}
                       </p>
                     </div>
-                    <div className="text-sm text-gray-500">
-                      {log.meals?.map((meal, index) => (
-                        <div key={index} className="mb-2">
-                          <span className="font-medium">{meal.foods?.name || 'Item'} {meal.foods?.quantity || 0} {meal.foods?.unit || 'g'}</span>
-                          <span className="text-gray-500"> - {meal.foods?.calories || 0} cal</span>
-                        </div>
-                      ))}
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-gray-900">
+                        Daily Totals
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Calories: {log.meals?.reduce((sum, meal) => sum + (meal.totalCalories || 0), 0) || 0} cal
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        P: {log.meals?.reduce((sum, meal) => sum + (meal.totalProtein || 0), 0) || 0}g | 
+                        C: {log.meals?.reduce((sum, meal) => sum + (meal.totalCarbs || 0), 0) || 0}g | 
+                        F: {log.meals?.reduce((sum, meal) => sum + (meal.totalFat || 0), 0) || 0}g
+                      </div>
                     </div>
+                  </div>
+                  
+                  {/* Daily Goals */}
+                  {log.dailyGoals && (
+                    <div className="mb-4 p-3 bg-gray-50 rounded">
+                      <div className="text-sm font-medium text-gray-700 mb-2">Daily Goals</div>
+                      <div className="grid grid-cols-5 gap-2 text-xs">
+                        <div>
+                          <span className="text-gray-500">Cal:</span> {log.dailyGoals.calories || 0}
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Protein:</span> {log.dailyGoals.protein || 0}g
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Carbs:</span> {log.dailyGoals.carbs || 0}g
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Fat:</span> {log.dailyGoals.fat || 0}g
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Water:</span> {log.dailyGoals.water || 0}L
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Meals */}
+                  <div className="space-y-3">
+                    {log.meals?.map((meal, mealIndex) => (
+                      <div key={mealIndex} className="border-l-4 border-blue-200 pl-3">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <h5 className="font-medium text-sm capitalize">{meal.type || 'Meal'}</h5>
+                            {meal.name && <p className="text-xs text-gray-600">{meal.name}</p>}
+                            {meal.time && <p className="text-xs text-gray-500">{meal.time}</p>}
+                          </div>
+                          <div className="text-right text-sm">
+                            <div className="font-medium">{meal.totalCalories || 0} cal</div>
+                            <div className="text-xs text-gray-500">
+                              P: {meal.totalProtein || 0}g | C: {meal.totalCarbs || 0}g | F: {meal.totalFat || 0}g
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Foods */}
+                        <div className="space-y-1">
+                          {meal.foods?.map((food, foodIndex) => (
+                            <div key={foodIndex} className="flex justify-between items-center text-xs bg-gray-50 p-2 rounded">
+                              <div>
+                                <span className="font-medium">{food.name || 'Food item'}</span>
+                                <span className="text-gray-500 ml-2">
+                                  {food.quantity || 0} {food.unit || 'g'}
+                                </span>
+                              </div>
+                              <div className="text-right">
+                                <span className="text-gray-600">{food.calories || 0} cal</span>
+                                <span className="text-gray-400 ml-2">
+                                  P:{food.protein || 0}g C:{food.carbs || 0}g F:{food.fat || 0}g
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
