@@ -26,7 +26,7 @@ const TrainerDashboard = () => {
       setClients(clientsRes.data);
 
       // Fetch workouts assigned by this trainer
-      const workoutsRes = await axiosInstance.get('/workouts');
+      const workoutsRes = await axiosInstance.get('/workouts/assigned');
       setWorkouts(workoutsRes.data);
 
       // Calculate stats
