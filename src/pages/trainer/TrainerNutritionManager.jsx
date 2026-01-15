@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import axiosInstance from "../../api/axios";
 
 const TrainerNutritionManager = () => {
+  const [searchParams] = useSearchParams();
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState("");
   const [nutritionLogs, setNutritionLogs] = useState([]);
@@ -44,6 +46,14 @@ const TrainerNutritionManager = () => {
   useEffect(() => {
     fetchClients();
   }, []);
+
+  useEffect(() => {
+    // Handle userId from URL parameter
+    const userId = searchParams.get('userId');
+    if (userId) {
+      setSelectedClient(userId);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (selectedClient) {
