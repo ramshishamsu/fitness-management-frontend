@@ -4,6 +4,7 @@ import {
   Users,
   Dumbbell,
   IndianRupee,
+  Apple,
   LogOut
 } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
@@ -25,6 +26,7 @@ const TrainerSidebar = () => {
         <SidebarLink to="/trainer/dashboard" icon={<LayoutDashboard />} text="Dashboard" />
         <SidebarLink to="/trainer/users" icon={<Users />} text="Clients" />
         <SidebarLink to="/trainer/assign-workout" icon={<Dumbbell />} text="Assign Workout" />
+        <SidebarLink to="/trainer/nutrition" icon={<Apple />} text="Nutrition Plans" />
         <SidebarLink to="/trainer/earnings" icon={<IndianRupee />} text="Earnings" />
 
         <button
