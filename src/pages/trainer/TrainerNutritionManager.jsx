@@ -74,12 +74,95 @@ const TrainerNutritionManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.post(`/nutrition/client/${selectedClient}`, formData);
+      // Validate that we have at least one meal with food
+      const hasValidMeals = formData.meals.some(meal => 
+        meal.name && meal.foods.some(food => food.name && food.calories > 0)
+      );
+
+      if (!hasValidMeals) {
+        alert('Please add at least one meal with valid food items');
+        return;
+      }
+
+      // Process meals to ensure they match the schema
+      const processedMeals = formData.meals.map(meal => ({
+        type: meal.type,
+        name: meal.name || `${meal.type.charAt(0).toUpperCase() + meal.type.slice(1)} Meal`,
+        time: meal.time || '12:00 PM',
+        foods: meal.foods.filter(food => food.name).map(food => ({
+          name: food.name,
+          quantity: Number(food.quantity) || 100,
+          unit: food.unit || 'grams',
+          calories: Number(food.calories) || 0,
+          protein: Number(food.protein) || 0,
+          carbs: Number(food.carbs) || 0,
+          fat: Number(food.fat) || 0
+        })),
+        totalCalories: meal.foods.reduce((sum, food) => sum + (Number(food.calories) || 0), 0),
+        totalProtein: meal.foods.reduce((sum, food) => sum + (Number(food.protein) || 0), 0),
+        totalCarbs: meal.foods.reduce((sum, food) => sum + (Number(food.carbs) || 0), 0),
+        totalFat: meal.foods.reduce((sum, food) => sum + (Number(food.fat) || 0), 0)
+      }));
+
+      const submissionData = {
+        clientId: selectedClient,
+        date: formData.date,
+        meals: processedMeals,
+        waterIntake: Number(formData.waterIntake),
+        notes: formData.notes,
+        dailyGoals: {
+          calories: Number(formData.dailyGoals.calories),
+          protein: Number(formData.dailyGoals.protein),
+          carbs: Number(formData.dailyGoals.carbs),
+          fat: Number(formData.dailyGoals.fat),
+          water: Number(formData.dailyGoals.water)
+        }
+      };
+
+      console.log('Submitting nutrition data:', submissionData);
+      
+      await axiosInstance.post(`/nutrition/client/${selectedClient}`, submissionData);
       alert('Nutrition plan created successfully!');
       fetchClientNutrition();
+      
+      // Reset form
+      setFormData({
+        date: new Date().toISOString().split('T')[0],
+        meals: [
+          {
+            type: 'breakfast',
+            name: '',
+            time: '08:00 AM',
+            foods: [
+              {
+                name: '',
+                quantity: 100,
+                unit: 'grams',
+                calories: 0,
+                protein: 0,
+                carbs: 0,
+                fat: 0
+              }
+            ],
+            totalCalories: 0,
+            totalProtein: 0,
+            totalCarbs: 0,
+            totalFat: 0
+          }
+        ],
+        waterIntake: 2.0,
+        notes: '',
+        dailyGoals: {
+          calories: 2000,
+          protein: 50,
+          carbs: 250,
+          fat: 65,
+          water: 2.5
+        }
+      });
     } catch (error) {
       console.error('Error creating nutrition plan:', error);
-      alert('Failed to create nutrition plan');
+      alert('Failed to create nutrition plan: ' + (error.response?.data?.message || error.message));
     }
   };
 
@@ -101,6 +184,71 @@ const TrainerNutritionManager = () => {
     updatedMeals[mealIndex].totalFat = foods.reduce((sum, food) => sum + Number(food.fat || 0), 0);
     
     setFormData({ ...formData, meals: updatedMeals });
+  };
+
+  const addFood = (mealIndex) => {
+    const updatedMeals = [...formData.meals];
+    updatedMeals[mealIndex].foods.push({
+      name: '',
+      quantity: 100,
+      unit: 'grams',
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0
+    });
+    setFormData({ ...formData, meals: updatedMeals });
+  };
+
+  const removeFood = (mealIndex, foodIndex) => {
+    const updatedMeals = [...formData.meals];
+    updatedMeals[mealIndex].foods.splice(foodIndex, 1);
+    
+    // Recalculate meal totals
+    const foods = updatedMeals[mealIndex].foods;
+    updatedMeals[mealIndex].totalCalories = foods.reduce((sum, food) => sum + Number(food.calories || 0), 0);
+    updatedMeals[mealIndex].totalProtein = foods.reduce((sum, food) => sum + Number(food.protein || 0), 0);
+    updatedMeals[mealIndex].totalCarbs = foods.reduce((sum, food) => sum + Number(food.carbs || 0), 0);
+    updatedMeals[mealIndex].totalFat = foods.reduce((sum, food) => sum + Number(food.fat || 0), 0);
+    
+    setFormData({ ...formData, meals: updatedMeals });
+  };
+
+  const addMeal = () => {
+    const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack', 'post_workout'];
+    const currentMealTypes = formData.meals.map(m => m.type);
+    const nextMealType = mealTypes.find(type => !currentMealTypes.includes(type)) || 'snack';
+    
+    setFormData({
+      ...formData,
+      meals: [...formData.meals, {
+        type: nextMealType,
+        name: '',
+        time: '12:00 PM',
+        foods: [
+          {
+            name: '',
+            quantity: 100,
+            unit: 'grams',
+            calories: 0,
+            protein: 0,
+            carbs: 0,
+            fat: 0
+          }
+        ],
+        totalCalories: 0,
+        totalProtein: 0,
+        totalCarbs: 0,
+        totalFat: 0
+      }]
+    });
+  };
+
+  const removeMeal = (mealIndex) => {
+    if (formData.meals.length > 1) {
+      const updatedMeals = formData.meals.filter((_, index) => index !== mealIndex);
+      setFormData({ ...formData, meals: updatedMeals });
+    }
   };
 
   if (loading) {
@@ -228,9 +376,30 @@ const TrainerNutritionManager = () => {
 
             {/* Meals */}
             <div className="mb-4">
-              <h3 className="text-lg font-medium mb-2">Meals</h3>
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-medium">Meals</h3>
+                <button
+                  type="button"
+                  onClick={addMeal}
+                  className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition"
+                >
+                  Add Meal
+                </button>
+              </div>
               {formData.meals.map((meal, mealIndex) => (
                 <div key={mealIndex} className="border rounded p-4 mb-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <h4 className="font-medium text-sm">Meal {mealIndex + 1}</h4>
+                    {formData.meals.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeMeal(mealIndex)}
+                        className="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
                     <div>
                       <label className="block text-xs font-medium mb-1">Meal Type</label>
@@ -270,45 +439,94 @@ const TrainerNutritionManager = () => {
 
                   {/* Foods */}
                   <div className="mb-2">
-                    <h4 className="text-sm font-medium mb-2">Foods</h4>
+                    <div className="flex justify-between items-center mb-2">
+                      <h5 className="text-sm font-medium">Foods</h5>
+                      <button
+                        type="button"
+                        onClick={() => addFood(mealIndex)}
+                        className="px-2 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition"
+                      >
+                        Add Food
+                      </button>
+                    </div>
                     {meal.foods.map((food, foodIndex) => (
-                      <div key={foodIndex} className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2">
-                        <input
-                          type="text"
-                          value={food.name}
-                          onChange={(e) => updateFoodField(mealIndex, foodIndex, 'name', e.target.value)}
-                          className="p-1 border rounded text-sm"
-                          placeholder="Food name"
-                        />
-                        <input
-                          type="number"
-                          value={food.quantity}
-                          onChange={(e) => updateFoodField(mealIndex, foodIndex, 'quantity', e.target.value)}
-                          className="p-1 border rounded text-sm"
-                          placeholder="Qty"
-                        />
-                        <select
-                          value={food.unit}
-                          onChange={(e) => updateFoodField(mealIndex, foodIndex, 'unit', e.target.value)}
-                          className="p-1 border rounded text-sm"
-                        >
-                          <option value="grams">grams</option>
-                          <option value="oz">oz</option>
-                          <option value="cups">cups</option>
-                          <option value="pieces">pieces</option>
-                          <option value="ml">ml</option>
-                          <option value="tbsp">tbsp</option>
-                        </select>
-                        <input
-                          type="number"
-                          value={food.calories}
-                          onChange={(e) => updateFoodField(mealIndex, foodIndex, 'calories', e.target.value)}
-                          className="p-1 border rounded text-sm"
-                          placeholder="Calories"
-                        />
+                      <div key={foodIndex} className="border border-gray-200 rounded p-2 mb-2">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-xs font-medium">Food {foodIndex + 1}</span>
+                          {meal.foods.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removeFood(mealIndex, foodIndex)}
+                              className="px-1 py-0.5 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition"
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-1 mb-1">
+                          <input
+                            type="text"
+                            value={food.name}
+                            onChange={(e) => updateFoodField(mealIndex, foodIndex, 'name', e.target.value)}
+                            className="p-1 border rounded text-xs"
+                            placeholder="Food name"
+                          />
+                          <input
+                            type="number"
+                            value={food.quantity}
+                            onChange={(e) => updateFoodField(mealIndex, foodIndex, 'quantity', e.target.value)}
+                            className="p-1 border rounded text-xs"
+                            placeholder="Qty"
+                          />
+                          <select
+                            value={food.unit}
+                            onChange={(e) => updateFoodField(mealIndex, foodIndex, 'unit', e.target.value)}
+                            className="p-1 border rounded text-xs"
+                          >
+                            <option value="grams">grams</option>
+                            <option value="oz">oz</option>
+                            <option value="cups">cups</option>
+                            <option value="pieces">pieces</option>
+                            <option value="ml">ml</option>
+                            <option value="tbsp">tbsp</option>
+                          </select>
+                          <input
+                            type="number"
+                            value={food.calories}
+                            onChange={(e) => updateFoodField(mealIndex, foodIndex, 'calories', e.target.value)}
+                            className="p-1 border rounded text-xs"
+                            placeholder="Cal"
+                          />
+                          <input
+                            type="number"
+                            value={food.protein}
+                            onChange={(e) => updateFoodField(mealIndex, foodIndex, 'protein', e.target.value)}
+                            className="p-1 border rounded text-xs"
+                            placeholder="Pro"
+                          />
+                        </div>
+                        <div className="grid grid-cols-3 gap-1">
+                          <input
+                            type="number"
+                            value={food.carbs}
+                            onChange={(e) => updateFoodField(mealIndex, foodIndex, 'carbs', e.target.value)}
+                            className="p-1 border rounded text-xs"
+                            placeholder="Carbs"
+                          />
+                          <input
+                            type="number"
+                            value={food.fat}
+                            onChange={(e) => updateFoodField(mealIndex, foodIndex, 'fat', e.target.value)}
+                            className="p-1 border rounded text-xs"
+                            placeholder="Fat"
+                          />
+                          <div className="text-xs text-gray-600 p-1 bg-gray-100 rounded text-center">
+                            {food.calories} cal
+                          </div>
+                        </div>
                       </div>
                     ))}
-                    <div className="text-xs text-gray-600">
+                    <div className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
                       Totals: {meal.totalCalories} cal, {meal.totalProtein}g protein, {meal.totalCarbs}g carbs, {meal.totalFat}g fat
                     </div>
                   </div>
