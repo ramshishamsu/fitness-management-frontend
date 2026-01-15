@@ -33,7 +33,7 @@ import TrainerUsers from "./pages/trainer/TrainerUsers";
 import TrainerViewUserProfile from "./pages/trainer/TrainerViewUserProfile";
 import AssignWorkout from "./pages/trainer/AssignWorkout";
 import TrainerLayout from "./components/common/TrainerLayout";
-import TrainerNutritionManager from "./pages/trainer/TrainerNutritionManager";
+import TrainerNutritionManager from "./pages/trainer/SimpleNutritionManager";
 
 
 
