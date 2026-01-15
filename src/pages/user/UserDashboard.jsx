@@ -44,11 +44,11 @@ const UserDashboard = () => {
         goalsRes,
         progressRes
       ] = await Promise.all([
-        axios.get('/api/workouts/my'),
-        axios.get('/api/payments'),
-        axios.get('/api/nutrition/logs'),
-        axios.get('/api/goals'),
-        axios.get('/api/progress')
+        axios.get('/workouts/my'),
+        axios.get('/payments'),
+        axios.get('/nutrition/logs'),
+        axios.get('/goals'),
+        axios.get('/progress')
       ]);
 
       setDashboardData({
