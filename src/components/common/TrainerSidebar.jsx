@@ -25,7 +25,7 @@ const TrainerSidebar = () => {
       <nav className="space-y-4">
         <SidebarLink to="/trainer/dashboard" icon={<LayoutDashboard />} text="Dashboard" />
         <SidebarLink to="/trainer/users" icon={<Users />} text="Clients" />
-        <SidebarLink to="/trainer/assign-workout" icon={<Dumbbell />} text="Assign Workout" />
+        <SidebarLink to="/trainer/users" icon={<Dumbbell />} text="Assign Workout" />
         <SidebarLink to="/trainer/nutrition" icon={<Apple />} text="Nutrition Plans" />
         <SidebarLink to="/trainer/earnings" icon={<IndianRupee />} text="Earnings" />
 
