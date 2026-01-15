@@ -55,7 +55,7 @@ const UserDashboard = () => {
         trainer: trainerRes?.data || null,
         workouts: workoutsRes?.data || [],
         payments: paymentsRes?.data || [],
-        nutritionLogs: nutritionRes?.data || [],
+        nutritionLogs: nutritionRes?.data?.nutritionLogs || [],
         goals: goalsRes?.data?.goals || [],
         progress: progressRes?.data || []
       });
@@ -260,14 +260,66 @@ const UserDashboard = () => {
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Today's Calories</span>
                   <span className="font-medium">
-                    {nutritionLogs.slice(-1)[0]?.calories || 0} kcal
+                    {(() => {
+                      const todayLog = nutritionLogs.find(log => 
+                        new Date(log.date).toDateString() === new Date().toDateString()
+                      );
+                      if (todayLog) {
+                        return todayLog.meals?.reduce((sum, meal) => sum + (meal.totalCalories || 0), 0) || 0;
+                      }
+                      return nutritionLogs[0]?.meals?.reduce((sum, meal) => sum + (meal.totalCalories || 0), 0) || 0;
+                    })()} kcal
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Protein</span>
                   <span className="font-medium">
-                    {nutritionLogs.slice(-1)[0]?.protein || 0}g
+                    {(() => {
+                      const todayLog = nutritionLogs.find(log => 
+                        new Date(log.date).toDateString() === new Date().toDateString()
+                      );
+                      if (todayLog) {
+                        return todayLog.meals?.reduce((sum, meal) => sum + (meal.totalProtein || 0), 0) || 0;
+                      }
+                      return nutritionLogs[0]?.meals?.reduce((sum, meal) => sum + (meal.totalProtein || 0), 0) || 0;
+                    })()}g
                   </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Carbs</span>
+                  <span className="font-medium">
+                    {(() => {
+                      const todayLog = nutritionLogs.find(log => 
+                        new Date(log.date).toDateString() === new Date().toDateString()
+                      );
+                      if (todayLog) {
+                        return todayLog.meals?.reduce((sum, meal) => sum + (meal.totalCarbs || 0), 0) || 0;
+                      }
+                      return nutritionLogs[0]?.meals?.reduce((sum, meal) => sum + (meal.totalCarbs || 0), 0) || 0;
+                    })()}g
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Fat</span>
+                  <span className="font-medium">
+                    {(() => {
+                      const todayLog = nutritionLogs.find(log => 
+                        new Date(log.date).toDateString() === new Date().toDateString()
+                      );
+                      if (todayLog) {
+                        return todayLog.meals?.reduce((sum, meal) => sum + (meal.totalFat || 0), 0) || 0;
+                      }
+                      return nutritionLogs[0]?.meals?.reduce((sum, meal) => sum + (meal.totalFat || 0), 0) || 0;
+                    })()}g
+                  </span>
+                </div>
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <Link 
+                    to="/user/nutrition-tracker" 
+                    className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                  >
+                    View All Nutrition →
+                  </Link>
                 </div>
               </div>
             ) : (
