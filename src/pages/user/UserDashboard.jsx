@@ -21,7 +21,6 @@ const UserDashboard = () => {
   const [dashboardData, setDashboardData] = useState({
     trainer: null,
     workouts: [],
-    appointments: [],
     payments: [],
     nutritionLogs: [],
     goals: [],
@@ -40,28 +39,24 @@ const UserDashboard = () => {
       const [
         trainerRes,
         workoutsRes,
-        appointmentsRes,
         paymentsRes,
         nutritionRes,
         goalsRes,
         progressRes
       ] = await Promise.all([
-        axios.get('/trainers/my'),
-        axios.get('/workouts/my'),
-        axios.get('/appointments/my'),
-        axios.get('/payments/my'),
-        axios.get('/nutrition/logs'),
-        axios.get('/goals/my'),
-        axios.get('/progress/my')
+        axios.get('/api/workouts/my'),
+        axios.get('/api/payments'),
+        axios.get('/api/nutrition/logs'),
+        axios.get('/api/goals'),
+        axios.get('/api/progress')
       ]);
 
       setDashboardData({
         trainer: trainerRes?.data || null,
         workouts: workoutsRes?.data || [],
-        appointments: appointmentsRes?.data || [],
         payments: paymentsRes?.data || [],
         nutritionLogs: nutritionRes?.data || [],
-        goals: goalsRes?.data || [],
+        goals: goalsRes?.data?.goals || [],
         progress: progressRes?.data || []
       });
     } catch (error) {
@@ -111,18 +106,7 @@ const UserDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Upcoming Appointments</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {appointments.filter(a => new Date(a.date) > new Date()).length}
-              </p>
-            </div>
-            <Calendar className="w-8 h-8 text-green-600" />
-          </div>
-        </div>
-
+  
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
@@ -214,27 +198,25 @@ const UserDashboard = () => {
               </Link>
             </div>
             
-            {appointments.length > 0 ? (
+            {workouts.length > 0 ? (
               <div className="space-y-3">
-                {appointments.slice(0, 3).map((appointment) => (
-                  <div key={appointment._id} className="border border-gray-200 rounded-lg p-4">
+                {workouts.slice(0, 3).map((workout) => (
+                  <div key={workout._id} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-medium text-gray-900">
-                          {appointment.trainerId?.name || 'Training Session'}
+                          {workout.title || 'Workout Session'}
                         </h3>
                         <p className="text-sm text-gray-500">
-                          {new Date(appointment.date).toLocaleDateString()} at {appointment.time}
+                          Trainer: {workout.trainer?.userId?.name || 'Not assigned'}
                         </p>
                       </div>
                       <span className={`px-2 py-1 text-xs rounded-full ${
-                        appointment.status === 'confirmed' 
+                        workout.completed 
                           ? 'bg-green-100 text-green-800'
-                          : appointment.status === 'pending'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-gray-100 text-gray-800'
+                          : 'bg-yellow-100 text-yellow-800'
                       }`}>
-                        {appointment.status}
+                        {workout.completed ? 'Completed' : 'Pending'}
                       </span>
                     </div>
                   </div>

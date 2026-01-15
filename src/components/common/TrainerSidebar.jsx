@@ -2,7 +2,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
-  Calendar,
   Dumbbell,
   IndianRupee,
   LogOut
@@ -25,7 +24,6 @@ const TrainerSidebar = () => {
       <nav className="space-y-4">
         <SidebarLink to="/trainer/dashboard" icon={<LayoutDashboard />} text="Dashboard" />
         <SidebarLink to="/trainer/users" icon={<Users />} text="Clients" />
-        <SidebarLink to="/trainer/schedule" icon={<Calendar />} text="Schedule" />
         <SidebarLink to="/trainer/assign-workout" icon={<Dumbbell />} text="Assign Workout" />
         <SidebarLink to="/trainer/earnings" icon={<IndianRupee />} text="Earnings" />
 

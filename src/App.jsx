@@ -15,7 +15,6 @@ import AdminLayout from "./components/common/AdminLayout";
 import UserProfile from "./pages/user/UserProfile";
 import UserDashboard from "./pages/user/UserDashboard";
 import UserTrainers from "./pages/user/UserTrainers";
-import UserAppointments from "./pages/user/UserAppointments";
 import UserPayments from "./pages/user/UserPayments";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import MyWorkouts from "./pages/user/MyWorkouts";
@@ -24,7 +23,7 @@ import UserCheckout from "./pages/user/UserCheckout";
 import UserPlans from "./pages/user/UserPlans";
 import UserPaymentSuccess from "./pages/user/UserPaymentSuccess";
 import UserPaymentCancel from "./pages/user/UserPaymentCancel";
-
+import WorkoutDetails from "./pages/user/WorkoutDetails";
 // TRAINER
 import TrainerPending from "./pages/trainerStatus/TrainerPending";
 import TrainerProtectedRoute from "./routes/TrainerProtectedRoute";
@@ -32,7 +31,6 @@ import TrainerDashboard from "./pages/trainer/TrainerDashboard";
 import TrainerProfile from "./pages/trainer/TrainerProfile";
 import TrainerUsers from "./pages/trainer/TrainerUsers";
 import TrainerViewUserProfile from "./pages/trainer/TrainerViewUserProfile";
-import TrainerSchedule from "./pages/trainer/TrainerSchedule";
 import AssignWorkout from "./pages/trainer/AssignWorkout";
 import TrainerLayout from "./components/common/TrainerLayout";
 
@@ -73,12 +71,13 @@ const App = () => {
         <Route path="nutrition-tracker" element={<NutritionTracker />} />
         <Route path="my-workouts" element={<MyWorkouts />} />
         <Route path="trainers" element={<UserTrainers />} />
-        <Route path="appointments" element={<UserAppointments />} />
         <Route path="plans" element={<UserPlans />} />
         <Route path="checkout/:planId" element={<UserCheckout />} />
         <Route path="payments" element={<UserPayments />} />
         <Route path="success" element={<UserPaymentSuccess />} />
         <Route path="cancel" element={<UserPaymentCancel />} />
+        <Route path="/user/workouts/:id" element={<WorkoutDetails />} />
+
       </Route>
 
       {/* ================= TRAINER ================= */}
@@ -98,7 +97,6 @@ const App = () => {
         <Route path="users" element={<TrainerUsers />} />
         <Route path="users/:id" element={<TrainerViewUserProfile />} />
         <Route path="assign-workout/:id" element={<AssignWorkout />} />
-        <Route path="schedule" element={<TrainerSchedule />} />
       </Route>
 
       {/* ================= ADMIN ================= */}
