@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { getTrainerUsers, getTrainerClients } from "../../api/trainerApi";
 import { Link } from "react-router-dom";
 import { User, Dumbbell, Apple, Eye, Plus } from 'lucide-react';
+import { useTheme } from "../../context/ThemeContext.jsx";
 
 const TrainerUsers = () => {
+  const { isDark } = useTheme();
   const [allUsers, setAllUsers] = useState([]);
   const [myClients, setMyClients] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,15 +34,15 @@ const TrainerUsers = () => {
   }, []);
 
   const UserCard = ({ user, showClientBadge = false }) => (
-    <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 hover:border-neutral-700 transition-all duration-200">
+    <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} p-6 rounded-xl hover:${isDark ? 'border-neutral-700' : 'border-gray-300'} transition-all duration-200`}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center">
+          <div className={`w-12 h-12 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center`}>
             <User className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-white">{user.name}</h3>
-            <p className="text-neutral-400 text-sm">{user.email}</p>
+            <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{user.name}</h3>
+            <p className={`${isDark ? 'text-neutral-400' : 'text-gray-600'} text-sm`}>{user.email}</p>
           </div>
         </div>
         {showClientBadge && (
@@ -60,7 +62,11 @@ const TrainerUsers = () => {
         <div className="grid grid-cols-3 gap-2">
           <Link
             to={`/trainer/users/${user._id}`}
-            className="flex items-center justify-center gap-1 px-3 py-2 text-sm bg-neutral-800 text-neutral-300 rounded-lg hover:bg-neutral-700 transition-colors"
+            className={`flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg transition-colors ${
+              isDark 
+                ? 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
             title="View Profile"
           >
             <Eye className="w-4 h-4" />
@@ -99,17 +105,19 @@ const TrainerUsers = () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className={`space-y-8 ${isDark ? 'text-white' : 'text-gray-900'}`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white">User Management</h1>
+        <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>User Management</h1>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setActiveTab('all')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               activeTab === 'all' 
                 ? 'bg-emerald-600 text-white' 
-                : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                : isDark
+                  ? 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
           >
             All Users ({allUsers.length})
@@ -119,7 +127,9 @@ const TrainerUsers = () => {
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               activeTab === 'clients' 
                 ? 'bg-emerald-600 text-white' 
-                : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                : isDark
+                  ? 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
           >
             My Clients ({myClients.length})
@@ -131,15 +141,15 @@ const TrainerUsers = () => {
       {activeTab === 'all' && (
         <div>
           <div className="flex items-center gap-2 mb-6">
-            <User className="w-5 h-5 text-neutral-400" />
-            <h2 className="text-xl font-semibold text-white">All Users</h2>
-            <span className="text-neutral-400">({allUsers.length} total)</span>
+            <User className={`w-5 h-5 ${isDark ? 'text-neutral-400' : 'text-gray-500'}`} />
+            <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>All Users</h2>
+            <span className={`${isDark ? 'text-neutral-400' : 'text-gray-500'}`}>({allUsers.length} total)</span>
           </div>
           
           {allUsers.length === 0 ? (
             <div className="text-center py-12">
               <User className="w-16 h-16 text-neutral-600 mx-auto mb-4" />
-              <p className="text-neutral-400">No users found in the system.</p>
+              <p className={`${isDark ? 'text-neutral-400' : 'text-gray-500'}`}>No users found in system.</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -162,8 +172,8 @@ const TrainerUsers = () => {
             <div className="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
               <User className="w-3 h-3 text-white" />
             </div>
-            <h2 className="text-xl font-semibold text-white">My Clients</h2>
-            <span className="text-neutral-400">({myClients.length} assigned)</span>
+            <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>My Clients</h2>
+            <span className={`${isDark ? 'text-neutral-400' : 'text-gray-500'}`}>({myClients.length} assigned)</span>
           </div>
           
           {myClients.length === 0 ? (
@@ -171,8 +181,8 @@ const TrainerUsers = () => {
               <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
                 <User className="w-8 h-8 text-neutral-600" />
               </div>
-              <p className="text-neutral-400 mb-4">No clients assigned yet.</p>
-              <p className="text-neutral-500 text-sm mb-6">Assign workouts to users to make them your clients.</p>
+              <p className={`${isDark ? 'text-neutral-400' : 'text-gray-500'}`}>No clients assigned yet.</p>
+              <p className={`${isDark ? 'text-neutral-500' : 'text-gray-600'} text-sm mb-6`}>Assign workouts to users to make them your clients.</p>
               <Link
                 to="/trainer/users"
                 onClick={() => setActiveTab('all')}

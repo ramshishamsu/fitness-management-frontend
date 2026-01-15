@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Users, Calendar, IndianRupee, Clock, Apple, TrendingUp, Activity, Moon, Sun } from "lucide-react";
+import { Users, Calendar, IndianRupee, Clock, Apple, TrendingUp, Activity } from "lucide-react";
 import axiosInstance from "../../api/axios";
 import { useAuth } from "../../context/useAuth";
 import { useTheme } from "../../context/ThemeContext.jsx";
 
 const TrainerDashboard = () => {
   const { user } = useAuth();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark } = useTheme();
   const [stats, setStats] = useState({
     activeClients: 0,
     sessionsThisWeek: 0,
@@ -70,32 +70,13 @@ const TrainerDashboard = () => {
     <div className={`${isDark ? 'bg-neutral-950 text-white' : 'bg-gray-50 text-gray-900'} min-h-screen px-6 py-10`}>
       {/* ================= HEADER ================= */}
       <div className="max-w-7xl mx-auto mb-10">
-        <div className="flex items-center justify-between">
-          <div>
+        <div>
             <h1 className="text-3xl font-bold mb-2">
               Welcome back, {user?.name}! 🏋️‍♂️
             </h1>
             <p className={`${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>
               Manage your clients and track their progress efficiently
             </p>
-          </div>
-          
-          {/* Theme Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            className={`p-3 rounded-lg transition-all duration-200 border ${
-              isDark 
-                ? 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700 border-neutral-700' 
-                : 'bg-white text-gray-700 hover:bg-gray-100 border-gray-300'
-            }`}
-            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-          >
-            {isDark ? (
-              <Sun className="w-5 h-5" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
-          </button>
         </div>
       </div>
 
