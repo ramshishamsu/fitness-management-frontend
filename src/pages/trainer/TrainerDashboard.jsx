@@ -116,59 +116,59 @@ const TrainerDashboard = () => {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Recent Workouts Assigned */}
-          <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
-            <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-emerald-400" />
+          <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6`}>
+            <h3 className={`text-lg font-medium mb-4 flex items-center gap-2`}>
+              <Activity className={`w-5 h-5 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
               Recent Workouts Assigned
             </h3>
             <div className="space-y-3">
               {workouts.slice(0, 5).map((workout) => (
-                <div key={workout._id} className="flex justify-between items-center p-3 bg-neutral-800 rounded-lg">
+                <div key={workout._id} className={`flex justify-between items-center p-3 ${isDark ? 'bg-neutral-800' : 'bg-gray-100'} rounded-lg`}>
                   <div>
                     <p className="font-medium">{workout.title}</p>
-                    <p className="text-sm text-neutral-400">
+                    <p className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>
                       {clients.find(c => c._id === workout.user)?.name || 'Unknown Client'}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-emerald-400">
+                    <p className={`text-sm ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
                       {workout.completed ? 'Completed' : 'Pending'}
                     </p>
-                    <p className="text-xs text-neutral-400">
+                    <p className={`text-xs ${isDark ? 'text-neutral-400' : 'text-gray-500'}`}>
                       {new Date(workout.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
               ))}
               {workouts.length === 0 && (
-                <p className="text-neutral-400 text-center py-4">No workouts assigned yet</p>
+                <p className={`${isDark ? 'text-neutral-400' : 'text-gray-500'} text-center py-4`}>No workouts assigned yet</p>
               )}
             </div>
           </div>
 
           {/* Nutrition Plans Created */}
-          <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
-            <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
-              <Apple className="w-5 h-5 text-emerald-400" />
+          <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6`}>
+            <h3 className={`text-lg font-medium mb-4 flex items-center gap-2`}>
+              <Apple className={`w-5 h-5 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
               Nutrition Management
             </h3>
             <div className="space-y-3">
               {clients.slice(0, 5).map((client) => (
-                <div key={client._id} className="flex justify-between items-center p-3 bg-neutral-800 rounded-lg">
+                <div key={client._id} className={`flex justify-between items-center p-3 ${isDark ? 'bg-neutral-800' : 'bg-gray-100'} rounded-lg`}>
                   <div>
                     <p className="font-medium">{client.name}</p>
-                    <p className="text-sm text-neutral-400">{client.email}</p>
+                    <p className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>{client.email}</p>
                   </div>
                   <button 
                     onClick={() => window.location.href = `/trainer/nutrition`}
-                    className="px-3 py-1 bg-emerald-500 text-black text-sm rounded hover:bg-emerald-400 transition"
+                    className={`px-3 py-1 ${isDark ? 'bg-emerald-500 text-black' : 'bg-emerald-600 text-white'} text-sm rounded hover:${isDark ? 'bg-emerald-400' : 'bg-emerald-700'} transition`}
                   >
                     Manage Plan
                   </button>
                 </div>
               ))}
               {clients.length === 0 && (
-                <p className="text-neutral-400 text-center py-4">No clients assigned yet</p>
+                <p className={`${isDark ? 'text-neutral-400' : 'text-gray-500'} text-center py-4`}>No clients assigned yet</p>
               )}
             </div>
           </div>
@@ -214,49 +214,52 @@ const TrainerDashboard = () => {
 /* ================= COMPONENTS ================= */
 
 const StatCard = ({ icon, label, value, change }) => (
-  <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
-    <div className="w-12 h-12 mb-4 flex items-center justify-center bg-emerald-500/10 text-emerald-400 rounded-lg">
+  <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6`}>
+    <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-500/10 text-emerald-600'} rounded-lg`}>
       {icon}
     </div>
-    <p className="text-neutral-400 text-sm mb-1">{label}</p>
-    <p className="text-2xl font-bold mb-2">{value}</p>
-    {change && (
-      <p className="text-xs text-emerald-400 flex items-center gap-1">
-        <TrendingUp className="w-3 h-3" />
-        {change}
-      </p>
-    )}
+    <div className="text-center">
+      <p className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>{label}</p>
+      <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{value}</p>
+      <p className={`text-sm ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>{change}</p>
+    </div>
   </div>
 );
 
 const ClientCard = ({ client, workoutCount }) => (
-  <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
+  <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6`}>
     <div className="flex items-center justify-between mb-4">
-      <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center">
-        <Users className="w-6 h-6 text-emerald-400" />
+      <div className="flex items-center gap-3">
+        <div className={`w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center`}>
+          <Users className="w-6 h-6 text-emerald-400" />
+        </div>
+        <div>
+          <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{client.name}</h3>
+          <p className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>{client.email}</p>
+        </div>
       </div>
-      <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">
+      <span className={`px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full`}>
         Active
       </span>
     </div>
-    <p className="text-lg font-semibold mb-1">{client.name}</p>
-    <p className="text-neutral-400 text-sm mb-4">{client.email}</p>
+    <p className={`text-lg font-semibold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{client.name}</p>
+    <p className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-600'} mb-4`}>{client.email}</p>
     
     <div className="flex justify-between items-center mb-4">
-      <span className="text-sm text-neutral-400">Workouts Assigned</span>
+      <span className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-500'}`}>Workouts Assigned</span>
       <span className="text-sm font-medium">{workoutCount}</span>
     </div>
 
     <div className="space-y-2">
       <button 
         onClick={() => window.location.href = `/trainer/assign-workout`}
-        className="w-full bg-emerald-500 text-black py-2 rounded-md font-semibold hover:bg-emerald-400 transition"
+        className={`w-full ${isDark ? 'bg-emerald-500 text-black' : 'bg-emerald-600 text-white'} py-2 rounded-md font-semibold hover:${isDark ? 'bg-emerald-400' : 'bg-emerald-700'} transition`}
       >
         Assign Workout
       </button>
       <button 
         onClick={() => window.location.href = `/trainer/nutrition`}
-        className="w-full border border-emerald-500 text-emerald-400 py-2 rounded-md font-semibold hover:bg-emerald-500/10 transition"
+        className={`w-full border ${isDark ? 'border-emerald-500 text-emerald-400' : 'border-emerald-600 text-emerald-600'} py-2 rounded-md font-semibold hover:${isDark ? 'bg-emerald-500/10' : 'bg-emerald-700'} transition`}
       >
         Nutrition Plan
       </button>
