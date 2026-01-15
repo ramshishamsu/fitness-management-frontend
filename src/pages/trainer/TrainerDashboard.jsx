@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Users, Calendar, IndianRupee, Clock, Apple, TrendingUp, Activity, Moon, Sun } from "lucide-react";
 import axiosInstance from "../../api/axios";
 import { useAuth } from "../../context/useAuth";
-import { useTheme } from "../../context/ThemeContext";
+import { useTheme } from "../../context/ThemeContext.jsx";
 
 const TrainerDashboard = () => {
   const { user } = useAuth();
