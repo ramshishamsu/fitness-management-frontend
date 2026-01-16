@@ -18,9 +18,7 @@ import UserTrainers from "./pages/user/UserTrainers";
 import UserPayments from "./pages/user/UserPayments";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import MyWorkouts from "./pages/user/MyWorkouts";
-import NutritionTracker from "./pages/user/NutritionTracker";
-import UserNutritionPlans from "./pages/user/UserNutritionPlans";
-import ClientNutritionLog from "./pages/user/ClientNutritionLog";
+import UserNutritionTracker from "./pages/user/UserNutritionTracker";
 import UserCheckout from "./pages/user/UserCheckout";
 import UserPlans from "./pages/user/UserPlans";
 import UserPaymentSuccess from "./pages/user/UserPaymentSuccess";
@@ -72,9 +70,8 @@ const App = () => {
         <Route index element={<UserDashboard />} />
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="profile" element={<UserProfile />} />
-        <Route path="nutrition-tracker" element={<NutritionTracker />} />
-        <Route path="nutrition-plans" element={<UserNutritionPlans />} />
-        <Route path="nutrition-log/:planId" element={<ClientNutritionLog />} />
+        <Route path="nutrition-tracker" element={<UserNutritionTracker />} />
+        <Route path="nutrition-log/:planId" element={<UserNutritionTracker />} />
         <Route path="my-workouts" element={<MyWorkouts />} />
         <Route path="trainers" element={<UserTrainers />} />
         <Route path="plans" element={<UserPlans />} />

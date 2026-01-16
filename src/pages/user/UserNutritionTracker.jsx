@@ -3,10 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, CheckCircle, XCircle, AlertCircle, Clock, TrendingUp, Target, ArrowLeft } from 'lucide-react';
 import axios from '../../api/axios';
 
-const ClientNutritionLog = () => {
+const UserNutritionTracker = () => {
   const { planId } = useParams();
   const navigate = useNavigate();
   const [nutritionPlan, setNutritionPlan] = useState(null);
+  const [nutritionPlans, setNutritionPlans] = useState([]);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -46,8 +47,12 @@ const ClientNutritionLog = () => {
   ];
 
   useEffect(() => {
-    fetchNutritionPlan();
-    fetchLogs();
+    if (planId) {
+      fetchNutritionPlan();
+      fetchLogs();
+    } else {
+      fetchNutritionPlans();
+    }
   }, [planId]);
 
   useEffect(() => {
@@ -55,6 +60,18 @@ const ClientNutritionLog = () => {
       findTodayLog();
     }
   }, [selectedDate, logs]);
+
+  const fetchNutritionPlans = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('/api/nutrition-plans');
+      setNutritionPlans(response.data.nutritionPlans || []);
+    } catch (error) {
+      console.error('Error fetching nutrition plans:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchNutritionPlan = async () => {
     try {
@@ -207,6 +224,49 @@ const ClientNutritionLog = () => {
     if (score >= 80) return 'text-green-600 bg-green-100';
     if (score >= 60) return 'text-yellow-600 bg-yellow-100';
     return 'text-red-600 bg-red-100';
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'completed':
+        return 'bg-blue-100 text-blue-800';
+      case 'paused':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getGoalTypeLabel = (goalType) => {
+    switch (goalType) {
+      case 'weight_loss':
+        return 'Weight Loss';
+      case 'muscle_gain':
+        return 'Muscle Gain';
+      case 'maintenance':
+        return 'Maintenance';
+      case 'performance':
+        return 'Performance';
+      default:
+        return goalType;
+    }
+  };
+
+  const getDaysRemaining = (endDate) => {
+    const today = new Date();
+    const end = new Date(endDate);
+    const diffTime = end - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return Math.max(0, diffDays);
+  };
+
+  const getProgressPercentage = (startDate, endDate, completedDays, totalDays) => {
+    const totalPlanDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) + 1;
+    return Math.min(100, Math.round((completedDays / totalPlanDays) * 100));
   };
 
   const plannedMeals = getPlannedMealsForDate();
@@ -607,4 +667,4 @@ const ClientNutritionLog = () => {
   );
 };
 
-export default ClientNutritionLog;
+export default UserNutritionTracker;
