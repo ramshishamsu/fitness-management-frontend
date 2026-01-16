@@ -7,43 +7,72 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Load auth from localStorage on refresh
+  // 🔹 SAFE load auth from localStorage on refresh
   useEffect(() => {
-    const auth = JSON.parse(localStorage.getItem("auth"));
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        const rawAuth = window.localStorage.getItem("auth");
 
-    if (auth?.user) {
-      setUser(auth.user);
+        if (rawAuth && rawAuth !== "undefined") {
+          const auth = JSON.parse(rawAuth);
+          if (auth?.user) {
+            setUser(auth.user);
+          }
+        }
+      }
+    } catch (error) {
+      console.warn("localStorage blocked while loading auth");
+      setUser(null);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }, []);
 
-  // ✅ THIS WAS MISSING
+  // 🔐 SAFE login
   const login = (data) => {
-    localStorage.setItem("auth", JSON.stringify(data));
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.setItem("auth", JSON.stringify(data));
+      }
+    } catch (error) {
+      console.warn("localStorage blocked during login");
+    }
+
     setUser(data.user);
   };
 
+  // 🔓 SAFE logout
   const logout = () => {
-    localStorage.removeItem("auth");
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.removeItem("auth");
+      }
+    } catch (error) {
+      console.warn("localStorage blocked during logout");
+    }
+
     setUser(null);
   };
 
-  // 🔄 Refresh user data from server
+  // 🔄 SAFE refresh user
   const refreshUser = async () => {
     try {
       const response = await axiosInstance.get("/auth/me");
       const updatedUser = response.data.user;
-      
-      // Update localStorage
-      const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-      auth.user = updatedUser;
-      localStorage.setItem("auth", JSON.stringify(auth));
-      
-      // Update state
+
       setUser(updatedUser);
-      
-      console.log("User data refreshed:", updatedUser);
+
+      // Update localStorage safely
+      try {
+        if (typeof window !== "undefined" && window.localStorage) {
+          const rawAuth = window.localStorage.getItem("auth") || "{}";
+          const auth = JSON.parse(rawAuth);
+          auth.user = updatedUser;
+          window.localStorage.setItem("auth", JSON.stringify(auth));
+        }
+      } catch (err) {
+        console.warn("localStorage blocked while refreshing user");
+      }
     } catch (error) {
       console.error("Error refreshing user data:", error);
     }
@@ -57,7 +86,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         refreshUser,
-        loading
+        loading,
       }}
     >
       {children}

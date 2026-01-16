@@ -1,10 +1,4 @@
-/*
-|--------------------------------------------------------------------------
-| AUTH PROVIDER (SAFE VERSION)
-|--------------------------------------------------------------------------
-| Prevents JSON.parse errors
-*/
-
+// src/context/AuthProvider.jsx
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 
@@ -13,24 +7,23 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // 🔒 SAFE localStorage read
   useEffect(() => {
     try {
-      const storedUser = localStorage.getItem("user");
-      const storedToken = localStorage.getItem("token");
+      if (typeof window !== "undefined" && window.localStorage) {
+        const storedUser = window.localStorage.getItem("user");
+        const storedToken = window.localStorage.getItem("token");
 
-      if (storedUser && storedUser !== "undefined") {
-        setUser(JSON.parse(storedUser));
-      } else {
-        setUser(null);
-      }
+        if (storedUser && storedUser !== "undefined") {
+          setUser(JSON.parse(storedUser));
+        }
 
-      if (storedToken && storedToken !== "undefined") {
-        setToken(storedToken);
-      } else {
-        setToken(null);
+        if (storedToken && storedToken !== "undefined") {
+          setToken(storedToken);
+        }
       }
     } catch (error) {
-      console.error("Auth storage error:", error);
+      console.warn("localStorage blocked, continuing without auth");
       setUser(null);
       setToken(null);
     } finally {
@@ -38,17 +31,31 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // 🔒 SAFE login
   const login = (data) => {
-    localStorage.setItem("user", JSON.stringify(data.user));
-    localStorage.setItem("token", data.token);
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.setItem("user", JSON.stringify(data.user));
+        window.localStorage.setItem("token", data.token);
+      }
+    } catch (error) {
+      console.warn("localStorage blocked during login");
+    }
 
     setUser(data.user);
     setToken(data.token);
   };
 
+  // 🔒 SAFE logout
   const logout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.removeItem("user");
+        window.localStorage.removeItem("token");
+      }
+    } catch (error) {
+      console.warn("localStorage blocked during logout");
+    }
 
     setUser(null);
     setToken(null);
@@ -62,10 +69,11 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         logout,
-        isAuthenticated: !!token
+        isAuthenticated: !!token,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
