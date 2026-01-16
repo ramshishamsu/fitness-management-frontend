@@ -5,7 +5,7 @@ import { useAuth } from "../../context/useAuth";
 import { useTheme } from "../../context/ThemeContext.jsx";
 
 const TrainerDashboard = () => {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const { isDark } = useTheme();
   const [stats, setStats] = useState({
     activeClients: 0,
@@ -19,6 +19,12 @@ const TrainerDashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
+    // Refresh user data to get updated status after admin approval
+    if (refreshUser && typeof refreshUser === 'function') {
+      refreshUser().catch(error => {
+        console.error('Error refreshing user data:', error);
+      });
+    }
   }, []);
 
   const fetchDashboardData = async () => {
@@ -87,24 +93,28 @@ const TrainerDashboard = () => {
           label="Active Clients"
           value={stats.activeClients}
           change="+2 this week"
+          isDark={isDark}
         />
         <StatCard
           icon={<Calendar />}
           label="Sessions This Week"
           value={stats.sessionsThisWeek}
           change="+12% from last week"
+          isDark={isDark}
         />
         <StatCard
           icon={<IndianRupee />}
           label="Monthly Earnings"
           value={`₹${stats.monthlyEarnings.toLocaleString()}`}
           change="+8% from last month"
+          isDark={isDark}
         />
         <StatCard
           icon={<Clock />}
           label="Today's Sessions"
           value={stats.todaySessions}
           change={stats.todaySessions > 0 ? "On track" : "No sessions today"}
+          isDark={isDark}
         />
       </div>
 
@@ -213,7 +223,7 @@ const TrainerDashboard = () => {
 
 /* ================= COMPONENTS ================= */
 
-const StatCard = ({ icon, label, value, change }) => (
+const StatCard = ({ icon, label, value, change, isDark }) => (
   <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6`}>
     <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-500/10 text-emerald-600'} rounded-lg`}>
       {icon}
@@ -226,7 +236,7 @@ const StatCard = ({ icon, label, value, change }) => (
   </div>
 );
 
-const ClientCard = ({ client, workoutCount }) => (
+const ClientCard = ({ client, workoutCount, isDark }) => (
   <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6`}>
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center gap-3">

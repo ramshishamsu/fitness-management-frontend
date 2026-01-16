@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import axiosInstance from "../api/axios";
 
 export const AuthContext = createContext(null);
 
@@ -28,6 +29,26 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // 🔄 Refresh user data from server
+  const refreshUser = async () => {
+    try {
+      const response = await axiosInstance.get("/auth/me");
+      const updatedUser = response.data.user;
+      
+      // Update localStorage
+      const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+      auth.user = updatedUser;
+      localStorage.setItem("auth", JSON.stringify(auth));
+      
+      // Update state
+      setUser(updatedUser);
+      
+      console.log("User data refreshed:", updatedUser);
+    } catch (error) {
+      console.error("Error refreshing user data:", error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -35,6 +56,7 @@ export const AuthProvider = ({ children }) => {
         setUser,
         login,
         logout,
+        refreshUser,
         loading
       }}
     >

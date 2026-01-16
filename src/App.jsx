@@ -19,6 +19,8 @@ import UserPayments from "./pages/user/UserPayments";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import MyWorkouts from "./pages/user/MyWorkouts";
 import NutritionTracker from "./pages/user/NutritionTracker";
+import UserNutritionPlans from "./pages/user/UserNutritionPlans";
+import ClientNutritionLog from "./pages/user/ClientNutritionLog";
 import UserCheckout from "./pages/user/UserCheckout";
 import UserPlans from "./pages/user/UserPlans";
 import UserPaymentSuccess from "./pages/user/UserPaymentSuccess";
@@ -33,7 +35,7 @@ import TrainerUsers from "./pages/trainer/TrainerUsers";
 import TrainerViewUserProfile from "./pages/trainer/TrainerViewUserProfile";
 import AssignWorkout from "./pages/trainer/AssignWorkout";
 import TrainerLayout from "./components/common/TrainerLayout";
-import SimpleNutritionManager from "./pages/trainer/SimpleNutritionManager";
+import TrainerNutritionManager from "./pages/trainer/TrainerNutritionManager";
 
 
 
@@ -41,6 +43,7 @@ import SimpleNutritionManager from "./pages/trainer/SimpleNutritionManager";
 import AdminProtectedRoute from "./routes/AdminProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
+import AdminTrainerDetails from "./pages/admin/AdminTrainerDetails";
 import TrainerApproval from "./pages/admin/TrainerApproval";
 import AdminAppointments from "./pages/admin/AdminAppointments";
 import AdminPayments from "./pages/admin/AdminPayments";
@@ -70,6 +73,8 @@ const App = () => {
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="profile" element={<UserProfile />} />
         <Route path="nutrition-tracker" element={<NutritionTracker />} />
+        <Route path="nutrition-plans" element={<UserNutritionPlans />} />
+        <Route path="nutrition-log/:planId" element={<ClientNutritionLog />} />
         <Route path="my-workouts" element={<MyWorkouts />} />
         <Route path="trainers" element={<UserTrainers />} />
         <Route path="plans" element={<UserPlans />} />
@@ -99,6 +104,7 @@ const App = () => {
         <Route path="users/:id" element={<TrainerViewUserProfile />} />
         <Route path="assign-workout/:id" element={<AssignWorkout />} />
         <Route path="nutrition" element={<TrainerNutritionManager />} />
+        <Route path="nutrition-plans" element={<TrainerNutritionManager />} />
       </Route>
 
       {/* ================= ADMIN ================= */}
@@ -115,6 +121,7 @@ const App = () => {
         <Route index element={<AdminDashboard />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users" element={<AdminUsers />} />
+        <Route path="trainer-details/:id" element={<AdminTrainerDetails />} />
         <Route path="trainers" element={<TrainerApproval />} />
         <Route path="appointments" element={<AdminAppointments />} />
         <Route path="payments" element={<AdminPayments />} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Search, Filter, Ban, Check, Trash, Edit, Eye, UserPlus } from 'lucide-react';
+import { Users, Search, Filter, Ban, Check, Trash, Edit, Eye, UserPlus, FileText } from 'lucide-react';
 import { FaUsers } from 'react-icons/fa';
 import axios from '../../api/axios';
 
@@ -252,6 +252,15 @@ const AdminUsers = () => {
                           >
                             <Eye className="text-blue-600 hover:text-blue-900" />
                           </button>
+                          {user.role === 'trainer' && (
+                            <button
+                              onClick={() => window.location.href = `/admin/trainer-details/${user._id}`}
+                              className="text-purple-600 hover:text-purple-900"
+                              title="View Trainer Documents"
+                            >
+                              <FileText className="text-purple-600 hover:text-purple-900" />
+                            </button>
+                          )}
                           <button
                             onClick={() => window.location.href = `/admin/users/${user._id}/edit`}
                             className="text-green-600 hover:text-green-900"
