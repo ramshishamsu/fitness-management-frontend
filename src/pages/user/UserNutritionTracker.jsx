@@ -115,8 +115,14 @@ const UserNutritionTracker = () => {
   };
 
   const getPlannedMealsForDate = () => {
-    if (!nutritionPlan || !nutritionPlan.dailyPlans) {
-      console.log('No nutrition plan or dailyPlans found');
+    if (!nutritionPlan) {
+      console.log('No nutrition plan found');
+      return [];
+    }
+    
+    // Handle case where dailyPlans doesn't exist or is empty
+    if (!nutritionPlan.dailyPlans || nutritionPlan.dailyPlans.length === 0) {
+      console.log('No dailyPlans found in nutrition plan');
       return [];
     }
     
@@ -365,7 +371,8 @@ const UserNutritionTracker = () => {
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
               <h3 className="text-lg font-semibold text-yellow-800 mb-2">Plan Details</h3>
               <p className="text-yellow-700">This nutrition plan is created but daily meal plans are not yet configured.</p>
-              <p className="text-yellow-700">Please contact your trainer to add daily meal plans.</p>
+              <p className="text-yellow-700">Please contact your trainer to add daily meal plans for each day of the nutrition program.</p>
+              <p className="text-yellow-700 text-sm">Current daily plans in system: {nutritionPlan.dailyPlans?.length || 0} days</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
