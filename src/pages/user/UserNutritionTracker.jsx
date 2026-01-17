@@ -7,6 +7,7 @@ const UserNutritionTracker = () => {
   const { planId } = useParams();
   const navigate = useNavigate();
   const [nutritionPlan, setNutritionPlan] = useState(null);
+  const [nutritionPlans, setNutritionPlans] = useState([]);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
