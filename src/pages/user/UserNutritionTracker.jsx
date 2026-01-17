@@ -319,35 +319,6 @@ const UserNutritionTracker = () => {
             <div className="text-center py-12">
               <AlertCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No Nutrition Plans</h3>
-              <p className="text-gray-600">You don't have any nutrition plans assigned yet.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {nutritionPlans.map(plan => (
-                <div key={plan._id} className="bg-white rounded-lg shadow-md p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{plan.name}</h3>
-                  <p className="text-gray-600 mb-4">{plan.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-500">
-                      {new Date(plan.startDate).toLocaleDateString()} - {new Date(plan.endDate).toLocaleDateString()}
-                    </span>
-                    <button
-                      onClick={() => navigate(`/user/nutrition-log/${plan._id}`)}
-                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-                    >
-                      View Plan
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-  if (!nutritionPlan || !nutritionPlan.dailyPlans || nutritionPlan.dailyPlans.length === 0) {
-    if (!nutritionPlan) {
-      // Show loading while nutrition plan is being fetched
-      return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
         </div>
       );
     }
@@ -378,48 +349,29 @@ const UserNutritionTracker = () => {
                 <div className="text-center">
                   <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
                   <div className="text-sm text-gray-500">Goal Type</div>
-                  <div className="text-xl font-bold text-gray-900 capitalize">
-                    {nutritionPlan.goals?.goalType?.replace('_', ' ') || 'Not set'}
-                  </div>
-                </div>
-                <div className="text-center">
-                  <Calendar className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                  <div className="text-sm text-gray-500">Duration</div>
-                  <div className="text-xl font-bold text-gray-900">
-                    {nutritionPlan.duration || 'Not set'} days
-                  </div>
-                </div>
-                <div className="text-center">
-                  <CheckCircle className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
-                  <div className="text-sm text-gray-500">Status</div>
-                  <div className="text-xl font-bold text-gray-900 capitalize">
-                    {nutritionPlan.status || 'Not set'}
-                  </div>
-                </div>
-              </div>
             </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {nutritionPlans.map(plan => (
+                <div key={plan._id} className="bg-white rounded-lg shadow-md p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{plan.name}</h3>
+                  <p className="text-gray-600 mb-4">{plan.description}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">
+                      {new Date(plan.startDate).toLocaleDateString()} - {new Date(plan.endDate).toLocaleDateString()}
+                    </span>
+                    <button
+                      onClick={() => navigate(`/user/nutrition-log/${plan._id}`)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                    >
+                      View Plan
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
             
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <h3 className="text-lg font-semibold text-yellow-800 mb-2">Meal Plans</h3>
-              <p className="text-yellow-700">This nutrition plan is created but daily meal plans are not yet configured.</p>
-              <p className="text-yellow-700">Please contact your trainer to add daily meal plans for each day of the nutrition program.</p>
-              <p className="text-yellow-700 text-sm">Current daily plans in system: {nutritionPlan.dailyPlans?.length || 0} days</p>
-            </div>
-            
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <h3 className="text-lg font-semibold text-blue-800 mb-2">Next Steps</h3>
-              <ul className="list-disc list-inside text-blue-700 space-y-2">
-                <li>Contact your trainer to add daily meal plans for each day</li>
-                <li>Trainer can add meals, exercises, and nutritional targets</li>
-                <li>You'll be able to log daily nutrition intake once meals are added</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   // Show individual plan details
   if (!nutritionPlan) {
     return (
