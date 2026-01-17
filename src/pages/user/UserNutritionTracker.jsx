@@ -88,9 +88,9 @@ const UserNutritionTracker = () => {
       setLogs(response.data.logs || []);
     } catch (error) {
       console.error("Error fetching logs:", error);
+      setLogs([]); // Set empty array on error
     }
   };
-
 
   const findTodayLog = () => {
     const log = logs.find(log => 
@@ -361,7 +361,7 @@ const UserNutritionTracker = () => {
               <div className="text-center">
                 <Target className="w-8 h-8 text-blue-600 mx-auto mb-2" />
                 <div className="text-sm text-gray-500">Daily Calories</div>
-                <div className="text-xl font-bold text-gray-900">{nutritionPlan.goals.dailyCalories}</div>
+                <div className="text-xl font-bold text-gray-900">{nutritionPlan.goals?.dailyCalories || 'Not set'}</div>
               </div>
               <div className="text-center">
                 <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
