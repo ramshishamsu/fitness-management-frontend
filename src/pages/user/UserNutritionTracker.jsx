@@ -314,30 +314,6 @@ const UserNutritionTracker = () => {
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">My Nutrition Plans</h1>
-          
-          {nutritionPlans.length === 0 ? (
-            <div className="text-center py-12">
-              <AlertCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Nutrition Plans</h3>
-        </div>
-      );
-    }
-    
-    return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <button
-            onClick={() => navigate('/user/nutrition-tracker')}
-            className="mb-6 flex items-center gap-2 text-blue-600 hover:text-blue-800"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Back to Plans
-          </button>
-          
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{nutritionPlan.name}</h1>
-            <p className="text-gray-600 mb-4">{nutritionPlan.description}</p>
-            
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
               <h3 className="text-lg font-semibold text-blue-800 mb-2">Plan Overview</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
