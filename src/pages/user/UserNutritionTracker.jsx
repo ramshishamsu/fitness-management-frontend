@@ -7,7 +7,6 @@ const UserNutritionTracker = () => {
   const { planId } = useParams();
   const navigate = useNavigate();
   const [nutritionPlan, setNutritionPlan] = useState(null);
-  const [nutritionPlans, setNutritionPlans] = useState([]);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -53,6 +52,7 @@ const UserNutritionTracker = () => {
     } else {
       fetchNutritionPlans();
     }
+    setLoading(false);
   }, [planId]);
 
   useEffect(() => {
@@ -63,36 +63,31 @@ const UserNutritionTracker = () => {
 
   const fetchNutritionPlans = async () => {
     try {
-      setLoading(true);
-      const response = await axios.get('/api/nutrition-plans');
+      const response = await axios.get('/nutrition-plans');
       setNutritionPlans(response.data.nutritionPlans || []);
     } catch (error) {
       console.error('Error fetching nutrition plans:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchNutritionPlan = async () => {
     try {
-      const response = await axios.get(`/api/nutrition-plans/${planId}`);
+      const response = await axios.get(`/nutrition-plans/${planId}`);
       setNutritionPlan(response.data);
     } catch (error) {
-      console.error('Error fetching nutrition plan:', error);
+      console.error("Error fetching nutrition plan:", error);
     }
   };
 
   const fetchLogs = async () => {
     try {
-      setLoading(true);
-      const response = await axios.get(`/api/nutrition-plans/${planId}/logs`);
+      const response = await axios.get(`/nutrition-plans/${planId}/logs`);
       setLogs(response.data.logs || []);
     } catch (error) {
-      console.error('Error fetching nutrition logs:', error);
-    } finally {
-      setLoading(false);
+      console.error("Error fetching logs:", error);
     }
   };
+
 
   const findTodayLog = () => {
     const log = logs.find(log => 
@@ -193,7 +188,7 @@ const UserNutritionTracker = () => {
         totalConsumedCalories
       };
 
-      await axios.post(`/api/nutrition-plans/${planId}/logs`, logData);
+      await axios.post(`/nutrition-plans/${planId}/logs`, logData);
       
       alert('Nutrition log saved successfully!');
       fetchLogs(); // Refresh logs
@@ -279,6 +274,46 @@ const UserNutritionTracker = () => {
     );
   }
 
+  // Show nutrition plans list if no planId
+  if (!planId) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">My Nutrition Plans</h1>
+          
+          {nutritionPlans.length === 0 ? (
+            <div className="text-center py-12">
+              <AlertCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Nutrition Plans</h3>
+              <p className="text-gray-600">You don't have any nutrition plans assigned yet.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {nutritionPlans.map(plan => (
+                <div key={plan._id} className="bg-white rounded-lg shadow-md p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{plan.name}</h3>
+                  <p className="text-gray-600 mb-4">{plan.description}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">
+                      {new Date(plan.startDate).toLocaleDateString()} - {new Date(plan.endDate).toLocaleDateString()}
+                    </span>
+                    <button
+                      onClick={() => navigate(`/user/nutrition/${plan._id}`)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                    >
+                      View Plan
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Show individual plan details
   if (!nutritionPlan) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -290,7 +325,7 @@ const UserNutritionTracker = () => {
             onClick={() => navigate('/user/nutrition')}
             className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
           >
-            Back to Nutrition
+            Back to Nutrition Plans
           </button>
         </div>
       </div>
