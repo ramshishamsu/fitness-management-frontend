@@ -299,7 +299,7 @@ const UserNutritionTracker = () => {
                       {new Date(plan.startDate).toLocaleDateString()} - {new Date(plan.endDate).toLocaleDateString()}
                     </span>
                     <button
-                      onClick={() => navigate(`/user/nutrition/${plan._id}`)}
+                      onClick={() => navigate(`/user/nutrition-log/${plan._id}`)}
                       className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
                     >
                       View Plan
