@@ -115,6 +115,11 @@ const UserNutritionTracker = () => {
   };
 
   const getPlannedMealsForDate = () => {
+    console.log('=== DEBUGGING NUTRITION PLAN STRUCTURE ===');
+    console.log('nutritionPlan object:', nutritionPlan);
+    console.log('nutritionPlan.dailyPlans:', nutritionPlan?.dailyPlans);
+    console.log('nutritionPlan keys:', nutritionPlan ? Object.keys(nutritionPlan) : 'nutritionPlan is null');
+    
     if (!nutritionPlan) {
       console.log('No nutrition plan found');
       return [];
