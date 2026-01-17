@@ -47,13 +47,19 @@ const UserNutritionTracker = () => {
   ];
 
   useEffect(() => {
-    if (planId) {
-      fetchNutritionPlan();
-      fetchLogs();
-    } else {
-      fetchNutritionPlans();
-    }
-    setLoading(false);
+    const fetchData = async () => {
+      if (planId) {
+        await Promise.all([
+          fetchNutritionPlan(),
+          fetchLogs()
+        ]);
+      } else {
+        await fetchNutritionPlans();
+      }
+      setLoading(false);
+    };
+    
+    fetchData();
   }, [planId]);
 
   useEffect(() => {
@@ -402,14 +408,8 @@ const UserNutritionTracker = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <AlertCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Nutrition Plan Not Found</h2>
-          <p className="text-gray-600">The nutrition plan you're looking for doesn't exist.</p>
-          <button
-            onClick={() => navigate('/user/nutrition')}
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-          >
-            Back to Nutrition Plans
-          </button>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading Nutrition Plan...</h2>
+          <p className="text-gray-600">Please wait while we fetch your plan details.</p>
         </div>
       </div>
     );
