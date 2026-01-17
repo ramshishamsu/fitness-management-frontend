@@ -101,7 +101,7 @@ const UserNutritionPlans = () => {
         {/* Nutrition Plans Grid */}
         {nutritionPlans.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {nutritionPlans.map((plan) => (
+            {nutritionPlans.map((plan, index) => (
               <div key={plan._id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
                 <div className="p-6">
                   {/* Plan Header */}
@@ -113,48 +113,41 @@ const UserNutritionPlans = () => {
                   </div>
 
                   {/* Plan Description */}
-                  {plan.description && (
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{plan.description}</p>
-                  )}
+                  <div className="flex items-center text-sm text-gray-500">
+                    <div className="flex-1">
+                      <h4 className="text-lg font-medium text-gray-900">{plan.name}</h4>
+                      <p className="text-gray-600 text-sm mb-2 line-clamp-2">{plan.description}</p>
+                    </div>
 
-                  {/* Plan Details */}
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center text-sm">
-                      <Calendar className="w-4 h-4 text-gray-500 mr-2" />
-                      <span className="text-gray-700">
+                    {/* Plan Details */}
+                    <div className="space-y-2">
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Calendar className="w-4 h-4 text-gray-500 mr-2" />
+                        <span className="text-gray-700">
+                          {new Date(plan.startDate).toLocaleDateString()} - {new Date(plan.endDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="text-gray-700">
                         {plan.duration} days • {getDaysRemaining(plan.endDate)} days remaining
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center text-sm">
-                      <Target className="w-4 h-4 text-gray-500 mr-2" />
-                      <span className="text-gray-700">
+                      </div>
+                      <div className="text-gray-700">
                         {getGoalTypeLabel(plan.goals?.goalType)} • {plan.goals?.dailyCalories} cal/day
-                      </span>
-                    </div>
-
-                    <div className="flex items-center text-sm">
-                      <TrendingUp className="w-4 h-4 text-gray-500 mr-2" />
-                      <span className="text-gray-700">
-                        {plan.statistics?.adherenceRate || 0}% adherence rate
-                      </span>
+                      </div>
+                      <div className="text-gray-700">
+                        {plan.status}
+                      </div>
                     </div>
                   </div>
 
                   {/* Progress Bar */}
-                  <div className="mb-4">
-                    <div className="flex justify-between text-sm text-gray-600 mb-1">
-                      <span>Progress</span>
-                      <span>{getProgressPercentage(plan.startDate, plan.endDate, plan.statistics?.completedDays, plan.duration)}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                        style={{
-                          width: getProgressPercentage(plan.startDate, plan.endDate, plan.statistics?.completedDays, plan.duration) + '%'
-                        }}
-                      />
-                    </div>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <span>Progress</span>
+                    <div
+                      className="w-full bg-gray-200 rounded-full h-2"
+                      style={{
+                        width: getProgressPercentage(plan.startDate, plan.endDate, plan.statistics?.completedDays, plan.duration) + '%'
+                      }}
+                    ></div>
                   </div>
 
                   {/* Action Buttons */}
@@ -166,16 +159,6 @@ const UserNutritionPlans = () => {
                       <ArrowRight className="w-4 h-4 mr-2" />
                       View Plan
                     </button>
-                    
-                    {plan.status === 'active' && (
-                      <button
-                        onClick={() => navigate('/user/nutrition-log/' + plan._id)}
-                        className="flex-1 flex items-center justify-center px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
-                      >
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Log Today
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
