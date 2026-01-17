@@ -291,18 +291,55 @@ const UserNutritionTracker = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {nutritionPlans.map(plan => (
-                <div key={plan._id} className="bg-white rounded-lg shadow-md p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{plan.name}</h3>
-                  <p className="text-gray-600 mb-4">{plan.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-500">
-                      {new Date(plan.startDate).toLocaleDateString()} - {new Date(plan.endDate).toLocaleDateString()}
-                    </span>
+              {nutritionPlans.map((plan, index) => (
+                <div key={plan._id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-semibold text-gray-900">{plan.name}</h3>
+                      <span className={'px-3 py-1 rounded-full text-xs font-medium ' + getStatusColor(plan.status)}>
+                        {plan.status?.charAt(0)?.toUpperCase() + plan.status?.slice(1)}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center text-sm text-gray-500">
+                      <div className="flex-1">
+                        <h4 className="text-lg font-medium text-gray-900">{plan.name}</h4>
+                        <p className="text-gray-600 text-sm mb-2 line-clamp-2">{plan.description}</p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center text-sm text-gray-500">
+                          <Calendar className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-gray-700">
+                            {new Date(plan.startDate).toLocaleDateString()} - {new Date(plan.endDate).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="text-gray-700">
+                          {plan.duration} days • {getDaysRemaining(plan.endDate)} days remaining
+                        </div>
+                        <div className="text-gray-700">
+                          {getGoalTypeLabel(plan.goals?.goalType)} • {plan.goals?.dailyCalories} cal/day
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center text-sm text-gray-500">
+                      <span>Progress</span>
+                      <div
+                        className="w-full bg-gray-200 rounded-full h-2"
+                        style={{
+                          width: getProgressPercentage(plan.startDate, plan.endDate, plan.statistics?.completedDays, plan.duration) + '%'
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-3">
                     <button
-                      onClick={() => navigate(`/user/nutrition-log/${plan._id}`)}
-                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                      onClick={() => navigate('/user/nutrition-log/' + plan._id)}
+                      className="flex-1 flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
                     >
+                      <ArrowRight className="w-4 h-4 mr-2" />
                       View Plan
                     </button>
                   </div>
@@ -555,7 +592,6 @@ const UserNutritionTracker = () => {
                         <span className="text-blue-700">Adherence:</span>
                         <span className="ml-2 font-medium text-blue-900">{todayLog.adherenceScore}%</span>
                       </div>
-                      )}
                       {todayLog.notes && (
                         <div>
                           <span className="text-blue-700">Notes:</span>
