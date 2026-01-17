@@ -1,49 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, CheckCircle, XCircle, AlertCircle, Clock, TrendingUp, Target, ArrowLeft } from 'lucide-react';
-import axios from '../../api/axios';
+import React, { useEffect, useState } from "react";
+import axios from "../../api/axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, AlertCircle, Target, TrendingUp, Calendar, CheckCircle, Clock, XCircle } from "lucide-react";
 
 const UserNutritionTracker = () => {
   const { planId } = useParams();
   const navigate = useNavigate();
-  const [nutritionPlan, setNutritionPlan] = useState(null);
   const [nutritionPlans, setNutritionPlans] = useState([]);
+  const [nutritionPlan, setNutritionPlan] = useState(null);
   const [logs, setLogs] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [todayLog, setTodayLog] = useState(null);
   const [loggingMeal, setLoggingMeal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const mealTypes = [
-    { value: 'breakfast', label: 'Breakfast', icon: '🌅' },
-    { value: 'lunch', label: 'Lunch', icon: '☀️' },
-    { value: 'dinner', label: 'Dinner', icon: '🌙' },
-    { value: 'snack', label: 'Snack', icon: '🍎' },
-    { value: 'pre_workout', label: 'Pre-Workout', icon: '💪' },
-    { value: 'post_workout', label: 'Post-Workout', icon: '🏃' }
+    { value: "breakfast", label: "Breakfast", icon: "🍳" },
+    { value: "lunch", label: "Lunch", icon: "🥗" },
+    { value: "dinner", label: "Dinner", icon: "🍽" },
+    { value: "snack", label: "Snack", icon: "🍿" },
+    { value: "pre_workout", label: "Pre-Workout", icon: "⚡" },
+    { value: "post_workout", label: "Post-Workout", icon: "🔋" }
   ];
 
   const statusOptions = [
-    { value: 'completed', label: 'Completed', color: 'green' },
-    { value: 'skipped', label: 'Skipped', color: 'red' },
-    { value: 'partial', label: 'Partial', color: 'yellow' },
-    { value: 'substituted', label: 'Substituted', color: 'blue' }
+    { value: "completed", label: "Completed" },
+    { value: "skipped", label: "Skipped" },
+    { value: "partial", label: "Partial" },
+    { value: "substituted", label: "Substituted" }
   ];
 
   const moodOptions = [
-    { value: 'excellent', label: 'Excellent', emoji: '😊' },
-    { value: 'good', label: 'Good', emoji: '🙂' },
-    { value: 'average', label: 'Average', emoji: '😐' },
-    { value: 'poor', label: 'Poor', emoji: '😔' },
-    { value: 'terrible', label: 'Terrible', emoji: '😞' }
+    { value: "great", label: "Great", emoji: "😊" },
+    { value: "good", label: "Good", emoji: "🙂" },
+    { value: "okay", label: "Okay", emoji: "😐" },
+    { value: "bad", label: "Bad", emoji: "😞" },
+    { value: "terrible", label: "Terrible", emoji: "😢" }
   ];
 
   const energyOptions = [
-    { value: 'very_high', label: 'Very High', emoji: '⚡' },
-    { value: 'high', label: 'High', emoji: '🔥' },
-    { value: 'medium', label: 'Medium', emoji: '🔋' },
-    { value: 'low', label: 'Low', emoji: '🔻' },
-    { value: 'very_low', label: 'Very Low', emoji: '🔻🔻' }
+    { value: "very_high", label: "Very High", emoji: "⚡" },
+    { value: "high", label: "High", emoji: "🔥" },
+    { value: "medium", label: "Medium", emoji: "🔋" },
+    { value: "low", label: "Low", emoji: "🔻" },
+    { value: "very_low", label: "Very Low", emoji: "🔻🔻" }
   ];
 
   useEffect(() => {
@@ -62,12 +62,6 @@ const UserNutritionTracker = () => {
     fetchData();
   }, [planId]);
 
-  useEffect(() => {
-    if (selectedDate && nutritionPlan) {
-      findTodayLog();
-    }
-  }, [selectedDate, logs]);
-
   const fetchNutritionPlans = async () => {
     try {
       const response = await axios.get('/nutrition-plans');
@@ -81,15 +75,6 @@ const UserNutritionTracker = () => {
     try {
       const response = await axios.get(`/nutrition-plans/${planId}`);
       console.log('Nutrition plan data:', response.data);
-      console.log('Plan structure:', {
-        name: response.data.name,
-        description: response.data.description,
-        goals: response.data.goals,
-        dailyPlans: response.data.dailyPlans,
-        startDate: response.data.startDate,
-        endDate: response.data.endDate,
-        status: response.data.status
-      });
       setNutritionPlan(response.data);
     } catch (error) {
       console.error("Error fetching nutrition plan:", error);
@@ -103,8 +88,21 @@ const UserNutritionTracker = () => {
       setLogs(response.data.logs || []);
     } catch (error) {
       console.error("Error fetching logs:", error);
-      setLogs([]); // Set empty array on error
+      setLogs([]);
     }
+  };
+
+  const getPlannedMealsForDate = () => {
+    if (!nutritionPlan || !nutritionPlan.dailyPlans) {
+      return [];
+    }
+    
+    const startDate = new Date(nutritionPlan.startDate);
+    const selectedDateObj = new Date(selectedDate);
+    const dayDiff = Math.ceil((selectedDateObj - startDate) / (1000 * 60 * 60 * 24)) + 1;
+    
+    const dayPlan = nutritionPlan.dailyPlans.find(plan => plan.day === dayDiff);
+    return dayPlan ? dayPlan.meals : [];
   };
 
   const findTodayLog = () => {
@@ -114,58 +112,30 @@ const UserNutritionTracker = () => {
     setTodayLog(log || null);
   };
 
-  const getPlannedMealsForDate = () => {
-    console.log('=== DEBUGGING NUTRITION PLAN STRUCTURE ===');
-    console.log('nutritionPlan object:', nutritionPlan);
-    console.log('nutritionPlan.dailyPlans:', nutritionPlan?.dailyPlans);
-    console.log('nutritionPlan keys:', nutritionPlan ? Object.keys(nutritionPlan) : 'nutritionPlan is null');
-    
-    if (!nutritionPlan) {
-      console.log('No nutrition plan found');
-      return [];
-    }
-    
-    // Handle case where dailyPlans doesn't exist or is empty
-    if (!nutritionPlan.dailyPlans || nutritionPlan.dailyPlans.length === 0) {
-      console.log('No dailyPlans found in nutrition plan');
-      return [];
-    }
-    
-    const startDate = new Date(nutritionPlan.startDate);
-    const selectedDateObj = new Date(selectedDate);
-    const dayDiff = Math.ceil((selectedDateObj - startDate) / (1000 * 60 * 60 * 24)) + 1;
-    
-    console.log('Finding meals for day:', dayDiff, 'from', nutritionPlan.dailyPlans?.length || 0, 'days');
-    
-    const dayPlan = nutritionPlan.dailyPlans.find(plan => plan.day === dayDiff);
-    return dayPlan ? dayPlan.meals : [];
-  };
-
   const updateMealStatus = (mealType, status) => {
-    if (!todayLog) {
-      // Create new log for today
-      const newLog = {
-        date: selectedDate,
-        day: getDayNumber(),
-        meals: getPlannedMealsForDate().map(meal => ({
-          mealType: meal.mealType,
-          status: meal.mealType === mealType ? status : 'skipped',
-          notes: '',
-          actualCalories: meal.mealType === mealType ? meal.calories : 0,
-          actualProtein: meal.mealType === mealType ? meal.protein : 0,
-          actualCarbs: meal.mealType === mealType ? meal.carbs : 0,
-          actualFat: meal.mealType === mealType ? meal.fat : 0
-        })),
-        totalConsumedCalories: 0,
-        adherenceScore: 0,
+    if (!todayLog) return;
+    
+    const newLog = {
+      date: selectedDate,
+      day: getDayNumber(),
+      meals: getPlannedMealsForDate().map(meal => ({
+        mealType: meal.mealType,
+        status: meal.mealType === mealType ? status : 'skipped',
         notes: '',
-        weight: null,
-        mood: null,
-        energyLevel: null
-      };
-      setTodayLog(newLog);
-    } else {
-      // Update existing log
+        actualCalories: meal.mealType === mealType ? meal.calories : 0,
+        actualProtein: meal.mealType === mealType ? meal.protein : 0,
+        actualCarbs: meal.mealType === mealType ? meal.carbs : 0,
+        actualFat: meal.mealType === mealType ? meal.fat : 0
+      })),
+      totalConsumedCalories: 0,
+      adherenceScore: 0,
+      notes: '',
+      weight: null,
+      mood: null,
+      energyLevel: null
+    };
+    setTodayLog(newLog);
+  } else {
       const updatedMeals = todayLog.meals.map(meal => 
         meal.mealType === mealType 
           ? { ...meal, status }
@@ -207,7 +177,6 @@ const UserNutritionTracker = () => {
     try {
       setLoggingMeal(true);
       
-      // Calculate adherence score
       const completedMeals = todayLog.meals.filter(meal => meal.status === 'completed').length;
       const totalMeals = todayLog.meals.length;
       const adherenceScore = totalMeals > 0 ? Math.round((completedMeals / totalMeals) * 100) : 0;
@@ -225,7 +194,7 @@ const UserNutritionTracker = () => {
       await axios.post(`/nutrition-plans/${planId}/logs`, logData);
       
       alert('Nutrition log saved successfully!');
-      fetchLogs(); // Refresh logs
+      fetchLogs();
     } catch (error) {
       console.error('Error saving nutrition log:', error);
       alert('Failed to save nutrition log');
@@ -308,26 +277,20 @@ const UserNutritionTracker = () => {
     );
   }
 
-  // Show nutrition plans list if no planId
   if (!planId) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">My Nutrition Plans</h1>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <h3 className="text-lg font-semibold text-blue-800 mb-2">Plan Overview</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="text-center">
-                  <Target className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                  <div className="text-sm text-gray-500">Daily Calories</div>
-                  <div className="text-xl font-bold text-gray-900">{nutritionPlan.goals?.dailyCalories || 'Not set'}</div>
-                </div>
-                <div className="text-center">
-                  <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <div className="text-sm text-gray-500">Goal Type</div>
+          
+          {nutritionPlans.length === 0 ? (
+            <div className="text-center py-12">
+              <AlertCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Nutrition Plans</h3>
+              <p className="text-gray-600">You don't have any nutrition plans assigned yet.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {nutritionPlans.map(plan => (
                 <div key={plan._id} className="bg-white rounded-lg shadow-md p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">{plan.name}</h3>
@@ -347,15 +310,87 @@ const UserNutritionTracker = () => {
               ))}
             </div>
           )}
-            
-  // Show individual plan details
-  if (!nutritionPlan) {
+        </div>
+      </div>
+    );
+  }
+
+  if (!nutritionPlan || !nutritionPlan.dailyPlans || nutritionPlan.dailyPlans.length === 0) {
+    if (!nutritionPlan) {
+      return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading Nutrition Plan...</h2>
+            <p className="text-gray-600">Please wait while we fetch your plan details.</p>
+          </div>
+        </div>
+      );
+    }
+    
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <AlertCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading Nutrition Plan...</h2>
-          <p className="text-gray-600">Please wait while we fetch your plan details.</p>
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <button
+            onClick={() => navigate('/user/nutrition-tracker')}
+            className="mb-6 flex items-center gap-2 text-blue-600 hover:text-blue-800"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back to Plans
+          </button>
+          
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{nutritionPlan.name}</h1>
+            <p className="text-gray-600 mb-4">{nutritionPlan.description}</p>
+            
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <h3 className="text-lg font-semibold text-blue-800 mb-2">Plan Overview</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <Target className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                  <div className="text-sm text-gray-500">Daily Calories</div>
+                  <div className="text-xl font-bold text-gray-900">{nutritionPlan.goals?.dailyCalories || 'Not set'}</div>
+                </div>
+                <div className="text-center">
+                  <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                  <div className="text-sm text-gray-500">Goal Type</div>
+                  <div className="text-xl font-bold text-gray-900 capitalize">
+                    {nutritionPlan.goals?.goalType?.replace('_', ' ') || 'Not set'}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <Calendar className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                  <div className="text-sm text-gray-500">Duration</div>
+                  <div className="text-xl font-bold text-gray-900">
+                    {nutritionPlan.duration || 'Not set'} days
+                  </div>
+                </div>
+                <div className="text-center">
+                  <CheckCircle className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
+                  <div className="text-sm text-gray-500">Status</div>
+                  <div className="text-xl font-bold text-gray-900 capitalize">
+                    {nutritionPlan.status || 'Not set'}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <h3 className="text-lg font-semibold text-yellow-800 mb-2">Meal Plans</h3>
+              <p className="text-yellow-700">This nutrition plan is created but daily meal plans are not yet configured.</p>
+              <p className="text-yellow-700">Please contact your trainer to add daily meal plans for each day of the nutrition program.</p>
+              <p className="text-yellow-700 text-sm">Current daily plans in system: {nutritionPlan.dailyPlans?.length || 0} days</p>
+            </div>
+            
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <h3 className="text-lg font-semibold text-blue-800 mb-2">Next Steps</h3>
+              <ul className="list-disc list-inside text-blue-700 space-y-2">
+                <li>Contact your trainer to add daily meal plans for each day</li>
+                <li>Trainer can add meals, exercises, and nutritional targets</li>
+                <li>You'll be able to log daily nutrition intake once meals are added</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -364,7 +399,6 @@ const UserNutritionTracker = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => navigate('/user/nutrition')}
@@ -373,41 +407,40 @@ const UserNutritionTracker = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Nutrition Plans
           </button>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{nutritionPlan.name}</h1>
+          <p className="text-gray-600 mb-4">{nutritionPlan.description}</p>
           
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{nutritionPlan.name}</h1>
-            <p className="text-gray-600 mb-4">{nutritionPlan.description}</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <Target className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                <div className="text-sm text-gray-500">Daily Calories</div>
-                <div className="text-xl font-bold text-gray-900">{nutritionPlan.goals?.dailyCalories || 'Not set'}</div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <Target className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+              <div className="text-sm text-gray-500">Daily Calories</div>
+              <div className="text-xl font-bold text-gray-900">{nutritionPlan.goals?.dailyCalories || 'Not set'}</div>
+            </div>
+            <div className="text-center">
+              <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
+              <div className="text-sm text-gray-500">Goal Type</div>
+              <div className="text-xl font-bold text-gray-900 capitalize">
+                {nutritionPlan.goals.goalType?.replace('_', ' ')}
               </div>
-              <div className="text-center">
-                <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                <div className="text-sm text-gray-500">Goal Type</div>
-                <div className="text-xl font-bold text-gray-900 capitalize">
-                  {nutritionPlan.goals.goalType?.replace('_', ' ')}
-                </div>
-              </div>
-              <div className="text-center">
-                <Calendar className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                <div className="text-sm text-gray-500">Duration</div>
-                <div className="text-xl font-bold text-gray-900">{nutritionPlan.duration} days</div>
-              </div>
-              <div className="text-center">
-                <CheckCircle className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
-                <div className="text-sm text-gray-500">Adherence Rate</div>
-                <div className="text-xl font-bold text-gray-900">
-                  {nutritionPlan.statistics.adherenceRate || 0}%
-                </div>
+            </div>
+            <div className="text-center">
+              <Calendar className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+              <div className="text-sm text-gray-500">Duration</div>
+              <div className="text-xl font-bold text-gray-900">{nutritionPlan.duration} days</div>
+            </div>
+            <div className="text-center">
+              <CheckCircle className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
+              <div className="text-sm text-gray-500">Adherence Rate</div>
+              <div className="text-xl font-bold text-gray-900">
+                {nutritionPlan.statistics.adherenceRate || 0}%
               </div>
             </div>
           </div>
         </div>
-
-        {/* Date Selection and Logging */}
+        
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Daily Nutrition Log</h2>
           
@@ -424,22 +457,16 @@ const UserNutritionTracker = () => {
               className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-
+          
           {plannedMeals.length > 0 ? (
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
                 Day {getDayNumber()} - Nutrition Log
-                {todayLog?.createdByTrainer && (
-                  <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                    Created by Trainer
-                  </span>
-                )}
               </h3>
               
               {plannedMeals.map((meal, index) => {
                 const currentMealStatus = todayLog?.meals?.find(m => m.mealType === meal.mealType)?.status;
                 const mealType = mealTypes.find(type => type.value === meal.mealType);
-                const isTrainerCreated = todayLog?.createdByTrainer;
                 
                 return (
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
@@ -456,26 +483,18 @@ const UserNutritionTracker = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         {getStatusIcon(currentMealStatus)}
-                        {isTrainerCreated ? (
-                          <div className="px-3 py-2 bg-gray-100 rounded-lg">
-                            <span className="text-sm font-medium text-gray-700">
-                              {statusOptions.find(option => option.value === currentMealStatus)?.label || 'Not logged'}
-                            </span>
-                          </div>
-                        ) : (
-                          <select
-                            value={currentMealStatus || 'skipped'}
-                            onChange={(e) => updateMealStatus(meal.mealType, e.target.value)}
-                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          >
-                            <option value="">Select Status</option>
-                            {statusOptions.map(option => (
-                              <option key={option.value} value={option.value}>
-                                {option.label}
-                              </option>
-                            ))}
-                          </select>
-                        )}
+                        <select
+                          value={currentMealStatus || 'skipped'}
+                          onChange={(e) => updateMealStatus(meal.mealType, e.target.value)}
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                          <option value="">Select Status</option>
+                          {statusOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                     
@@ -500,44 +519,43 @@ const UserNutritionTracker = () => {
                   </div>
                 );
               })}
-
-              {/* Daily Summary */}
-              {todayLog && (
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                  <h4 className="text-lg font-medium text-blue-900 mb-3">Daily Summary</h4>
-                  {todayLog.createdByTrainer ? (
-                    <div className="space-y-4">
-                      <div className="text-sm text-blue-700 mb-3">
-                        <strong>This log was created by your trainer</strong>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {todayLog.weight && (
-                          <div>
-                            <span className="text-blue-700">Weight:</span>
-                            <span className="ml-2 font-medium text-blue-900">{todayLog.weight} lbs</span>
-                          </div>
-                        )}
-                        {todayLog.mood && (
-                          <div>
-                            <span className="text-blue-700">Mood:</span>
-                            <span className="ml-2 font-medium text-blue-900 capitalize">
-                              {moodOptions.find(m => m.value === todayLog.mood)?.emoji} {todayLog.mood}
-                            </span>
-                          </div>
-                        )}
-                        {todayLog.energyLevel && (
-                          <div>
-                            <span className="text-blue-700">Energy:</span>
-                            <span className="ml-2 font-medium text-blue-900 capitalize">
-                              {energyOptions.find(e => e.value === todayLog.energyLevel)?.emoji} {todayLog.energyLevel?.replace('_', ' ')}
-                            </span>
-                          </div>
-                        )}
+              
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <h4 className="text-lg font-medium text-blue-900 mb-3">Daily Summary</h4>
+                
+                {todayLog && (
+                  <div className="space-y-4">
+                    <div className="text-sm text-blue-700 mb-3">
+                      <strong>This log was created by your trainer</strong>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {todayLog.weight && (
                         <div>
-                          <span className="text-blue-700">Adherence:</span>
-                          <span className="ml-2 font-medium text-blue-900">{todayLog.adherenceScore}%</span>
+                          <span className="text-blue-700">Weight:</span>
+                          <span className="ml-2 font-medium text-blue-900">{todayLog.weight} lbs</span>
                         </div>
+                      )}
+                      {todayLog.mood && (
+                        <div>
+                          <span className="text-blue-700">Mood:</span>
+                          <span className="ml-2 font-medium text-blue-900 capitalize">
+                            {moodOptions.find(m => m.value === todayLog.mood)?.emoji} {todayLog.mood}
+                          </span>
+                        </div>
+                      )}
+                      {todayLog.energyLevel && (
+                        <div>
+                          <span className="text-blue-700">Energy:</span>
+                          <span className="ml-2 font-medium text-blue-900 capitalize">
+                            {energyOptions.find(e => e.value === todayLog.energyLevel)?.emoji} {todayLog.energyLevel?.replace('_', ' ')}
+                          </span>
+                        </div>
+                      )}
+                      <div>
+                        <span className="text-blue-700">Adherence:</span>
+                        <span className="ml-2 font-medium text-blue-900">{todayLog.adherenceScore}%</span>
                       </div>
+                      )}
                       {todayLog.notes && (
                         <div>
                           <span className="text-blue-700">Notes:</span>
@@ -556,11 +574,10 @@ const UserNutritionTracker = () => {
                           step="0.1"
                           value={todayLog.weight || ''}
                           onChange={(e) => setTodayLog(prev => ({ ...prev, weight: e.target.value ? parseFloat(e.target.value) : null }))}
-                          className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="Enter today's weight"
                         />
                       </div>
-                      
                       <div>
                         <label className="block text-sm font-medium text-blue-700 mb-1">
                           Mood
@@ -568,17 +585,16 @@ const UserNutritionTracker = () => {
                         <select
                           value={todayLog.mood || ''}
                           onChange={(e) => setTodayLog(prev => ({ ...prev, mood: e.target.value }))}
-                          className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
-                          <option value="">Select mood</option>
+                          <option value="">Select Mood</option>
                           {moodOptions.map(option => (
                             <option key={option.value} value={option.value}>
-                              {option.emoji} {option.label}
+                              {option.label}
                             </option>
                           ))}
                         </select>
                       </div>
-                      
                       <div>
                         <label className="block text-sm font-medium text-blue-700 mb-1">
                           Energy Level
@@ -586,17 +602,16 @@ const UserNutritionTracker = () => {
                         <select
                           value={todayLog.energyLevel || ''}
                           onChange={(e) => setTodayLog(prev => ({ ...prev, energyLevel: e.target.value }))}
-                          className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
-                          <option value="">Select energy level</option>
+                          <option value="">Select Energy</option>
                           {energyOptions.map(option => (
                             <option key={option.value} value={option.value}>
-                              {option.emoji} {option.label}
+                              {option.label}
                             </option>
                           ))}
                         </select>
                       </div>
-                      
                       <div>
                         <label className="block text-sm font-medium text-blue-700 mb-1">
                           Notes
@@ -604,125 +619,27 @@ const UserNutritionTracker = () => {
                         <textarea
                           value={todayLog.notes || ''}
                           onChange={(e) => setTodayLog(prev => ({ ...prev, notes: e.target.value }))}
-                          className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          rows={3}
-                          placeholder="How did you feel today? Any challenges or successes?"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          rows="3"
+                          placeholder="Add any notes for the day"
                         />
                       </div>
                     </div>
                   )}
                 </div>
               )}
-
-              {/* Save Button - Only show for user-created logs */}
-              {todayLog && !todayLog.createdByTrainer && (
-                <div className="mt-6 flex justify-end">
-                  <button
-                    onClick={saveTodayLog}
-                    disabled={loggingMeal}
-                    className="flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {loggingMeal ? (
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    ) : (
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                    )}
-                    {loggingMeal ? 'Saving...' : 'Save Daily Log'}
-                  </button>
-                </div>
-              )}
+              
+              <button
+                onClick={saveTodayLog}
+                disabled={loggingMeal}
+                className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              >
+                {loggingMeal ? 'Saving...' : 'Save Daily Log'}
+              </button>
             </div>
           ) : (
-            <div className="text-center py-8">
-              <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Meals Planned</h3>
-              <p className="text-gray-600">There are no meals planned for this date.</p>
-            </div>
-          )}
-        </div>
-
-        {/* Recent Logs */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Nutrition Logs</h2>
-          
-          {logs.length > 0 ? (
-            <div className="space-y-4">
-              {logs.slice(0, 10).map((log, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <h4 className="text-lg font-medium text-gray-900">
-                        {new Date(log.date).toLocaleDateString()}
-                      </h4>
-                      <p className="text-sm text-gray-600">Day {log.day}</p>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <div className={`px-3 py-1 rounded-full text-sm font-medium ${getAdherenceColor(log.adherenceScore)}`}>
-                        {log.adherenceScore}% Adherence
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {log.totalConsumedCalories} cal consumed
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-3">
-                    {log.meals.map((meal, mealIndex) => {
-                      const mealType = mealTypes.find(type => type.value === meal.mealType);
-                      return (
-                        <div key={mealIndex} className="text-center">
-                          <div className="text-lg mb-1">{mealType?.icon}</div>
-                          <div className="text-xs text-gray-600">{mealType?.label}</div>
-                          <div className="mt-1">
-                            {getStatusIcon(meal.status)}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  
-                  {(log.weight || log.mood || log.energyLevel || log.notes) && (
-                    <div className="mt-3 p-3 bg-gray-50 rounded text-sm">
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {log.weight && (
-                          <div>
-                            <span className="text-gray-600">Weight:</span>
-                            <span className="ml-2 font-medium">{log.weight} lbs</span>
-                          </div>
-                        )}
-                        {log.mood && (
-                          <div>
-                            <span className="text-gray-600">Mood:</span>
-                            <span className="ml-2 font-medium capitalize">
-                              {moodOptions.find(m => m.value === log.mood)?.emoji} {log.mood}
-                            </span>
-                          </div>
-                        )}
-                        {log.energyLevel && (
-                          <div>
-                            <span className="text-gray-600">Energy:</span>
-                            <span className="ml-2 font-medium capitalize">
-                              {energyOptions.find(e => e.value === log.energyLevel)?.emoji} {log.energyLevel?.replace('_', ' ')}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      {log.notes && (
-                        <div className="mt-2">
-                          <span className="text-gray-600">Notes:</span>
-                          <span className="ml-2">{log.notes}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Nutrition Logs Yet</h3>
-              <p className="text-gray-600">Start logging your daily nutrition to track your progress.</p>
+            <div className="text-center py-12">
+              <p className="text-gray-600">No meals planned for this date.</p>
             </div>
           )}
         </div>
