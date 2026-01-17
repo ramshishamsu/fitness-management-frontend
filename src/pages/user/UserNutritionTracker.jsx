@@ -74,6 +74,7 @@ const UserNutritionTracker = () => {
   const fetchNutritionPlan = async () => {
     try {
       const response = await axios.get(`/nutrition-plans/${planId}`);
+      console.log('Nutrition plan data:', response.data);
       setNutritionPlan(response.data);
     } catch (error) {
       console.error("Error fetching nutrition plan:", error);
@@ -83,6 +84,7 @@ const UserNutritionTracker = () => {
   const fetchLogs = async () => {
     try {
       const response = await axios.get(`/nutrition-plans/${planId}/logs`);
+      console.log('Logs data:', response.data);
       setLogs(response.data.logs || []);
     } catch (error) {
       console.error("Error fetching logs:", error);
@@ -98,11 +100,16 @@ const UserNutritionTracker = () => {
   };
 
   const getPlannedMealsForDate = () => {
-    if (!nutritionPlan) return [];
+    if (!nutritionPlan || !nutritionPlan.dailyPlans) {
+      console.log('No nutrition plan or dailyPlans found');
+      return [];
+    }
     
     const startDate = new Date(nutritionPlan.startDate);
     const selectedDateObj = new Date(selectedDate);
     const dayDiff = Math.ceil((selectedDateObj - startDate) / (1000 * 60 * 60 * 24)) + 1;
+    
+    console.log('Finding meals for day:', dayDiff, 'from', nutritionPlan.dailyPlans?.length || 0, 'days');
     
     const dayPlan = nutritionPlan.dailyPlans.find(plan => plan.day === dayDiff);
     return dayPlan ? dayPlan.meals : [];
