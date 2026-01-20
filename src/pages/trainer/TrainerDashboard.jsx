@@ -172,8 +172,8 @@ const TrainerDashboard = () => {
               onClick={() => window.location.href = '/trainer/profile'}
               className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
                 isDark 
-                  ? 'bg-teal-600 text-white hover:bg-teal-700 shadow-teal-600/20' 
-                  : 'bg-teal-600 text-white hover:bg-teal-700 shadow-teal-600/20'
+                  ? 'bg-gray-600 text-white hover:bg-gray-700 shadow-gray-600/20' 
+                  : 'bg-gray-600 text-white hover:bg-gray-700 shadow-gray-600/20'
               }`}
             >
               <Activity className="w-8 h-8 mb-3" />
