@@ -52,9 +52,9 @@ const TrainerUsers = () => {
         )}
       </div>
 
-      {user.goal && (
+      {user.fitnessGoal && (
         <p className="text-sm mb-4">
-          Goal: <span className="text-emerald-400">{user.goal}</span>
+          Goal: <span className="text-emerald-400">{user.fitnessGoal}</span>
         </p>
       )}
 
