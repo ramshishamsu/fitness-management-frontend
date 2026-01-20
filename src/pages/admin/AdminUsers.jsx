@@ -29,7 +29,7 @@ const AdminUsers = () => {
 
       const response = await axios.get(`/admin/users?${params}`);
       setUsers(response.data.users);
-      setTotalPages(response.data.pagination.pages);
+      setTotalPages(response.data.pages.pages);
     } catch (error) {
       console.error('Error fetching users:', error);
     } finally {
@@ -39,7 +39,7 @@ const AdminUsers = () => {
 
   const handleBlockUnblock = async (userId) => {
     try {
-      await axios.put(`/admin/users/${userId}/toggle-block`);
+      await axios.put(`/admin/users/${userId}/block`);
       fetchUsers(); // Refresh the list
     } catch (error) {
       console.error('Error blocking/unblocking user:', error);
@@ -267,15 +267,6 @@ const AdminUsers = () => {
                             title="Edit User"
                           >
                             <Edit className="text-green-600 hover:text-green-900" />
-                          </button>
-                          <button
-                            onClick={() => handleBlockUnblock(user._id)}
-                            className={`${
-                              user.isBlocked ? 'text-green-600 hover:text-green-900' : 'text-yellow-600 hover:text-yellow-900'
-                            }`}
-                            title={user.isBlocked ? 'Unblock User' : 'Block User'}
-                          >
-                            {user.isBlocked ? <Check className="text-green-600 hover:text-green-900" /> : <Ban className="text-yellow-600 hover:text-yellow-900" />}
                           </button>
                           <button
                             onClick={() => handleDeleteUser(user._id)}
