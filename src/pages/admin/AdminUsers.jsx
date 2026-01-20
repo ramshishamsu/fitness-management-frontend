@@ -8,13 +8,12 @@ const AdminUsers = () => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     fetchUsers();
-  }, [currentPage, searchTerm, roleFilter, statusFilter]);
+  }, [currentPage, searchTerm, roleFilter]);
 
   const fetchUsers = async () => {
     try {
@@ -23,8 +22,7 @@ const AdminUsers = () => {
         page: currentPage,
         limit: 10,
         ...(searchTerm && { search: searchTerm }),
-        ...(roleFilter && { role }),
-        ...(statusFilter && { status })
+        ...(roleFilter && { role: roleFilter })
       });
 
       const response = await axios.get(`/admin/users?${params}`);
@@ -67,10 +65,6 @@ const AdminUsers = () => {
     setCurrentPage(1); // Reset to first page when filtering
   };
 
-  const handleStatusFilter = (e) => {
-    setStatusFilter(e.target.value);
-    setCurrentPage(1); // Reset to first page when filtering
-  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -134,26 +128,12 @@ const AdminUsers = () => {
                 onChange={handleRoleFilter}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">All Roles</option>
+              <option value="">All Roles</option>
                 <option value="user">Users</option>
                 <option value="trainer">Trainers</option>
-                <option value="admin">Admins</option>
               </select>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Status Filter</label>
-              <select
-                value={statusFilter}
-                onChange={handleStatusFilter}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="blocked">Blocked</option>
-                <option value="pending">Pending</option>
-              </select>
-            </div>
 
             <div className="flex items-end">
               <button
