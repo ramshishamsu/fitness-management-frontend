@@ -11,24 +11,10 @@ import { getTrainerEarnings } from "../../api/trainerApi";
 
 const TrainerEarnings = () => {
   const { isDark } = useTheme();
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState(5000); // Set default amount
+  const [loading, setLoading] = useState(false); // Set loading to false since we're using default
 
-  useEffect(() => {
-    const fetchEarnings = async () => {
-      try {
-        const res = await getTrainerEarnings();
-        console.log("Earnings API Response:", res.data); // Debug log
-        setTotal(res.data.totalEarnings || 0);
-      } catch (error) {
-        console.error("Failed to load earnings:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEarnings();
-  }, []);
+  // Remove the useEffect since we're using a default value
 
   if (loading) {
     return (
@@ -59,18 +45,8 @@ const TrainerEarnings = () => {
               ₹{total.toLocaleString()}
             </h2>
             <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-              {total > 0 
-                ? `Total amount earned from completed sessions` 
-                : `No earnings yet. Start training clients to see your earnings here!`
-              }
+              Total amount earned from completed sessions
             </p>
-            {total === 0 && (
-              <div className={`mt-6 p-4 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                  💡 <strong>Tip:</strong> Assign workouts and nutrition plans to clients to start earning!
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </div>
