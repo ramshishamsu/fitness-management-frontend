@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Dumbbell, Calendar, DollarSign, TrendingUp, UserCheck, AlertTriangle, FileText, Settings } from 'lucide-react';
+import { Users, Dumbbell, Calendar, DollarSign, UserCheck, AlertTriangle, FileText, Settings } from 'lucide-react';
 import axios from '../../api/axios';
 
 const AdminDashboard = () => {
@@ -59,13 +59,13 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
           <p className="text-gray-600">Manage your fitness management system</p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <StatCard
             title="Total Users"
             value={stats.totalUsers}
@@ -94,6 +94,10 @@ const AdminDashboard = () => {
             color="bg-green-600"
             link="/admin/appointments"
           />
+        </div>
+
+        {/* Second Row Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <StatCard
             title="Payments"
             value={stats.payments}
@@ -125,9 +129,9 @@ const AdminDashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Link
               to="/admin/users"
               className="flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -156,126 +160,6 @@ const AdminDashboard = () => {
               <Settings className="w-5 h-5 mr-2" />
               Settings
             </Link>
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">System Overview</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="border-l-4 border-blue-500 pl-4">
-              <h3 className="font-semibold text-gray-900 mb-2">User Management</h3>
-              <p className="text-gray-600 mb-4">
-                Manage all users, trainers, and their permissions. Block/unblock users as needed.
-              </p>
-              <Link
-                to="/admin/users"
-                className="text-blue-600 hover:text-blue-800 font-medium"
-              >
-                <span className="text-blue-700 font-medium">Manage Users</span>
-                <Users className="text-blue-500" />
-              </Link>
-              <Link
-                to="/admin/trainers"
-                className="flex items-center justify-between p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
-              >
-                <span className="text-purple-700 font-medium">Trainer Approvals</span>
-                {stats.pendingTrainers > 0 && (
-                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                    {stats.pendingTrainers}
-                  </span>
-                )}
-              </Link>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Financial Management</h3>
-            <div className="space-y-3">
-              <Link
-                to="/admin/payments"
-                className="flex items-center justify-between p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
-              >
-                <span className="text-green-700 font-medium">Payments</span>
-                <DollarSign className="text-green-500" />
-              </Link>
-              <Link
-                to="/admin/withdrawals"
-                className="flex items-center justify-between p-3 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
-              >
-                <span className="text-red-700 font-medium">Withdrawal Requests</span>
-                {stats.pendingWithdrawals > 0 && (
-                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                    {stats.pendingWithdrawals}
-                  </span>
-                )}
-              </Link>
-              <Link
-                to="/admin/plans"
-                className="flex items-center justify-between p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
-              >
-                <span className="text-orange-700 font-medium">Manage Plans</span>
-                <FileText className="text-orange-500" />
-              </Link>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Operations</h3>
-            <div className="space-y-3">
-              <Link
-                to="/admin/appointments"
-                className="flex items-center justify-between p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
-              >
-                <span className="text-indigo-700 font-medium">Appointments</span>
-                <Calendar className="text-indigo-500" />
-              </Link>
-              <Link
-                to="/admin/assign-plan"
-                className="flex items-center justify-between p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors"
-              >
-                <span className="text-teal-700 font-medium">Assign Plan</span>
-                <UserCheck className="text-teal-500" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* System Health */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">System Health</h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-              <span className="text-green-700 font-medium">System Status</span>
-              <span className="text-green-600">● Operational</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-              <span className="text-blue-700 font-medium">Database</span>
-              <span className="text-blue-600">● Connected</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-              <span className="text-purple-700 font-medium">Last Backup</span>
-              <span className="text-purple-600">2 hours ago</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-          <div className="space-y-3">
-            <div className="flex items-center p-2 bg-green-50 rounded">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-              <span className="text-sm text-gray-700">New user registration</span>
-            </div>
-            <div className="flex items-center p-2 bg-yellow-50 rounded">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
-              <span className="text-sm text-gray-700">Payment processing delay reported</span>
-            </div>
-            <div className="flex items-center p-2 bg-blue-50 rounded">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-              <span className="text-sm text-gray-700">System update completed</span>
-            </div>
           </div>
         </div>
       </div>
