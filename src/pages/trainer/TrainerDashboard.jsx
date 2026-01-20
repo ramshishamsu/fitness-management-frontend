@@ -83,61 +83,61 @@ const TrainerDashboard = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
-            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-500/10 text-emerald-600'} rounded-lg`}>
+          <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
+            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-500/10 text-blue-600'} rounded-lg`}>
               <Activity className="w-6 h-6" />
             </div>
             <div className="text-center">
-              <p className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>Active Clients</p>
+              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Active Clients</p>
               <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{stats.activeClients}</p>
-              <p className={`text-sm ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>+2 this week</p>
+              <p className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>+2 this week</p>
             </div>
           </div>
 
-          <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
+          <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
             <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-500/10 text-blue-600'} rounded-lg`}>
               <Calendar className="w-6 h-6" />
             </div>
             <div className="text-center">
-              <p className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>Sessions This Week</p>
+              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Sessions This Week</p>
               <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{stats.sessionsThisWeek}</p>
               <p className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>+12% from last week</p>
             </div>
           </div>
 
-          <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
-            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-500/10 text-green-600'} rounded-lg`}>
+          <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
+            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-500/10 text-blue-600'} rounded-lg`}>
               <TrendingUp className="w-6 h-6" />
             </div>
             <div className="text-center">
-              <p className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>Monthly Earnings</p>
+              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Monthly Earnings</p>
               <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>₹{stats.monthlyEarnings.toLocaleString()}</p>
-              <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-600'}`}>+8% from last month</p>
+              <p className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>+8% from last month</p>
             </div>
           </div>
 
-          <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
-            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-orange-500/10 text-orange-400' : 'bg-orange-500/10 text-orange-600'} rounded-lg`}>
+          <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
+            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-500/10 text-blue-600'} rounded-lg`}>
               <Clock className="w-6 h-6" />
             </div>
             <div className="text-center">
-              <p className={`text-sm ${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>Today's Sessions</p>
+              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Today's Sessions</p>
               <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{stats.todaySessions}</p>
-              <p className={`text-sm ${isDark ? 'text-orange-400' : 'text-orange-600'}`}>{stats.todaySessions > 0 ? 'On track' : 'No sessions today'}</p>
+              <p className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{stats.todaySessions > 0 ? 'On track' : 'No sessions today'}</p>
             </div>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
+        <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
           <h2 className={`text-xl font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <button
               onClick={() => window.location.href = '/trainer/assign-workout'}
-              className={`flex flex-col items-center justify-center p-6 rounded-lg transition-colors ${
+              className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
                 isDark 
-                  ? 'bg-emerald-600 text-black hover:bg-emerald-500' 
-                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/20' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/20'
               }`}
             >
               <Dumbbell className="w-8 h-8 mb-3" />
@@ -146,10 +146,10 @@ const TrainerDashboard = () => {
 
             <button
               onClick={() => window.location.href = '/trainer/nutrition'}
-              className={`flex flex-col items-center justify-center p-6 rounded-lg transition-colors ${
+              className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
                 isDark 
-                  ? 'bg-blue-600 text-white hover:bg-blue-500' 
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/20' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/20'
               }`}
             >
               <Apple className="w-8 h-8 mb-3" />
@@ -158,10 +158,10 @@ const TrainerDashboard = () => {
 
             <button
               onClick={() => window.location.href = '/trainer/schedule'}
-              className={`flex flex-col items-center justify-center p-6 rounded-lg transition-colors ${
+              className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
                 isDark 
-                  ? 'bg-purple-600 text-white hover:bg-purple-500' 
-                  : 'bg-purple-600 text-white hover:bg-purple-700'
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/20' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/20'
               }`}
             >
               <Calendar className="w-8 h-8 mb-3" />
@@ -170,10 +170,10 @@ const TrainerDashboard = () => {
 
             <button
               onClick={() => window.location.href = '/trainer/profile'}
-              className={`flex flex-col items-center justify-center p-6 rounded-lg transition-colors ${
+              className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
                 isDark 
-                  ? 'bg-gray-600 text-white hover:bg-gray-500' 
-                  : 'bg-gray-600 text-white hover:bg-gray-700'
+                  ? 'bg-gray-600 text-white hover:bg-gray-700 shadow-gray-600/20' 
+                  : 'bg-gray-600 text-white hover:bg-gray-700 shadow-gray-600/20'
               }`}
             >
               <Activity className="w-8 h-8 mb-3" />
