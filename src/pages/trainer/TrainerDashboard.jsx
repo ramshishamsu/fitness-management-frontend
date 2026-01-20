@@ -84,46 +84,46 @@ const TrainerDashboard = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
-            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-500/10 text-green-600'} rounded-lg`}>
+            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-500/10 text-purple-600'} rounded-lg`}>
               <Activity className="w-6 h-6" />
             </div>
             <div className="text-center">
               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Active Clients</p>
               <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{stats.activeClients}</p>
-              <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-600'}`}>+2 this week</p>
+              <p className={`text-sm ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>+2 this week</p>
             </div>
           </div>
 
           <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
-            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-500/10 text-green-600'} rounded-lg`}>
+            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-500/10 text-purple-600'} rounded-lg`}>
               <Calendar className="w-6 h-6" />
             </div>
             <div className="text-center">
               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Sessions This Week</p>
               <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{stats.sessionsThisWeek}</p>
-              <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-600'}`}>+12% from last week</p>
+              <p className={`text-sm ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>+12% from last week</p>
             </div>
           </div>
 
           <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
-            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-500/10 text-green-600'} rounded-lg`}>
+            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-500/10 text-purple-600'} rounded-lg`}>
               <TrendingUp className="w-6 h-6" />
             </div>
             <div className="text-center">
               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Monthly Earnings</p>
               <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>₹{stats.monthlyEarnings.toLocaleString()}</p>
-              <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-600'}`}>+8% from last month</p>
+              <p className={`text-sm ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>+8% from last month</p>
             </div>
           </div>
 
           <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
-            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-500/10 text-green-600'} rounded-lg`}>
+            <div className={`w-12 h-12 mb-4 flex items-center justify-center ${isDark ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-500/10 text-purple-600'} rounded-lg`}>
               <Clock className="w-6 h-6" />
             </div>
             <div className="text-center">
               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Today's Sessions</p>
               <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{stats.todaySessions}</p>
-              <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-600'}`}>{stats.todaySessions > 0 ? 'On track' : 'No sessions today'}</p>
+              <p className={`text-sm ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>{stats.todaySessions > 0 ? 'On track' : 'No sessions today'}</p>
             </div>
           </div>
         </div>
@@ -136,8 +136,8 @@ const TrainerDashboard = () => {
               onClick={() => window.location.href = '/trainer/assign-workout'}
               className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
                 isDark 
-                  ? 'bg-green-600 text-white hover:bg-green-700 shadow-green-600/20' 
-                  : 'bg-green-600 text-white hover:bg-green-700 shadow-green-600/20'
+                  ? 'bg-purple-600 text-white hover:bg-purple-700 shadow-purple-600/20' 
+                  : 'bg-purple-600 text-white hover:bg-purple-700 shadow-purple-600/20'
               }`}
             >
               <Dumbbell className="w-8 h-8 mb-3" />
@@ -148,8 +148,8 @@ const TrainerDashboard = () => {
               onClick={() => window.location.href = '/trainer/nutrition'}
               className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
                 isDark 
-                  ? 'bg-green-600 text-white hover:bg-green-700 shadow-green-600/20' 
-                  : 'bg-green-600 text-white hover:bg-green-700 shadow-green-600/20'
+                  ? 'bg-purple-600 text-white hover:bg-purple-700 shadow-purple-600/20' 
+                  : 'bg-purple-600 text-white hover:bg-purple-700 shadow-purple-600/20'
               }`}
             >
               <Apple className="w-8 h-8 mb-3" />
@@ -160,8 +160,8 @@ const TrainerDashboard = () => {
               onClick={() => window.location.href = '/trainer/schedule'}
               className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
                 isDark 
-                  ? 'bg-green-600 text-white hover:bg-green-700 shadow-green-600/20' 
-                  : 'bg-green-600 text-white hover:bg-green-700 shadow-green-600/20'
+                  ? 'bg-purple-600 text-white hover:bg-purple-700 shadow-purple-600/20' 
+                  : 'bg-purple-600 text-white hover:bg-purple-700 shadow-purple-600/20'
               }`}
             >
               <Calendar className="w-8 h-8 mb-3" />
