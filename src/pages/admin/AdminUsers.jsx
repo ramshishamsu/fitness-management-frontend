@@ -37,7 +37,7 @@ const AdminUsers = () => {
 
   const handleBlockUnblock = async (userId) => {
     try {
-      await axios.put(`/admin/users/${userId}/block`);
+      await axios.put(`/users/${userId}/block`);
       fetchUsers(); // Refresh the list
     } catch (error) {
       console.error('Error blocking/unblocking user:', error);
@@ -247,6 +247,15 @@ const AdminUsers = () => {
                             title="Edit User"
                           >
                             <Edit className="text-green-600 hover:text-green-900" />
+                          </button>
+                          <button
+                            onClick={() => handleBlockUnblock(user._id)}
+                            className={`${
+                              user.status === 'blocked' ? 'text-green-600 hover:text-green-900' : 'text-yellow-600 hover:text-yellow-900'
+                            }`}
+                            title={user.status === 'blocked' ? 'Unblock User' : 'Block User'}
+                          >
+                            {user.status === 'blocked' ? <Check className="text-green-600 hover:text-green-900" /> : <Ban className="text-yellow-600 hover:text-yellow-900" />}
                           </button>
                           <button
                             onClick={() => handleDeleteUser(user._id)}
