@@ -215,7 +215,7 @@ const TrainerNutritionManager = () => {
               {editingId ? "Edit Nutrition Plan" : "Create Nutrition Plan"}
             </h2>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => { e.preventDefault(); savePlan(); }}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               {/* CLIENT */}
               <div>
