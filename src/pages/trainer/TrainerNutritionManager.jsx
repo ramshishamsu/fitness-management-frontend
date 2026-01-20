@@ -294,8 +294,8 @@ const TrainerNutritionManager = () => {
               </div>
             </div>
 
-              {/* MEALS */}
-              <div className="mb-6">
+            {/* MEALS */}
+            <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Meals (Day 1)</h3>
 
                 {meals.map((meal, index) => (
@@ -445,6 +445,7 @@ const TrainerNutritionManager = () => {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );
