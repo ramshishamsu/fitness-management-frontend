@@ -17,18 +17,18 @@ const TrainerProfile = () => {
   const [docLoading, setDocLoading] = useState(false);
 
   /* ================= LOAD EXISTING PROFILE & DOCS ================= */
- useEffect(() => {
-  axios.get("/trainers/profile").then((res) => {
-    const trainer = res.data;
-    if (trainer.profileImage) {
-      setAvatar(
-        `http://localhost:5003/${trainer.profileImage}?t=${Date.now()}`
-      );
-    }
-    if (trainer.documents) {
-      setDocs(trainer.documents);
-    }
-  }).catch(err => console.error('Failed to load trainer profile', err));
+  useEffect(() => {
+    axios.get("/trainers/profile").then((res) => {
+      const trainer = res.data;
+      if (trainer.profileImage) {
+        const avatarUrl = `http://localhost:5003/${trainer.profileImage}?t=${Date.now()}`;
+        // Save to localStorage for navbar
+        localStorage.setItem("trainerAvatar", avatarUrl);
+      }
+      if (trainer.documents) {
+        setDocs(trainer.documents);
+      }
+    }).catch(err => console.error('Failed to load trainer profile', err));
 }, []);
 
 
@@ -63,6 +63,12 @@ const TrainerProfile = () => {
       }
 
       await axios.put("/trainers/profile", formData);
+
+      // Update localStorage for navbar if profile image was uploaded
+      if (profileImage) {
+        const newAvatarUrl = `http://localhost:5003/${profileImage.name}?t=${Date.now()}`;
+        localStorage.setItem("trainerAvatar", newAvatarUrl);
+      }
 
       alert("Profile updated successfully ✅");
     } catch (err) {
