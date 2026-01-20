@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Calendar, Clock, TrendingUp, Activity, Dumbbell, Apple } from "lucide-react";
+import { Calendar, Clock, TrendingUp, Activity, Dumbbell, Apple, IndianRupee } from "lucide-react";
 import axiosInstance from "../../api/axios";
 import { useAuth } from "../../context/useAuth";
 import { useTheme } from "../../context/ThemeContext.jsx";
@@ -131,7 +131,7 @@ const TrainerDashboard = () => {
         {/* Quick Actions */}
         <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 shadow-lg`}>
           <h2 className={`text-xl font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
             <button
               onClick={() => window.location.href = '/trainer/assign-workout'}
               className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
@@ -166,6 +166,18 @@ const TrainerDashboard = () => {
             >
               <Calendar className="w-8 h-8 mb-3" />
               <span className="font-medium">Schedule</span>
+            </button>
+
+            <button
+              onClick={() => window.location.href = '/trainer/earnings'}
+              className={`flex flex-col items-center justify-center p-6 rounded-lg transition-all duration-200 ${
+                isDark 
+                  ? 'bg-gray-600 text-white hover:bg-gray-700 shadow-gray-600/20' 
+                  : 'bg-gray-600 text-white hover:bg-gray-700 shadow-gray-600/20'
+              }`}
+            >
+              <IndianRupee className="w-8 h-8 mb-3" />
+              <span className="font-medium">Earnings</span>
             </button>
 
             <button
