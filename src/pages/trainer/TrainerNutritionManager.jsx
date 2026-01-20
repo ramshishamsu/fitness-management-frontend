@@ -54,8 +54,13 @@ const TrainerNutritionManager = () => {
   };
 
   const fetchClients = async () => {
-    const res = await axios.get("/trainers/clients");
-    setClients(res.data || []);
+    try {
+      const res = await axios.get("/trainers/clients");
+      console.log("Clients data:", res.data); // Debug log
+      setClients(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch clients", err);
+    }
   };
 
   useEffect(() => {
