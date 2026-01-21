@@ -67,26 +67,25 @@ const Navbar = () => {
           </button>
 
           {/* User Profile */}
-          {user && (
-            <div className="relative">
-              <button
-                onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
-              >
-                {user.profileImage ? (
-                  <img 
-                    src={user.profileImage} 
-                    alt={user.name}
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
-                    <User size={16} className="text-white" />
-                  </div>
-                )}
-                <span className="text-sm font-medium text-neutral-700 dark:text-neutral-200 hidden lg:block">
-                  {user.name}
-                </span>
+          <div className="relative">
+            <button
+              onClick={() => setProfileOpen(!profileOpen)}
+              className="flex items-center gap-2 p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+            >
+              {user?.profileImage ? (
+                <img 
+                  src={user.profileImage} 
+                  alt={user?.name}
+                  className="w-8 h-8 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
+                  <User size={16} className="text-white" />
+                </div>
+              )}
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-200 hidden lg:block">
+                {user?.name || "User"}
+              </span>
               </button>
 
               {/* Profile Dropdown */}
@@ -121,7 +120,6 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-          )}
 
           {/* MOBILE BUTTON */}
           <button
