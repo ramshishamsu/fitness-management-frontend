@@ -82,7 +82,7 @@ const UserDashboard = () => {
   const { trainer, workouts, payments, nutritionLogs, goals, progress } = dashboardData;
 
   return (
-    <div className="h-screen bg-gray-50 p-6 overflow-hidden">
+    <div className="h-screen bg-gray-50 p-6 overflow-hidden flex flex-col">
       {/* HEADER */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
         <div className="flex items-center justify-between">
@@ -155,7 +155,7 @@ const UserDashboard = () => {
       </div>
 
       {/* MAIN CONTENT GRID */}
-      <div className="grid grid-cols-3 gap-6 h-96">
+      <div className="grid grid-cols-3 gap-6 flex-1">
         
         {/* WORKOUTS */}
         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
@@ -303,47 +303,6 @@ const UserDashboard = () => {
               <p className="text-sm text-gray-500">No goals set</p>
             </div>
           )}
-        </div>
-      </div>
-
-      {/* QUICK ACTIONS */}
-      <div className="absolute bottom-6 left-6 right-6">
-        <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="flex space-x-4">
-              <Link 
-                to="/user/trainers" 
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-              >
-                <Users className="w-4 h-4" />
-                <span>Find Trainer</span>
-              </Link>
-              
-              <Link 
-                to="/user/appointments" 
-                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
-              >
-                <Calendar className="w-4 h-4" />
-                <span>Book Session</span>
-              </Link>
-              
-              <Link 
-                to="/user/nutrition-tracker" 
-                className="flex items-center space-x-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm"
-              >
-                <Apple className="w-4 h-4" />
-                <span>Log Meal</span>
-              </Link>
-              
-              <Link 
-                to="/user/profile" 
-                className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
-              >
-                <TrendingUp className="w-4 h-4" />
-                <span>Profile</span>
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
     </div>
