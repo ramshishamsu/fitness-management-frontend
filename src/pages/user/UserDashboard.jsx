@@ -40,11 +40,11 @@ const UserDashboard = () => {
         goalsRes,
         progressRes
       ] = await Promise.all([
-        axios.get('/workouts/my'),
-        axios.get('/payments'),
-        axios.get('/nutrition/logs'),
-        axios.get('/goals'),
-        axios.get('/progress')
+        axios.get('/workouts/my').catch(() => ({ data: [] })),
+        axios.get('/payments').catch(() => ({ data: [] })),
+        axios.get('/nutrition-plans/logs').catch(() => ({ data: { nutritionLogs: [] } })),
+        axios.get('/goals').catch(() => ({ data: { goals: [] } })),
+        axios.get('/progress').catch(() => ({ data: [] }))
       ]);
 
       setDashboardData({
@@ -57,6 +57,15 @@ const UserDashboard = () => {
       });
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      // Set default empty data to prevent blank page
+      setDashboardData({
+        trainer: null,
+        workouts: [],
+        payments: [],
+        nutritionLogs: [],
+        goals: [],
+        progress: []
+      });
     } finally {
       setLoading(false);
     }
@@ -70,7 +79,7 @@ const UserDashboard = () => {
     );
   }
 
-  const { trainer, workouts, payments, nutritionLogs, goals } = dashboardData;
+  const { trainer, workouts, payments, nutritionLogs, goals, progress } = dashboardData;
 
   return (
     <div className="h-screen bg-gray-50 p-6 overflow-hidden">
