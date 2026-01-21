@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { ThemeProvider } from "./context/useTheme";
 
 /* ================= PUBLIC ================= */
 import Home from "./pages/Home";
@@ -54,8 +53,7 @@ import AdminAssignPlan from "./pages/admin/AdminAssignPlan";
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <Routes>
+    <Routes>
 
       {/* ========== PUBLIC ========== */}
       <Route path="/" element={<Home />} />
@@ -141,7 +139,6 @@ const App = () => {
       <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>
-    </ThemeProvider>
   );
 };
 
