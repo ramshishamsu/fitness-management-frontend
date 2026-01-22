@@ -86,13 +86,13 @@ const UserDashboard = () => {
 
   return (
     <div className={`min-h-screen p-4 sm:p-6 overflow-hidden flex flex-col ${
-      isDark ? "bg-neutral-950" : "bg-gray-50"
+      isDark ? "bg-black" : "bg-gray-50"
     }`}>
 
       {/* HEADER */}
       <div className={`rounded-lg shadow-sm p-4 sm:p-6 mb-4 sm:mb-6 border ${
         isDark 
-          ? "bg-neutral-900 border-neutral-800" 
+          ? "bg-gray-900 border-gray-700" 
           : "bg-white border-gray-200"
       }`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -116,7 +116,7 @@ const UserDashboard = () => {
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className={`rounded-lg shadow-sm p-3 sm:p-4 border ${
           isDark 
-            ? "bg-neutral-900 border-neutral-800" 
+            ? "bg-gray-900 border-gray-700" 
             : "bg-white border-gray-200"
         }`}>
           <div className="flex items-center space-x-2 sm:space-x-3">
@@ -132,7 +132,7 @@ const UserDashboard = () => {
 
 <div className={`rounded-lg shadow-sm p-4 sm:p-6 border ${
           isDark 
-            ? "bg-neutral-900 border-neutral-800" 
+            ? "bg-gray-900 border-gray-700" 
             : "bg-white border-gray-200"
         }`}>
           <div className="flex items-center space-x-2 sm:space-x-3">
@@ -148,7 +148,7 @@ const UserDashboard = () => {
 
         <div className={`rounded-lg shadow-sm p-3 sm:p-4 border ${
           isDark 
-            ? "bg-neutral-900 border-neutral-800" 
+            ? "bg-gray-900 border-gray-700" 
             : "bg-white border-gray-200"
         }`}>
           <div className="flex items-center space-x-2 sm:space-x-3">
@@ -166,7 +166,7 @@ const UserDashboard = () => {
 
         <div className={`rounded-lg shadow-sm p-3 sm:p-4 border ${
           isDark 
-            ? "bg-neutral-900 border-neutral-800" 
+            ? "bg-gray-900 border-gray-700" 
             : "bg-white border-gray-200"
         }`}>
           <div className="flex items-center space-x-2 sm:space-x-3">
@@ -187,7 +187,7 @@ const UserDashboard = () => {
         {/* WORKOUTS */}
         <div className={`rounded-lg shadow-sm p-4 sm:p-6 border ${
           isDark 
-            ? "bg-neutral-900 border-neutral-800" 
+            ? "bg-gray-900 border-gray-700" 
             : "bg-white border-gray-200"
         }`}>
           <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -208,7 +208,7 @@ const UserDashboard = () => {
               {workouts.slice(0, 3).map((workout) => (
                 <div key={workout._id} className={`flex items-center justify-between p-2 sm:p-3 rounded-lg ${
                   isDark 
-                    ? "bg-neutral-800" 
+                    ? "bg-gray-800" 
                     : "bg-gray-50"
                 }`}>
                   <div>
@@ -236,7 +236,7 @@ const UserDashboard = () => {
         {/* NUTRITION */}
         <div className={`rounded-lg shadow-sm p-4 sm:p-6 border ${
           isDark 
-            ? "bg-neutral-900 border-neutral-800" 
+            ? "bg-gray-900 border-gray-700" 
             : "bg-white border-gray-200"
         }`}>
           <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -299,7 +299,7 @@ const UserDashboard = () => {
         {/* GOALS */}
         <div className={`rounded-lg shadow-sm p-4 sm:p-6 border ${
           isDark 
-            ? "bg-neutral-900 border-neutral-800" 
+            ? "bg-gray-900 border-gray-700" 
             : "bg-white border-gray-200"
         }`}>
           <div className="flex items-center justify-between mb-3 sm:mb-4">
