@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./Navbar";
+import UserNavbar from "./UserNavbar";
 import UserSidebar from "./UserSidebar";
 import Footer from "./Footer";
 import { useState } from "react";
@@ -15,7 +15,7 @@ const UserLayout = () => {
       />
 
       <div className="flex-1 flex flex-col">
-        <Navbar />
+        <UserNavbar setSidebarOpen={setSidebarOpen} />
 
         <main className="flex-1 px-10 py-8">
           <Outlet />
