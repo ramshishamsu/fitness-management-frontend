@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Sun, Moon, User, LogOut } from "lucide-react";
+import { Menu, Sun, Moon, User, LogOut } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
 import { useTheme } from "../../context/ThemeContext";
-
 
 const UserNavbar = ({ setSidebarOpen }) => {
   const [profileOpen, setProfileOpen] = useState(false);
@@ -17,39 +16,59 @@ const UserNavbar = ({ setSidebarOpen }) => {
   };
 
   return (
-    <header className="h-16 flex items-center justify-between px-6 border-b border-[#1F2937] bg-[#050505]">
-      {/* LEFT SIDE */}
+    <header
+      className={`
+        h-16 flex items-center justify-between px-6 border-b
+        ${isDark
+          ? "bg-neutral-950 border-neutral-800 text-neutral-200"
+          : "bg-white border-gray-200 text-gray-900"}
+      `}
+    >
+      {/* LEFT */}
       <div className="flex items-center">
         <button
-          className="md:hidden text-xl mr-4 text-white"
+          className={`md:hidden text-xl mr-4 ${
+            isDark ? "text-neutral-200" : "text-gray-700"
+          }`}
           onClick={() => setSidebarOpen(true)}
         >
           ☰
         </button>
-        <h1 className="font-semibold tracking-wide text-white">
+        <h1 className="font-semibold tracking-wide">
           User Dashboard
         </h1>
       </div>
 
-      {/* RIGHT SIDE */}
+      {/* RIGHT */}
       <div className="flex items-center gap-4">
-        {/* Dark Mode Toggle */}
+        {/* THEME TOGGLE */}
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-lg bg-neutral-800 dark:bg-neutral-700 text-neutral-300 dark:text-neutral-200 hover:bg-neutral-700 dark:hover:bg-neutral-600 transition"
+          className={`
+            p-2 rounded-lg transition
+            ${isDark
+              ? "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"}
+          `}
+          aria-label="Toggle theme"
         >
           {isDark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
 
-        {/* User Profile */}
+        {/* PROFILE */}
         <div className="relative">
           <button
             onClick={() => setProfileOpen(!profileOpen)}
-            className="flex items-center gap-2 p-2 rounded-lg bg-neutral-800 dark:bg-neutral-700 hover:bg-neutral-700 dark:hover:bg-neutral-600 transition"
+            className={`
+              flex items-center gap-2 p-2 rounded-lg transition
+              ${isDark
+                ? "bg-neutral-800 hover:bg-neutral-700"
+                : "bg-gray-100 hover:bg-gray-200"}
+            `}
           >
             {user?.profileImage ? (
-              <img 
-                src={user.profileImage} 
+              <img
+                src={user.profileImage}
                 alt={user?.name}
                 className="w-8 h-8 rounded-full object-cover"
               />
@@ -58,36 +77,65 @@ const UserNavbar = ({ setSidebarOpen }) => {
                 <User size={16} className="text-white" />
               </div>
             )}
-            <span className="text-sm font-medium text-neutral-200 hidden lg:block">
+            <span
+              className={`text-sm font-medium hidden lg:block ${
+                isDark ? "text-neutral-200" : "text-gray-800"
+              }`}
+            >
               {user?.name || "User"}
             </span>
           </button>
 
-          {/* Profile Dropdown */}
+          {/* DROPDOWN */}
           {profileOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-neutral-800 dark:bg-neutral-900 rounded-lg shadow-lg border border-neutral-700 dark:border-neutral-600 py-2">
+            <div
+              className={`
+                absolute right-0 mt-2 w-48 rounded-lg shadow-lg border py-2
+                ${isDark
+                  ? "bg-neutral-900 border-neutral-700"
+                  : "bg-white border-gray-200"}
+              `}
+            >
               <Link
                 to="/user/profile"
                 onClick={() => setProfileOpen(false)}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-200 dark:text-neutral-300 hover:bg-neutral-700 dark:hover:bg-neutral-800"
+                className={`
+                  flex items-center gap-2 px-4 py-2 text-sm transition
+                  ${isDark
+                    ? "text-neutral-200 hover:bg-neutral-800"
+                    : "text-gray-700 hover:bg-gray-100"}
+                `}
               >
                 <User size={16} />
                 My Profile
               </Link>
+
               <Link
                 to="/user/settings"
                 onClick={() => setProfileOpen(false)}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-200 dark:text-neutral-300 hover:bg-neutral-700 dark:hover:bg-neutral-800"
+                className={`
+                  flex items-center gap-2 px-4 py-2 text-sm transition
+                  ${isDark
+                    ? "text-neutral-200 hover:bg-neutral-800"
+                    : "text-gray-700 hover:bg-gray-100"}
+                `}
               >
                 Settings
               </Link>
-              <hr className="my-2 border-neutral-700 dark:border-neutral-600" />
+
+              <hr className={isDark ? "border-neutral-700 my-2" : "border-gray-200 my-2"} />
+
               <button
                 onClick={() => {
                   handleLogout();
                   setProfileOpen(false);
                 }}
-                className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-400 dark:text-red-500 hover:bg-neutral-700 dark:hover:bg-neutral-800"
+                className={`
+                  flex items-center gap-2 w-full px-4 py-2 text-sm transition
+                  ${isDark
+                    ? "text-red-400 hover:bg-neutral-800"
+                    : "text-red-600 hover:bg-gray-100"}
+                `}
               >
                 <LogOut size={16} />
                 Logout
