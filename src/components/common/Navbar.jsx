@@ -19,7 +19,7 @@ const Navbar = () => {
     <header className="
       sticky top-0 z-50
       backdrop-blur-md
-      bg-neutral-950/85 dark:bg-neutral-950/85
+      bg-neutral-950/85 dark:bg-neutral-950
       border-b border-neutral-800
     ">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -67,8 +67,8 @@ const Navbar = () => {
             onClick={toggleTheme}
             className="
               p-2 rounded-md
-              bg-neutral-800 hover:bg-neutral-700
-              text-neutral-300
+              bg-neutral-800 dark:bg-neutral-700 hover:bg-neutral-700 dark:hover:bg-neutral-600
+              text-neutral-300 dark:text-neutral-200
               transition
             "
             aria-label="Toggle theme"
