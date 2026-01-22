@@ -6,7 +6,7 @@ import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-
+import PublicLayout from "./components/common/Publiclayout";
 /* ================= LAYOUTS ================= */
 import UserLayout from "./components/common/UserLayout";
 import AdminLayout from "./components/common/AdminLayout";
@@ -56,12 +56,13 @@ const App = () => {
     <Routes>
 
       {/* ========== PUBLIC ========== */}
+      <Route element={<PublicLayout />}>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
-
+      </Route>
       {/* ========== USER ========== */}
       <Route
         path="/user"

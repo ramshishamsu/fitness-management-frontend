@@ -96,7 +96,7 @@ const UserDashboard = () => {
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Trainer: {trainer.name}</span>
-              <span className="sm:hidden">{trainer.name.split(' ')[0]}</span>
+              <span className="sm:hidden">{trainer.name ? trainer.name.split(' ')[0] : ''}</span>
             </div>
           )}
         </div>

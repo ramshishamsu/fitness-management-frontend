@@ -1,21 +1,11 @@
-/*
-|--------------------------------------------------------------------------
-| NAVBAR – DARK INDUSTRIAL (cult.fit style)
-|--------------------------------------------------------------------------
-| - Sticky
-| - Mobile responsive
-| - Auth aware
-*/
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Sun, Moon, User, LogOut } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
-import { useTheme } from "../../context/useTheme";
+import { useTheme } from "../../context/ThemeContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
   const { user, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -26,29 +16,43 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur bg-white/80 dark:bg-neutral-950/80 border-b border-neutral-200 dark:border-neutral-800">
+    <header className="
+      sticky top-0 z-50
+      backdrop-blur-md
+      bg-neutral-950/85 dark:bg-neutral-950/85
+      border-b border-neutral-800
+    ">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
         {/* LOGO */}
-        <Link to="/" className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
-          FITNESS PRO
+        <Link
+          to="/"
+          className="text-lg font-semibold tracking-wide text-neutral-100"
+        >
+          FITNESS<span className="text-emerald-500">PRO</span>
         </Link>
 
-        {/* DESKTOP MENU */}
-        <nav className="hidden md:flex items-center gap-8 text-sm">
+        {/* DESKTOP LINKS */}
+        <nav className="hidden md:flex items-center gap-8 text-sm text-neutral-300">
           <NavLink to="/">Home</NavLink>
 
           {user ? (
             <>
               <NavLink to="/user">Dashboard</NavLink>
-              <NavLink to="/profile">Profile</NavLink>
+              <NavLink to="/user/profile">Profile</NavLink>
             </>
           ) : (
             <>
               <NavLink to="/login">Login</NavLink>
               <Link
                 to="/register"
-                className="bg-emerald-500 text-black px-5 py-2 rounded-md font-semibold hover:bg-emerald-400 transition"
+                className="
+                  bg-emerald-500 text-black
+                  px-4 py-2 rounded-md
+                  font-medium
+                  hover:bg-emerald-400
+                  transition
+                "
               >
                 Get Started
               </Link>
@@ -56,84 +60,41 @@ const Navbar = () => {
           )}
         </nav>
 
-        {/* RIGHT SIDE CONTROLS */}
-        <div className="flex items-center gap-4">
-          {/* Dark Mode Toggle */}
+        {/* RIGHT CONTROLS */}
+        <div className="flex items-center gap-3">
+          {/* THEME TOGGLE */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+            className="
+              p-2 rounded-md
+              bg-neutral-800 hover:bg-neutral-700
+              text-neutral-300
+              transition
+            "
+            aria-label="Toggle theme"
           >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          {/* User Profile */}
-          <div className="relative">
-            <button
-              onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
-            >
-              {user?.profileImage ? (
-                <img 
-                  src={user.profileImage} 
-                  alt={user?.name}
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
-                  <User size={16} className="text-white" />
-                </div>
-              )}
-              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-200 hidden lg:block">
-                {user?.name || "User"}
-              </span>
-              </button>
-
-              {/* Profile Dropdown */}
-              {profileOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200 dark:border-neutral-700 py-2">
-                  <Link
-                    to="/user/profile"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                  >
-                    <User size={16} />
-                    My Profile
-                  </Link>
-                  <Link
-                    to="/user/settings"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                  >
-                    Settings
-                  </Link>
-                  <hr className="my-2 border-neutral-200 dark:border-neutral-700" />
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setProfileOpen(false);
-                    }}
-                    className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                  >
-                    <LogOut size={16} />
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-
-          {/* MOBILE BUTTON */}
+          {/* MOBILE MENU */}
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden text-neutral-600 dark:text-neutral-300"
+            className="md:hidden text-neutral-300"
           >
-            {open ? <X size={26} /> : <Menu size={26} />}
+            {open ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
       {/* MOBILE MENU */}
       {open && (
-        <div className="md:hidden bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 px-6 py-6 space-y-4">
+        <div className="
+          md:hidden
+          bg-neutral-950
+          border-t border-neutral-800
+          px-6 py-4 space-y-4
+          text-neutral-300
+        ">
           <MobileLink to="/" onClick={() => setOpen(false)}>
             Home
           </MobileLink>
@@ -143,17 +104,15 @@ const Navbar = () => {
               <MobileLink to="/user" onClick={() => setOpen(false)}>
                 Dashboard
               </MobileLink>
-
               <MobileLink to="/user/profile" onClick={() => setOpen(false)}>
                 Profile
               </MobileLink>
-
               <button
                 onClick={() => {
                   handleLogout();
                   setOpen(false);
                 }}
-                className="block w-full text-left text-red-600 dark:text-red-400"
+                className="text-red-400"
               >
                 Logout
               </button>
@@ -163,14 +122,9 @@ const Navbar = () => {
               <MobileLink to="/login" onClick={() => setOpen(false)}>
                 Login
               </MobileLink>
-
-              <Link
-                to="/register"
-                onClick={() => setOpen(false)}
-                className="block bg-emerald-500 text-black px-5 py-3 rounded-md font-semibold text-center"
-              >
-                Get Started
-              </Link>
+              <MobileLink to="/register" onClick={() => setOpen(false)}>
+                Register
+              </MobileLink>
             </>
           )}
         </div>
@@ -179,12 +133,10 @@ const Navbar = () => {
   );
 };
 
-/* ================= HELPERS ================= */
-
 const NavLink = ({ to, children }) => (
   <Link
     to={to}
-    className="text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition"
+    className="hover:text-white transition"
   >
     {children}
   </Link>
@@ -194,7 +146,7 @@ const MobileLink = ({ to, onClick, children }) => (
   <Link
     to={to}
     onClick={onClick}
-    className="block text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition"
+    className="block hover:text-white transition"
   >
     {children}
   </Link>

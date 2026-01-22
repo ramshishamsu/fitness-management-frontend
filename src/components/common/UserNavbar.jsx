@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Sun, Moon, User, LogOut } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
-import { useTheme } from "../../context/useTheme";
+import { useTheme } from "../../context/ThemeContext";
+
 
 const UserNavbar = ({ setSidebarOpen }) => {
   const [profileOpen, setProfileOpen] = useState(false);
