@@ -16,6 +16,7 @@ import {
 
 const UserDashboard = () => {
   const { user } = useAuth();
+  const { isDark } = useTheme();
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState({
     trainer: null,
