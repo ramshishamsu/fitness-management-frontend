@@ -29,7 +29,7 @@ const UserLayout = () => {
         <main
           className={`
             flex-1 px-10 py-8 transition-colors
-            ${isDark ? "bg-neutral-950" : "bg-gray-50"}
+            ${isDark ? "bg-black" : "bg-gray-50"}
           `}
         >
           <Outlet />

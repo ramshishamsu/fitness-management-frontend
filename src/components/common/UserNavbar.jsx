@@ -21,7 +21,7 @@ const UserNavbar = ({ setSidebarOpen }) => {
       className={`
         h-16 flex items-center justify-between px-6 border-b
         ${isDark
-          ? "bg-neutral-950 border-neutral-800 text-neutral-200"
+          ? "bg-gray-900 border-gray-700 text-neutral-200"
           : "bg-white border-gray-200 text-gray-900"}
       `}
     >
@@ -48,7 +48,7 @@ const UserNavbar = ({ setSidebarOpen }) => {
           className={`
             p-2 rounded-lg transition
             ${isDark
-              ? "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+              ? "bg-gray-800 text-neutral-300 hover:bg-gray-700"
               : "bg-gray-100 text-gray-700 hover:bg-gray-200"}
           `}
           aria-label="Toggle theme"
@@ -93,7 +93,7 @@ const UserNavbar = ({ setSidebarOpen }) => {
               className={`
                 absolute right-0 mt-2 w-48 rounded-lg shadow-lg border py-2
                 ${isDark
-                  ? "bg-neutral-900 border-neutral-700"
+                  ? "bg-gray-900 border-gray-700"
                   : "bg-white border-gray-200"}
               `}
             >
@@ -103,7 +103,7 @@ const UserNavbar = ({ setSidebarOpen }) => {
                 className={`
                   flex items-center gap-2 px-4 py-2 text-sm transition
                   ${isDark
-                    ? "text-neutral-200 hover:bg-neutral-800"
+                    ? "text-neutral-200 hover:bg-gray-800"
                     : "text-gray-700 hover:bg-gray-100"}
                 `}
               >
@@ -117,14 +117,14 @@ const UserNavbar = ({ setSidebarOpen }) => {
                 className={`
                   flex items-center gap-2 px-4 py-2 text-sm transition
                   ${isDark
-                    ? "text-neutral-200 hover:bg-neutral-800"
+                    ? "text-neutral-200 hover:bg-gray-800"
                     : "text-gray-700 hover:bg-gray-100"}
                 `}
               >
                 Settings
               </Link>
 
-              <hr className={isDark ? "border-neutral-700 my-2" : "border-gray-200 my-2"} />
+              <hr className={isDark ? "border-gray-700 my-2" : "border-gray-200 my-2"} />
 
               <button
                 onClick={() => {
@@ -134,7 +134,7 @@ const UserNavbar = ({ setSidebarOpen }) => {
                 className={`
                   flex items-center gap-2 w-full px-4 py-2 text-sm transition
                   ${isDark
-                    ? "text-red-400 hover:bg-neutral-800"
+                    ? "text-red-400 hover:bg-gray-800"
                     : "text-red-600 hover:bg-gray-100"}
                 `}
               >
