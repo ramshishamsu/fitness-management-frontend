@@ -36,7 +36,7 @@ const UserNavbar = ({ setSidebarOpen }) => {
         {/* Dark Mode Toggle */}
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-lg bg-neutral-800 text-neutral-300 hover:bg-neutral-700 transition"
+          className="p-2 rounded-lg bg-neutral-800 dark:bg-neutral-700 text-neutral-300 dark:text-neutral-200 hover:bg-neutral-700 dark:hover:bg-neutral-600 transition"
         >
           {isDark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
@@ -45,7 +45,7 @@ const UserNavbar = ({ setSidebarOpen }) => {
         <div className="relative">
           <button
             onClick={() => setProfileOpen(!profileOpen)}
-            className="flex items-center gap-2 p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 transition"
+            className="flex items-center gap-2 p-2 rounded-lg bg-neutral-800 dark:bg-neutral-700 hover:bg-neutral-700 dark:hover:bg-neutral-600 transition"
           >
             {user?.profileImage ? (
               <img 
@@ -65,11 +65,11 @@ const UserNavbar = ({ setSidebarOpen }) => {
 
           {/* Profile Dropdown */}
           {profileOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-neutral-800 rounded-lg shadow-lg border border-neutral-700 py-2">
+            <div className="absolute right-0 mt-2 w-48 bg-neutral-800 dark:bg-neutral-900 rounded-lg shadow-lg border border-neutral-700 dark:border-neutral-600 py-2">
               <Link
                 to="/user/profile"
                 onClick={() => setProfileOpen(false)}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-200 hover:bg-neutral-700"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-200 dark:text-neutral-300 hover:bg-neutral-700 dark:hover:bg-neutral-800"
               >
                 <User size={16} />
                 My Profile
@@ -77,17 +77,17 @@ const UserNavbar = ({ setSidebarOpen }) => {
               <Link
                 to="/user/settings"
                 onClick={() => setProfileOpen(false)}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-200 hover:bg-neutral-700"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-200 dark:text-neutral-300 hover:bg-neutral-700 dark:hover:bg-neutral-800"
               >
                 Settings
               </Link>
-              <hr className="my-2 border-neutral-700" />
+              <hr className="my-2 border-neutral-700 dark:border-neutral-600" />
               <button
                 onClick={() => {
                   handleLogout();
                   setProfileOpen(false);
                 }}
-                className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-400 hover:bg-neutral-700"
+                className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-400 dark:text-red-500 hover:bg-neutral-700 dark:hover:bg-neutral-800"
               >
                 <LogOut size={16} />
                 Logout
