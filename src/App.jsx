@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 
+// Vercel deployment trigger: ThemeProvider fixed
 /* ================= PUBLIC ================= */
 import Home from "./pages/Home";
 import Register from "./pages/auth/Register";
