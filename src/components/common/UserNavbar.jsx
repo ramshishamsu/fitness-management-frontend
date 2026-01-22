@@ -4,6 +4,7 @@ import { Menu, Sun, Moon, User, LogOut } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
 import { useTheme } from "../../context/ThemeContext";
 
+// Deployment trigger: UserNavbar with theme support
 const UserNavbar = ({ setSidebarOpen }) => {
   const [profileOpen, setProfileOpen] = useState(false);
   const { user, logout } = useAuth();
