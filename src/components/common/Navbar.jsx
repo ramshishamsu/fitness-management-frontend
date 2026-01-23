@@ -18,9 +18,7 @@ const Navbar = () => {
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Features", href: "#features" },
-    { name: "Plans", href: "#plans" },
-    { name: "Trainers", href: "#trainers" },
+    { name: "Features", href: "/#features" },
   ];
 
   return (
@@ -48,7 +46,7 @@ const Navbar = () => {
             ${isDark ? "text-emerald-400 hover:text-emerald-300" : "text-emerald-600 hover:text-emerald-500"}
           `}
         >
-          FITPRO
+          FITNESS PRO
         </Link>
 
         {/* DESKTOP NAVIGATION */}

@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { Dumbbell, Flame, LineChart } from "lucide-react";
 import Loader from "../components/common/Loader";
 import { useTheme } from "../context/ThemeContext";
+import Features from "../components/home/Features";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -150,29 +151,7 @@ const Home = () => {
       </section>
 
       {/* ================= FEATURES ================= */}
-      <section className="max-w-7xl mx-auto px-6 py-24">
-        <h2 className="text-3xl font-bold mb-16 text-center">
-          Built for <span className="text-emerald-400">Serious Fitness</span>
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          <Feature
-            icon={<Dumbbell size={30} />}
-            title="Smart Workouts"
-            desc="Personalized workout plans that adapt to your progress."
-          />
-          <Feature
-            icon={<Flame size={30} />}
-            title="Trainer Guidance"
-            desc="Work with professional trainers anytime, anywhere."
-          />
-          <Feature
-            icon={<LineChart size={30} />}
-            title="Progress Analytics"
-            desc="Track performance with clean, visual insights."
-          />
-        </div>
-      </section>
+      <Features />
 
       {/* ================= COMMUNITY ================= */}
       <section className="bg-neutral-900">
@@ -231,17 +210,6 @@ const Stat = ({ number, label, isDark }) => (
   </div>
 );
 
-const Feature = ({ icon, title, desc }) => (
-  <motion.div
-    whileHover={{ y: -6 }}
-    className="bg-neutral-900 border border-neutral-800 p-8 rounded-xl"
-  >
-    <div className="w-14 h-14 mb-4 flex items-center justify-center bg-emerald-500/10 text-emerald-400 rounded-lg">
-      {icon}
-    </div>
-    <h3 className="text-xl font-semibold mb-3">{title}</h3>
-    <p className="text-neutral-400">{desc}</p>
-  </motion.div>
-);
+
 
 export default Home;

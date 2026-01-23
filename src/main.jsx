@@ -15,3 +15,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </ThemeProvider>
   </BrowserRouter>
 );
+
+// Add smooth scrolling behavior
+document.documentElement.style.scrollBehavior = 'smooth';
