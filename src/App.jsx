@@ -8,7 +8,7 @@ import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import PublicLayout from "./components/common/Publiclayout";
+import PublicLayout from "./components/common/PublicLayout";
 /* ================= LAYOUTS ================= */
 import UserLayout from "./components/common/UserLayout";
 import AdminLayout from "./components/common/AdminLayout";
