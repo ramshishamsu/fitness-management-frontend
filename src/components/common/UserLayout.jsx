@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import UserNavbar from "./UserNavbar";
 import UserSidebar from "./UserSidebar";
-import Footer from "./Footer";
 import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -34,8 +33,6 @@ const UserLayout = () => {
         >
           <Outlet />
         </main>
-
-        <Footer />
       </div>
     </div>
   );
