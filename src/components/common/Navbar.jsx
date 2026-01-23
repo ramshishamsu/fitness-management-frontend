@@ -17,13 +17,14 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { name: "Home", href: "/" },
-  ];
+  // Empty - all navigation items moved to right side
+];
 
-  const rightNavItems = [
-    { name: "Features", href: "/#features" },
-    { name: "Contact Us", href: "#contact" },
-  ];
+const rightNavItems = [
+  { name: "Home", href: "/" },
+  { name: "Features", href: "/#features" },
+  { name: "Contact Us", href: "#contact" },
+];
 
   return (
     <motion.header
@@ -176,25 +177,7 @@ const Navbar = () => {
           `}
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {/* Main Navigation */}
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                onClick={() => setOpen(false)}
-                className={`
-                  block px-3 py-2 rounded-md text-base font-medium transition-colors
-                  ${isDark
-                    ? "text-neutral-300 hover:bg-neutral-800 hover:text-white"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-black"
-                  }
-                `}
-              >
-                {item.name}
-              </Link>
-            ))}
-            
-            {/* Right Side Navigation */}
+            {/* Navigation Items */}
             {rightNavItems.map((item) => (
               <Link
                 key={item.name}
