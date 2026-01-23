@@ -14,57 +14,38 @@ const Footer = () => {
       }
       transition-colors duration-300
     `}>
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+      <div className="max-w-7xl mx-auto px-6 py-3">
+        <div className="flex flex-col sm:flex-row justify-between items-center space-y-1 sm:space-y-0">
           
           {/* BRAND */}
           <div className="flex items-center space-x-2">
-            <span className={`font-bold ${isDark ? "text-teal-400" : "text-teal-600"}`}>
+            <span className={`font-bold text-sm ${isDark ? "text-teal-400" : "text-teal-600"}`}>
               FITNESS PRO
             </span>
-            <span className={`text-xs ${isDark ? "text-slate-500" : "text-gray-500"}`}>
+            <span className={`text-xs ${isDark ? "text-slate-600" : "text-gray-400"}`}>
               © {new Date().getFullYear()}
             </span>
           </div>
 
-          {/* QUICK LINKS */}
-          <div className="flex items-center space-x-4 text-xs">
+          {/* MINIMAL LINKS */}
+          <div className="flex items-center space-x-3 text-xs">
             <Link
               to="/user/dashboard"
-              className={`transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
+              className={`transition-colors ${isDark ? "text-slate-500 hover:text-teal-400" : "text-gray-500 hover:text-teal-600"}`}
             >
               Dashboard
             </Link>
             <Link
               to="/user/my-workouts"
-              className={`transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
+              className={`transition-colors ${isDark ? "text-slate-500 hover:text-teal-400" : "text-gray-500 hover:text-teal-600"}`}
             >
               Workouts
             </Link>
             <Link
-              to="/user/nutrition-tracker"
-              className={`transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
-            >
-              Nutrition
-            </Link>
-            <Link
               to="/user/goals"
-              className={`transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
+              className={`transition-colors ${isDark ? "text-slate-500 hover:text-teal-400" : "text-gray-500 hover:text-teal-600"}`}
             >
               Goals
-            </Link>
-            <span className={`text-xs ${isDark ? "text-slate-600" : "text-gray-400"}`}>•</span>
-            <Link
-              to="/privacy"
-              className={`transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
-            >
-              Privacy
-            </Link>
-            <Link
-              to="/terms"
-              className={`transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
-            >
-              Terms
             </Link>
           </div>
         </div>
