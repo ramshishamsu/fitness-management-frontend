@@ -12,6 +12,7 @@ import { Dumbbell, Flame, LineChart } from "lucide-react";
 import Loader from "../components/common/Loader";
 import { useTheme } from "../context/ThemeContext";
 import Features from "../components/home/Features";
+import Contact from "../components/home/Contact";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -154,7 +155,9 @@ const Home = () => {
       <Features />
 
       {/* ================= COMMUNITY ================= */}
-      <section className="bg-neutral-900">
+      <section className={`
+        ${isDark ? "bg-neutral-900" : "bg-gray-800"}
+      `}>
         <div className="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
           <img
             src="https://media.istockphoto.com/id/1141407939/photo/battle-ropes-session-at-the-gym.jpg?s=612x612&w=0&k=20&c=YZObVI5i4D9dtyxg0I_tTWUj4elDwbvVT02lRN0Zy9Y="
@@ -163,10 +166,16 @@ const Home = () => {
           />
 
           <div>
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className={`
+              text-4xl font-bold mb-6
+              ${isDark ? "text-white" : "text-gray-100"}
+            `}>
               Train with a <span className="text-emerald-400">Community</span>
             </h2>
-            <p className="text-neutral-300 mb-8">
+            <p className={`
+              mb-8
+              ${isDark ? "text-neutral-300" : "text-gray-300"}
+            `}>
               Stay motivated by joining a community that shares your fitness
               goals and lifestyle.
             </p>
@@ -180,6 +189,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* ================= CONTACT ================= */}
+      <Contact />
 
       {/* ================= CTA ================= */}
       <section className="text-center py-24">

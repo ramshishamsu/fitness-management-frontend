@@ -18,7 +18,11 @@ const Navbar = () => {
 
   const navItems = [
     { name: "Home", href: "/" },
+  ];
+
+  const rightNavItems = [
     { name: "Features", href: "/#features" },
+    { name: "Contact Us", href: "#contact" },
   ];
 
   return (
@@ -67,6 +71,22 @@ const Navbar = () => {
 
         {/* RIGHT CONTROLS */}
         <div className="flex items-center space-x-4">
+          {/* RIGHT SIDE NAVIGATION */}
+          <nav className="hidden md:flex items-center space-x-6">
+            {rightNavItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={`
+                  text-sm font-medium transition-colors hover:text-emerald-400
+                  ${isDark ? "text-neutral-300" : "text-gray-700"}
+                `}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+
           {/* THEME TOGGLE */}
           <button
             onClick={toggleTheme}
@@ -156,7 +176,26 @@ const Navbar = () => {
           `}
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
+            {/* Main Navigation */}
             {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                onClick={() => setOpen(false)}
+                className={`
+                  block px-3 py-2 rounded-md text-base font-medium transition-colors
+                  ${isDark
+                    ? "text-neutral-300 hover:bg-neutral-800 hover:text-white"
+                    : "text-gray-700 hover:bg-gray-100 hover:text-black"
+                  }
+                `}
+              >
+                {item.name}
+              </Link>
+            ))}
+            
+            {/* Right Side Navigation */}
+            {rightNavItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
