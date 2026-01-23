@@ -38,30 +38,30 @@ const UserDashboard = () => {
       setLoading(true);
       
       // Fetch trainer assignment
-      const trainerRes = await axios.get('/api/trainers/assigned-trainer');
+      const trainerRes = await axios.get('/trainers/assigned-trainer');
       
       // Fetch user workouts
-      const workoutsRes = await axios.get('/api/workouts/user');
+      const workoutsRes = await axios.get('/workouts/user');
       
       // Fetch user payments
-      const paymentsRes = await axios.get('/api/payments/user');
+      const paymentsRes = await axios.get('/payments/user');
       
       // Fetch nutrition logs
-      const nutritionRes = await axios.get('/api/nutrition-plans/logs');
+      const nutritionRes = await axios.get('/nutrition-plans/logs');
       
       // Fetch user goals
-      const goalsRes = await axios.get('/api/goals/user');
+      const goalsRes = await axios.get('/goals/user');
       
       // Fetch progress data
-      const progressRes = await axios.get('/api/progress/user');
+      const progressRes = await axios.get('/progress/user');
       
       setDashboardData({
         trainer: trainerRes?.data || null,
-        workouts: workoutsRes?.data || [],
-        payments: paymentsRes?.data || [],
+        workouts: Array.isArray(workoutsRes?.data) ? workoutsRes.data : [],
+        payments: Array.isArray(paymentsRes?.data) ? paymentsRes.data : [],
         nutritionLogs: nutritionRes?.data?.nutritionLogs || [],
-        goals: goalsRes?.data || [],
-        progress: progressRes?.data || []
+        goals: Array.isArray(goalsRes?.data) ? goalsRes.data : [],
+        progress: Array.isArray(progressRes?.data) ? progressRes.data : []
       });
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -82,7 +82,7 @@ const UserDashboard = () => {
   const updateGoalProgress = async (goalId, newValue) => {
     try {
       // Update progress via API
-      await axios.post('/api/progress', {
+      await axios.post('/progress', {
         goalId,
         value: newValue,
         date: new Date()
