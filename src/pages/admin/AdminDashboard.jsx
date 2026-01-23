@@ -78,15 +78,15 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-rose-50 to-pink-50 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
           <div className="relative">
-            <div className="w-16 h-16 border-4 border-indigo-200 rounded-full"></div>
-            <div className="w-16 h-16 border-4 border-indigo-600 rounded-full border-t-transparent animate-spin absolute top-0 left-0"></div>
+            <div className="w-16 h-16 border-4 border-rose-200 rounded-full"></div>
+            <div className="w-16 h-16 border-4 border-rose-500 rounded-full border-t-transparent animate-spin absolute top-0 left-0"></div>
           </div>
           <div className="text-center">
-            <p className="text-slate-600 font-medium">Loading Dashboard</p>
-            <p className="text-slate-400 text-sm">Please wait...</p>
+            <p className="text-rose-600 font-medium">Loading Dashboard</p>
+            <p className="text-rose-400 text-sm">Please wait...</p>
           </div>
         </div>
       </div>
@@ -96,15 +96,15 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-2xl p-8 text-white shadow-xl">
+      <div className="bg-gradient-to-r from-rose-400 via-pink-400 to-rose-400 rounded-2xl p-8 text-white shadow-xl">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold mb-2">Admin Dashboard</h1>
             <p className="text-white/90 text-lg">Manage your fitness management system with powerful insights</p>
           </div>
           <div className="mt-4 lg:mt-0 flex items-center space-x-2">
-            <Activity className="w-5 h-5 text-emerald-300" />
-            <span className="text-emerald-300 font-medium">System Active</span>
+            <Activity className="w-5 h-5 text-white" />
+            <span className="text-white font-medium">System Active</span>
           </div>
         </div>
       </div>
@@ -115,7 +115,7 @@ const AdminDashboard = () => {
           title="Total Users"
           value={stats.totalUsers}
           icon={Users}
-          color="bg-gradient-to-br from-blue-600 to-blue-700"
+          color="bg-gradient-to-br from-sky-400 to-blue-500"
           link="/admin/users"
           trend="+12% this month"
           subtitle="Active members"
@@ -124,7 +124,7 @@ const AdminDashboard = () => {
           title="Total Trainers"
           value={stats.totalTrainers}
           icon={Dumbbell}
-          color="bg-gradient-to-br from-purple-600 to-purple-700"
+          color="bg-gradient-to-br from-purple-400 to-violet-500"
           link="/admin/trainers"
           trend="+8% this month"
           subtitle="Certified professionals"
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
           title="Pending Trainers"
           value={stats.pendingTrainers}
           icon={AlertTriangle}
-          color="bg-gradient-to-br from-amber-600 to-orange-600"
+          color="bg-gradient-to-br from-amber-400 to-orange-500"
           link="/admin/trainers?status=pending"
           subtitle="Awaiting approval"
         />
@@ -141,7 +141,7 @@ const AdminDashboard = () => {
           title="Appointments"
           value={stats.appointments}
           icon={Calendar}
-          color="bg-gradient-to-br from-emerald-600 to-teal-600"
+          color="bg-gradient-to-br from-emerald-400 to-teal-500"
           link="/admin/appointments"
           trend="+15% this week"
           subtitle="Scheduled sessions"
@@ -154,7 +154,7 @@ const AdminDashboard = () => {
           title="Total Revenue"
           value={`$${stats.totalRevenue?.toLocaleString() || '0'}`}
           icon={DollarSign}
-          color="bg-gradient-to-br from-green-600 to-emerald-600"
+          color="bg-gradient-to-br from-green-400 to-emerald-500"
           link="/admin/payments"
           trend="+20% this month"
           subtitle="Gross earnings"
@@ -163,7 +163,7 @@ const AdminDashboard = () => {
           title="Pending Withdrawals"
           value={stats.pendingWithdrawals}
           icon={AlertTriangle}
-          color="bg-gradient-to-br from-red-600 to-pink-600"
+          color="bg-gradient-to-br from-rose-400 to-pink-500"
           link="/admin/withdrawals"
           subtitle="Requires action"
         />
@@ -171,7 +171,7 @@ const AdminDashboard = () => {
           title="Active Plans"
           value={stats.plans}
           icon={FileText}
-          color="bg-gradient-to-br from-cyan-600 to-blue-600"
+          color="bg-gradient-to-br from-cyan-400 to-blue-500"
           link="/admin/plans"
           trend="+5% this month"
           subtitle="Subscription plans"
@@ -180,7 +180,7 @@ const AdminDashboard = () => {
           title="Active Users"
           value={stats.activeUsers}
           icon={UserCheck}
-          color="bg-gradient-to-br from-indigo-600 to-purple-600"
+          color="bg-gradient-to-br from-indigo-400 to-purple-500"
           link="/admin/users?status=active"
           trend="+18% this month"
           subtitle="Currently online"
@@ -188,29 +188,29 @@ const AdminDashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200">
+      <div className="bg-white rounded-2xl shadow-lg p-6 border border-rose-200">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-slate-900">Quick Actions</h2>
+          <h2 className="text-xl font-bold text-rose-900">Quick Actions</h2>
           <Zap className="w-5 h-5 text-amber-500" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Link
             to="/admin/users"
-            className="group flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+            className="group flex items-center justify-center px-6 py-4 bg-gradient-to-r from-sky-400 to-blue-500 text-white rounded-xl hover:from-sky-500 hover:to-blue-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
           >
             <Users className="w-5 h-5 mr-3" />
             <span className="font-medium">Manage Users</span>
           </Link>
           <Link
             to="/admin/trainers"
-            className="group flex items-center justify-center px-6 py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+            className="group flex items-center justify-center px-6 py-4 bg-gradient-to-r from-purple-400 to-violet-500 text-white rounded-xl hover:from-purple-500 hover:to-violet-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
           >
             <Dumbbell className="w-5 h-5 mr-3" />
             <span className="font-medium">Manage Trainers</span>
           </Link>
           <Link
             to="/admin/payments"
-            className="group flex items-center justify-center px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+            className="group flex items-center justify-center px-6 py-4 bg-gradient-to-r from-emerald-400 to-teal-500 text-white rounded-xl hover:from-emerald-500 hover:to-teal-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
           >
             <DollarSign className="w-5 h-5 mr-3" />
             <span className="font-medium">View Payments</span>
@@ -220,44 +220,44 @@ const AdminDashboard = () => {
 
       {/* Additional Stats Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
+        <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-6 border border-rose-200">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-slate-900">System Health</h3>
-            <Shield className="w-5 h-5 text-emerald-600" />
+            <h3 className="text-lg font-bold text-rose-900">System Health</h3>
+            <Shield className="w-5 h-5 text-emerald-500" />
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-slate-600">Server Status</span>
+              <span className="text-rose-600">Server Status</span>
               <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">Online</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-600">Database</span>
+              <span className="text-rose-600">Database</span>
               <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">Healthy</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-600">API Response</span>
-              <span className="text-slate-700 font-medium">&lt;100ms</span>
+              <span className="text-rose-600">API Response</span>
+              <span className="text-rose-700 font-medium">&lt;100ms</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
+        <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-6 border border-rose-200">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-slate-900">Recent Activity</h3>
-            <Activity className="w-5 h-5 text-blue-600" />
+            <h3 className="text-lg font-bold text-rose-900">Recent Activity</h3>
+            <Activity className="w-5 h-5 text-sky-500" />
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-slate-600">New Users Today</span>
-              <span className="text-slate-700 font-medium">+24</span>
+              <span className="text-rose-600">New Users Today</span>
+              <span className="text-rose-700 font-medium">+24</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-600">Sessions Completed</span>
-              <span className="text-slate-700 font-medium">156</span>
+              <span className="text-rose-600">Sessions Completed</span>
+              <span className="text-rose-700 font-medium">156</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-600">Revenue Today</span>
-              <span className="text-slate-700 font-medium">$1,234</span>
+              <span className="text-rose-600">Revenue Today</span>
+              <span className="text-rose-700 font-medium">$1,234</span>
             </div>
           </div>
         </div>
