@@ -3,7 +3,6 @@ import { useAuth } from "../../context/useAuth";
 import { useState, useEffect } from "react";
 import axios from "../../api/axios";
 import { useTheme } from "../../context/ThemeContext";
-import Footer from "../../components/common/Footer";
 
 import {
   Dumbbell,
@@ -107,7 +106,7 @@ const UserDashboard = () => {
   const { trainer, workouts, payments, nutritionLogs, goals, progress } = dashboardData;
 
   return (
-    <div className={`min-h-screen p-4 sm:p-6 overflow-hidden flex flex-col pb-16 ${
+    <div className={`min-h-screen p-4 sm:p-6 overflow-hidden flex flex-col ${
       isDark 
         ? "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" 
         : "bg-gradient-to-br from-teal-50 via-cyan-50 to-teal-50"
@@ -458,9 +457,6 @@ const UserDashboard = () => {
           )}
         </div>
       </div>
-      
-      {/* SIMPLIFIED FOOTER */}
-      <Footer />
     </div>
   );
 };
