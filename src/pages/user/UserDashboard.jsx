@@ -78,6 +78,29 @@ const UserDashboard = () => {
     }
   };
 
+  const updateGoalProgress = async (goalId, newValue) => {
+    try {
+      // Update progress via API
+      await axios.post('/api/progress', {
+        goalId,
+        value: newValue,
+        date: new Date()
+      });
+
+      // Update local state
+      setDashboardData(prev => ({
+        ...prev,
+        goals: prev.goals.map(goal => 
+          goal._id === goalId ? { ...goal, currentValue: newValue } : goal
+        )
+      }));
+
+      console.log('✅ Goal progress updated:', { goalId, newValue });
+    } catch (error) {
+      console.error('Failed to update goal progress:', error);
+    }
+  };
+
   useEffect(() => {
     if (user) {
       fetchDashboardData();
@@ -402,47 +425,113 @@ const UserDashboard = () => {
               </div>
               Goals
             </h2>
-            <Link 
-              to="/user/goals" 
-              className={`text-sm font-medium px-3 py-1 rounded-lg transition-colors ${
-                isDark 
-                  ? "text-purple-400 hover:bg-purple-500/20" 
-                  : "text-purple-600 hover:bg-purple-50"
-              }`}
-            >
-              Manage
-            </Link>
+            <div className="flex items-center space-x-2">
+              <Link 
+                to="/user/goals" 
+                className={`text-sm font-medium px-3 py-1 rounded-lg transition-colors ${
+                  isDark 
+                    ? "text-purple-400 hover:bg-purple-500/20" 
+                    : "text-purple-600 hover:bg-purple-50"
+                }`}
+              >
+                Manage
+              </Link>
+              <button
+                onClick={() => window.location.href = '/user/goals'}
+                className={`text-sm font-medium px-3 py-1 rounded-lg transition-colors ${
+                  isDark 
+                    ? "text-emerald-400 hover:bg-emerald-500/20" 
+                    : "text-emerald-600 hover:bg-emerald-50"
+                }`}
+              >
+                + New
+              </button>
+            </div>
           </div>
           
           {goals.length > 0 ? (
             <div className="space-y-3">
-              {goals.slice(0, 3).map((goal) => (
-                <div key={goal._id} className={`p-4 rounded-xl transition-all hover:scale-102 ${
-                  isDark 
-                    ? "bg-slate-700/50 hover:bg-slate-700" 
-                    : "bg-purple-50 hover:bg-purple-100"
-                }`}>
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className={`font-medium ${isDark ? "text-white" : "text-slate-900"}`}>{goal.title}</h3>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      goal.status === 'completed' 
-                        ? isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-700'
-                        : goal.status === 'active'
-                        ? isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-700'
-                        : isDark ? 'bg-slate-600/20 text-slate-400' : 'bg-slate-200 text-slate-700'
-                    }`}>
-                      {goal.status}
-                    </span>
+              {goals.slice(0, 3).map((goal) => {
+                const progressPercentage = goal.targetValue > 0 
+                  ? Math.min((goal.currentValue / goal.targetValue) * 100, 100)
+                  : 0;
+                
+                return (
+                  <div key={goal._id} className={`p-4 rounded-xl transition-all hover:scale-102 ${
+                    isDark 
+                      ? "bg-slate-700/50 hover:bg-slate-700" 
+                      : "bg-purple-50 hover:bg-purple-100"
+                  }`}>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className={`font-medium ${isDark ? "text-white" : "text-slate-900"}`}>{goal.title}</h3>
+                        <p className={`text-sm ${isDark ? "text-slate-400" : "text-slate-600"}`}>
+                          {goal.currentValue || 0} / {goal.targetValue} {goal.unit}
+                        </p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          progressPercentage >= 100
+                            ? isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-700'
+                            : progressPercentage >= 50
+                            ? isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-700'
+                            : isDark ? 'bg-slate-600/20 text-slate-400' : 'bg-slate-200 text-slate-700'
+                        }`}>
+                          {progressPercentage >= 100 ? '✓ Completed' : `${Math.round(progressPercentage)}%`}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-3">
+                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div 
+                          className={`h-2 rounded-full transition-all duration-300 ${
+                            progressPercentage >= 100 
+                              ? 'bg-gradient-to-r from-emerald-500 to-green-500'
+                              : progressPercentage >= 50
+                              ? 'bg-gradient-to-r from-purple-500 to-pink-500'
+                              : 'bg-gradient-to-r from-amber-500 to-orange-500'
+                          }`}
+                          style={{ width: `${progressPercentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+
+                    {/* Quick Progress Update */}
+                    <div className="flex items-center justify-between">
+                      <p className={`text-xs ${isDark ? "text-slate-400" : "text-slate-600"}`}>
+                        {progressPercentage >= 100 ? 'Goal achieved! 🎉' : `${Math.round(progressPercentage)}% Complete`}
+                      </p>
+                      <div className="flex items-center space-x-1">
+                        <button
+                          onClick={() => updateGoalProgress(goal._id, (goal.currentValue || 0) - 1)}
+                          className={`w-6 h-6 rounded-full flex items-center justify-center text-xs transition-colors ${
+                            isDark 
+                              ? "bg-slate-600 hover:bg-slate-500 text-white" 
+                              : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                          }`}
+                          disabled={(goal.currentValue || 0) <= 0}
+                        >
+                          -
+                        </button>
+                        <span className={`text-xs font-medium px-2 ${isDark ? "text-slate-300" : "text-slate-700"}`}>
+                          {goal.currentValue || 0}
+                        </span>
+                        <button
+                          onClick={() => updateGoalProgress(goal._id, (goal.currentValue || 0) + 1)}
+                          className={`w-6 h-6 rounded-full flex items-center justify-center text-xs transition-colors ${
+                            isDark 
+                              ? "bg-purple-500 hover:bg-purple-600 text-white" 
+                              : "bg-purple-500 hover:bg-purple-600 text-white"
+                          }`}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${goal.progress || 0}%` }}
-                    ></div>
-                  </div>
-                  <p className={`text-xs mt-1 ${isDark ? "text-slate-400" : "text-slate-600"}`}>{goal.progress || 0}% Complete</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-8">
@@ -453,6 +542,16 @@ const UserDashboard = () => {
               </div>
               <p className={`${isDark ? "text-slate-400" : "text-slate-600"}`}>No goals yet</p>
               <p className={`text-sm ${isDark ? "text-slate-500" : "text-slate-500"} mt-1`}>Set your fitness goals!</p>
+              <button
+                onClick={() => window.location.href = '/user/goals'}
+                className={`mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isDark 
+                    ? "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30" 
+                    : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+                }`}
+              >
+                Create Your First Goal
+              </button>
             </div>
           )}
         </div>
