@@ -10,7 +10,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Dumbbell, Flame, LineChart } from "lucide-react";
 import Loader from "../components/common/Loader";
-import Navbar from "../components/common/Navbar";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -43,10 +42,8 @@ const Home = () => {
 
   return (
     <div className="bg-neutral-950 text-white min-h-screen">
-      <Navbar />
-      
       {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden pt-16">
+      <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-neutral-900 to-neutral-800" />
 
         <div className="relative max-w-7xl mx-auto px-6 py-32 grid md:grid-cols-2 gap-16 items-center">
