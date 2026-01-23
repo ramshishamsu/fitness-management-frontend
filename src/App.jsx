@@ -28,6 +28,7 @@ import MyWorkouts from "./pages/user/MyWorkouts";
 import WorkoutDetails from "./pages/user/WorkoutDetails";
 import UserNutritionTracker from "./pages/user/UserNutritionTracker";
 import UserCheckout from "./pages/user/UserCheckout";
+import UserGoals from "./pages/user/UserGoals";
 import UserPlans from "./pages/user/UserPlans";
 import UserPaymentSuccess from "./pages/user/UserPaymentSuccess";
 import UserPaymentCancel from "./pages/user/UserPaymentCancel";
@@ -89,6 +90,9 @@ const App = () => {
         {/* NUTRITION */}
         <Route path="nutrition-tracker" element={<UserNutritionTracker />} />
         <Route path="nutrition-log/:planId" element={<UserNutritionTracker />} />
+
+        {/* GOALS */}
+        <Route path="goals" element={<UserGoals />} />
 
         {/* PAYMENTS */}
         <Route path="payments" element={<UserPayments />} />

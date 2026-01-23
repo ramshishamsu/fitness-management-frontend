@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 import { useState, useEffect } from "react";
 import axios from "../../api/axios";
@@ -22,6 +22,7 @@ import {
 const UserDashboard = () => {
   const { user } = useAuth();
   const { isDark } = useTheme();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState({
     trainer: null,
@@ -437,7 +438,7 @@ const UserDashboard = () => {
                 Manage
               </Link>
               <button
-                onClick={() => window.location.href = '/user/goals'}
+                onClick={() => navigate('/user/goals')}
                 className={`text-sm font-medium px-3 py-1 rounded-lg transition-colors ${
                   isDark 
                     ? "text-emerald-400 hover:bg-emerald-500/20" 
@@ -543,7 +544,7 @@ const UserDashboard = () => {
               <p className={`${isDark ? "text-slate-400" : "text-slate-600"}`}>No goals yet</p>
               <p className={`text-sm ${isDark ? "text-slate-500" : "text-slate-500"} mt-1`}>Set your fitness goals!</p>
               <button
-                onClick={() => window.location.href = '/user/goals'}
+                onClick={() => navigate('/user/goals')}
                 className={`mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isDark 
                     ? "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30" 
