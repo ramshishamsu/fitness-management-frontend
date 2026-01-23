@@ -57,13 +57,17 @@ const UserPlans = () => {
         return;
       }
 
-      // Create order
-      const response = await axios.post('/payments/checkout', {
+      // Create order with proper payload
+      const payload = {
         planId: selectedPlan._id,
-        planName: selectedPlan.name,
-        amount: selectedPlan.price
-      });
+        planName: selectedPlan.name.trim(),
+        amount: Number(selectedPlan.price),
+        currency: 'INR'
+      };
 
+      console.log('Creating payment order with payload:', payload);
+      
+      const response = await axios.post('/payments/checkout', payload);
       console.log('Razorpay order response:', response.data);
 
       if (response.data.orderId) {
@@ -71,15 +75,15 @@ const UserPlans = () => {
         const options = {
           key: response.data.keyId,
           amount: response.data.amount,
-          currency: response.data.currency,
+          currency: response.data.currency || 'INR',
           name: 'Fitness Management System',
-          description: selectedPlan.name,
+          description: selectedPlan.name.trim(),
           order_id: response.data.orderId,
-          notes: response.data.notes,
+          notes: response.data.notes || {},
           handler: function (razorpayResponse) {
             console.log('Razorpay payment successful:', razorpayResponse);
             // Payment successful, redirect to success page
-            window.location.href = '/user/success';
+            navigate('/user/payment-success');
           },
           modal: {
             ondismiss: function () {
@@ -114,7 +118,24 @@ const UserPlans = () => {
       }
     } catch (error) {
       console.error('Error creating Razorpay order:', error);
-      alert('Payment failed: ' + error.message);
+      console.error('Error response:', error.response?.data);
+      
+      let errorMessage = 'Payment failed. Please try again.';
+      
+      if (error.response?.status === 500) {
+        errorMessage = 'Server error. Please contact support or try again later.';
+      } else if (error.response?.status === 400) {
+        errorMessage = 'Invalid payment details. Please check your selection.';
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert(errorMessage);
+    } finally {
+      setShowPaymentModal(false);
+      setSelectedPlan(null);
     }
   };
 

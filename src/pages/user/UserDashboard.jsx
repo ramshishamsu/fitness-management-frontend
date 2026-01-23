@@ -37,26 +37,33 @@ const UserDashboard = () => {
     try {
       setLoading(true);
       
-      // Fetch trainer assignment
-      const trainerRes = await axios.get('/trainers/assigned-trainer');
+      // Fetch trainer assignment (handle 404 gracefully)
+      let trainerData = null;
+      try {
+        const trainerRes = await axios.get('/trainers/assigned-trainer');
+        trainerData = trainerRes?.data || null;
+      } catch (trainerError) {
+        console.log('No assigned trainer found:', trainerError.response?.status);
+        trainerData = null;
+      }
       
       // Fetch user workouts
-      const workoutsRes = await axios.get('/workouts/user');
+      const workoutsRes = await axios.get('/workouts/user').catch(() => ({ data: [] }));
       
       // Fetch user payments
-      const paymentsRes = await axios.get('/payments/user');
+      const paymentsRes = await axios.get('/payments/user').catch(() => ({ data: [] }));
       
       // Fetch nutrition logs
-      const nutritionRes = await axios.get('/nutrition-plans/logs');
+      const nutritionRes = await axios.get('/nutrition-plans/logs').catch(() => ({ data: { nutritionLogs: [] } }));
       
       // Fetch user goals
-      const goalsRes = await axios.get('/goals/user');
+      const goalsRes = await axios.get('/goals/user').catch(() => ({ data: [] }));
       
       // Fetch progress data
-      const progressRes = await axios.get('/progress/user');
+      const progressRes = await axios.get('/progress/user').catch(() => ({ data: [] }));
       
       setDashboardData({
-        trainer: trainerRes?.data || null,
+        trainer: trainerData,
         workouts: Array.isArray(workoutsRes?.data) ? workoutsRes.data : [],
         payments: Array.isArray(paymentsRes?.data) ? paymentsRes.data : [],
         nutritionLogs: nutritionRes?.data?.nutritionLogs || [],
