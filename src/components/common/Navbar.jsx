@@ -16,6 +16,26 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const handleSmoothScroll = (e, href) => {
+    e.preventDefault();
+    
+    if (href === "/") {
+      navigate("/");
+      return;
+    }
+    
+    // Remove the leading slash and hash if present
+    const targetId = href.replace(/.*#/, '');
+    const element = document.getElementById(targetId);
+    
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   const navItems = [
   // Empty - all navigation items moved to right side
 ];
@@ -75,16 +95,17 @@ const rightNavItems = [
           {/* RIGHT SIDE NAVIGATION */}
           <nav className="hidden md:flex items-center space-x-6">
             {rightNavItems.map((item) => (
-              <Link
+              <a
                 key={item.name}
-                to={item.href}
+                href={item.href}
+                onClick={(e) => handleSmoothScroll(e, item.href)}
                 className={`
-                  text-sm font-medium transition-colors hover:text-emerald-400
+                  text-sm font-medium transition-colors hover:text-emerald-400 cursor-pointer
                   ${isDark ? "text-neutral-300" : "text-gray-700"}
                 `}
               >
                 {item.name}
-              </Link>
+              </a>
             ))}
           </nav>
 
@@ -179,12 +200,15 @@ const rightNavItems = [
           <div className="px-2 pt-2 pb-3 space-y-1">
             {/* Navigation Items */}
             {rightNavItems.map((item) => (
-              <Link
+              <a
                 key={item.name}
-                to={item.href}
-                onClick={() => setOpen(false)}
+                href={item.href}
+                onClick={(e) => {
+                  handleSmoothScroll(e, item.href);
+                  setOpen(false);
+                }}
                 className={`
-                  block px-3 py-2 rounded-md text-base font-medium transition-colors
+                  block px-3 py-2 rounded-md text-base font-medium transition-colors cursor-pointer
                   ${isDark
                     ? "text-neutral-300 hover:bg-neutral-800 hover:text-white"
                     : "text-gray-700 hover:bg-gray-100 hover:text-black"
@@ -192,7 +216,7 @@ const rightNavItems = [
                 `}
               >
                 {item.name}
-              </Link>
+              </a>
             ))}
             
             <div className="pt-4 pb-2 border-t border-neutral-700">
