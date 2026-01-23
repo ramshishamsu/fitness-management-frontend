@@ -10,9 +10,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Dumbbell, Flame, LineChart } from "lucide-react";
 import Loader from "../components/common/Loader";
+import { useTheme } from "../context/ThemeContext";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { isDark } = useTheme();
   const [checkingAuth, setCheckingAuth] = useState(true);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -41,10 +43,22 @@ const Home = () => {
   }
 
   return (
-    <div className="bg-neutral-950 text-white min-h-screen">
+    <div className={`
+      min-h-screen
+      ${isDark 
+        ? "bg-neutral-950 text-white" 
+        : "bg-gray-50 text-gray-900"
+      }
+    `}>
       {/* ================= HERO ================= */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-neutral-900 to-neutral-800" />
+        <div className={`
+          absolute inset-0 bg-gradient-to-br
+          ${isDark 
+            ? "from-black via-neutral-900 to-neutral-800" 
+            : "from-gray-100 via-gray-50 to-white"
+          }
+        `} />
 
         <div className="relative max-w-7xl mx-auto px-6 py-32 grid md:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -52,12 +66,18 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+            <h1 className={`
+              text-5xl md:text-6xl font-extrabold leading-tight mb-6
+              ${isDark ? "text-white" : "text-gray-900"}
+            `}>
               Train Smarter. <br />
               <span className="text-emerald-400">Live Stronger.</span>
             </h1>
 
-            <p className="text-neutral-300 text-lg mb-10 max-w-xl">
+            <p className={`
+              text-lg mb-10 max-w-xl
+              ${isDark ? "text-neutral-300" : "text-gray-600"}
+            `}>
               A premium fitness management platform to track workouts, connect
               with trainers, and build lifelong fitness habits.
             </p>
@@ -73,7 +93,13 @@ const Home = () => {
               {/* Login */}
               <Link
                 to="/login"
-                className="border border-neutral-600 px-8 py-4 rounded-md font-medium hover:bg-neutral-800 transition"
+                className={`
+                  border px-8 py-4 rounded-md font-medium hover:transition
+                  ${isDark 
+                    ? "border-neutral-600 text-white hover:bg-neutral-800" 
+                    : "border-gray-300 text-gray-700 hover:bg-gray-100"
+                  }
+                `}
               >
                 Login
               </Link>
@@ -81,7 +107,13 @@ const Home = () => {
               {/* Trainer */}
               <Link
                 to="/register?role=trainer"
-                className="border border-emerald-500 text-emerald-400 px-8 py-4 rounded-md font-semibold hover:bg-emerald-500 hover:text-black transition"
+                className={`
+                  border px-8 py-4 rounded-md font-semibold transition
+                  ${isDark 
+                    ? "border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-black" 
+                    : "border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white"
+                  }
+                `}
               >
                 Become a Trainer
               </Link>
@@ -105,12 +137,15 @@ const Home = () => {
       </section>
 
       {/* ================= STATS ================= */}
-      <section className="border-t border-neutral-800">
+      <section className={`
+        border-t
+        ${isDark ? "border-neutral-800 bg-neutral-900" : "border-gray-200 bg-gray-50"}
+      `}>
         <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
-          <Stat number="10K+" label="Active Users" />
-          <Stat number="500+" label="Certified Trainers" />
-          <Stat number="1M+" label="Workouts Tracked" />
-          <Stat number="98%" label="User Satisfaction" />
+          <Stat number="10K+" label="Active Users" isDark={isDark} />
+          <Stat number="500+" label="Certified Trainers" isDark={isDark} />
+          <Stat number="1M+" label="Workouts Tracked" isDark={isDark} />
+          <Stat number="98%" label="User Satisfaction" isDark={isDark} />
         </div>
       </section>
 
@@ -189,10 +224,10 @@ const Home = () => {
 
 /* ================= SUB COMPONENTS ================= */
 
-const Stat = ({ number, label }) => (
+const Stat = ({ number, label, isDark }) => (
   <div>
     <p className="text-4xl font-bold text-emerald-400 mb-2">{number}</p>
-    <p className="text-neutral-400">{label}</p>
+    <p className={isDark ? "text-neutral-400" : "text-gray-600"}>{label}</p>
   </div>
 );
 
