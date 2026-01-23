@@ -186,7 +186,7 @@ const UserGoals = () => {
   };
 
   return (
-    <UserLayout>
+    <>
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 text-white">Fitness Goals</h1>
@@ -535,7 +535,7 @@ const UserGoals = () => {
           </div>
         )}
       </div>
-    </UserLayout>
+    </>
   );
 };
 
