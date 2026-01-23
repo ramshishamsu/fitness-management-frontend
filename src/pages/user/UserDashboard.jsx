@@ -3,6 +3,7 @@ import { useAuth } from "../../context/useAuth";
 import { useState, useEffect } from "react";
 import axios from "../../api/axios";
 import { useTheme } from "../../context/ThemeContext";
+import Footer from "../../components/common/Footer";
 
 import {
   Dumbbell,
@@ -457,6 +458,9 @@ const UserDashboard = () => {
           )}
         </div>
       </div>
+      
+      {/* SIMPLIFIED FOOTER */}
+      <Footer />
     </div>
   );
 };

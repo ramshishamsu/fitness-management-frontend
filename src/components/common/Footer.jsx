@@ -1,80 +1,57 @@
-/*
-|--------------------------------------------------------------------------
-| FOOTER – DARK INDUSTRIAL (cult.fit style)
-|--------------------------------------------------------------------------
-| - Minimal
-| - Responsive
-| - Product-ready
-*/
-
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-neutral-950 border-t border-neutral-800">
-      <div className="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-4">
+    <footer className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-t border-slate-700">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          
+          {/* BRAND */}
+          <div className="text-center md:text-left">
+            <h3 className="text-xl font-bold bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+              FITNESS PRO
+            </h3>
+            <p className="text-slate-400 text-sm mt-1">
+              Your fitness journey starts here
+            </p>
+          </div>
 
-        {/* BRAND */}
-        <div>
-          <h3 className="text-xl font-bold text-emerald-400 mb-4">
-            FITNESS PRO
-          </h3>
-          <p className="text-neutral-400 text-sm leading-relaxed">
-            A premium fitness management platform to train smarter,
-            track progress, and stay consistent.
-          </p>
+          {/* QUICK LINKS */}
+          <div className="flex flex-wrap justify-center gap-6 text-sm">
+            <Link
+              to="/user/dashboard"
+              className="text-slate-400 hover:text-teal-400 transition-colors"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/user/my-workouts"
+              className="text-slate-400 hover:text-teal-400 transition-colors"
+            >
+              Workouts
+            </Link>
+            <Link
+              to="/user/nutrition-tracker"
+              className="text-slate-400 hover:text-teal-400 transition-colors"
+            >
+              Nutrition
+            </Link>
+            <Link
+              to="/user/goals"
+              className="text-slate-400 hover:text-teal-400 transition-colors"
+            >
+              Goals
+            </Link>
+          </div>
+
+          {/* COPYRIGHT */}
+          <div className="text-center text-slate-500 text-sm">
+            © {new Date().getFullYear()} Fitness Pro. All rights reserved.
+          </div>
         </div>
-
-        {/* PRODUCT */}
-        <div>
-          <h4 className="text-white font-semibold mb-4">Product</h4>
-          <ul className="space-y-2 text-neutral-400 text-sm">
-            <li><FooterLink to="/">Home</FooterLink></li>
-            <li><FooterLink to="/user">Dashboard</FooterLink></li>
-            <li><FooterLink to="/trainer">Trainers</FooterLink></li>
-            <li><FooterLink to="/pricing">Pricing</FooterLink></li>
-          </ul>
-        </div>
-
-        {/* COMPANY */}
-        <div>
-          <h4 className="text-white font-semibold mb-4">Company</h4>
-          <ul className="space-y-2 text-neutral-400 text-sm">
-            <li><FooterLink to="/about">About</FooterLink></li>
-            <li><FooterLink to="/careers">Careers</FooterLink></li>
-            <li><FooterLink to="/blog">Blog</FooterLink></li>
-            <li><FooterLink to="/contact">Contact</FooterLink></li>
-          </ul>
-        </div>
-
-        {/* SUPPORT */}
-        <div>
-          <h4 className="text-white font-semibold mb-4">Support</h4>
-          <ul className="space-y-2 text-neutral-400 text-sm">
-            <li><FooterLink to="/help">Help Center</FooterLink></li>
-            <li><FooterLink to="/privacy">Privacy Policy</FooterLink></li>
-            <li><FooterLink to="/terms">Terms & Conditions</FooterLink></li>
-          </ul>
-        </div>
-      </div>
-
-      {/* BOTTOM BAR */}
-      <div className="border-t border-neutral-800 py-6 text-center text-neutral-500 text-sm">
-        © {new Date().getFullYear()} Fitness Pro. All rights reserved.
       </div>
     </footer>
   );
 };
-
-/* ================= HELPER ================= */
-
-const FooterLink = ({ to, children }) => (
-  <Link
-    to={to}
-    className="hover:text-white transition"
-  >
-    {children}
-  </Link>
-);
 
 export default Footer;
