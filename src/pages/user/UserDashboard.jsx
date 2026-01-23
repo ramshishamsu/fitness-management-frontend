@@ -107,7 +107,7 @@ const UserDashboard = () => {
   const { trainer, workouts, payments, nutritionLogs, goals, progress } = dashboardData;
 
   return (
-    <div className={`min-h-screen p-4 sm:p-6 overflow-hidden flex flex-col ${
+    <div className={`min-h-screen p-4 sm:p-6 overflow-hidden flex flex-col pb-32 ${
       isDark 
         ? "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" 
         : "bg-gradient-to-br from-teal-50 via-cyan-50 to-teal-50"

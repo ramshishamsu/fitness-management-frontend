@@ -1,23 +1,38 @@
 import { Link } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
 
 const Footer = () => {
+  const { isDark } = useTheme();
+  
   return (
-    <footer className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-t border-slate-700">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className={`
+      fixed bottom-0 left-0 right-0 z-50
+      w-full
+      ${isDark 
+        ? "bg-slate-900/95 backdrop-blur-md border-t border-slate-700" 
+        : "bg-white/95 backdrop-blur-md border-t border-gray-200"
+      }
+      transition-colors duration-300
+    `}>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           
           {/* BRAND */}
-          <div className="space-y-4">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+          <div className="space-y-3">
+            <h3 className={`text-xl font-bold ${isDark ? "text-teal-400" : "text-teal-600"}`}>
               FITNESS PRO
             </h3>
-            <p className="text-slate-400 text-sm leading-relaxed">
+            <p className={`text-sm leading-relaxed ${isDark ? "text-slate-400" : "text-slate-600"}`}>
               Your fitness journey starts here. Train smarter, live stronger.
             </p>
-            <div className="flex space-x-4 pt-2">
+            <div className="flex space-x-3 pt-2">
               <Link
                 to="/user/dashboard"
-                className="w-10 h-10 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold hover:scale-110 transition-transform"
+                className={`w-8 h-8 rounded-full flex items-center justify-center font-bold transition-transform hover:scale-110 ${
+                  isDark 
+                    ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white" 
+                    : "bg-gradient-to-r from-teal-600 to-cyan-600 text-white"
+                }`}
               >
                 F
               </Link>
@@ -26,12 +41,12 @@ const Footer = () => {
 
           {/* NAVIGATION */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Navigation</h4>
-            <ul className="space-y-3">
+            <h4 className={`font-semibold mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Navigation</h4>
+            <ul className="space-y-2">
               <li>
                 <Link
                   to="/user/dashboard"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   Dashboard
                 </Link>
@@ -39,7 +54,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/user/my-workouts"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   My Workouts
                 </Link>
@@ -47,7 +62,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/user/nutrition-tracker"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   Nutrition
                 </Link>
@@ -55,7 +70,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/user/goals"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   Goals
                 </Link>
@@ -65,12 +80,12 @@ const Footer = () => {
 
           {/* RESOURCES */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Resources</h4>
-            <ul className="space-y-3">
+            <h4 className={`font-semibold mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Resources</h4>
+            <ul className="space-y-2">
               <li>
                 <Link
                   to="/user/profile"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   Profile Settings
                 </Link>
@@ -78,7 +93,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/user/progress"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   Progress Tracking
                 </Link>
@@ -86,7 +101,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/user/payments"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   Payment History
                 </Link>
@@ -96,12 +111,12 @@ const Footer = () => {
 
           {/* SUPPORT */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Support</h4>
-            <ul className="space-y-3">
+            <h4 className={`font-semibold mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Support</h4>
+            <ul className="space-y-2">
               <li>
                 <Link
                   to="/help"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   Help Center
                 </Link>
@@ -109,7 +124,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/contact"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   Contact Us
                 </Link>
@@ -117,7 +132,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/faq"
-                  className="text-slate-400 hover:text-teal-400 transition-colors text-sm"
+                  className={`text-sm transition-colors ${isDark ? "text-slate-400 hover:text-teal-400" : "text-gray-600 hover:text-teal-600"}`}
                 >
                   FAQ
                 </Link>
@@ -127,21 +142,21 @@ const Footer = () => {
         </div>
 
         {/* BOTTOM BAR */}
-        <div className="border-t border-slate-700 pt-8 mt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-slate-400 text-sm">
+        <div className={`border-t ${isDark ? "border-slate-700" : "border-gray-200"} pt-4 mt-6`}>
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
+            <div className={`text-xs ${isDark ? "text-slate-500" : "text-gray-500"}`}>
               © {new Date().getFullYear()} Fitness Pro. All rights reserved.
             </div>
-            <div className="flex items-center space-x-6 text-sm text-slate-400">
+            <div className="flex items-center space-x-4 text-xs">
               <Link
                 to="/privacy"
-                className="hover:text-teal-400 transition-colors"
+                className={`transition-colors ${isDark ? "text-slate-500 hover:text-teal-400" : "text-gray-500 hover:text-teal-600"}`}
               >
                 Privacy Policy
               </Link>
               <Link
                 to="/terms"
-                className="hover:text-teal-400 transition-colors"
+                className={`transition-colors ${isDark ? "text-slate-500 hover:text-teal-400" : "text-gray-500 hover:text-teal-600"}`}
               >
                 Terms of Service
               </Link>
