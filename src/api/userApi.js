@@ -1,5 +1,6 @@
 import axiosInstance from "./axios";
 
+
 /*
 |--------------------------------------------------------------------------
 | USER / AUTH APIs
@@ -41,4 +42,7 @@ export const resetPassword = async (token, password) => {
 
 export const getMe = () => {
   return axiosInstance.get("/users/me");
+};
+export const getUserSubscription = () => {
+  return axiosInstance.get("/users/profile");
 };

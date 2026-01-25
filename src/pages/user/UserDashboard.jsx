@@ -18,6 +18,7 @@ import {
   Award,
   BarChart3
 } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 const UserDashboard = () => {
   const { user } = useAuth();
@@ -48,19 +49,19 @@ const UserDashboard = () => {
       }
       
       // Fetch user workouts
-      const workoutsRes = await axios.get('/workouts/user').catch(() => ({ data: [] }));
+      const workoutsRes = await axios.get('/users/workouts').catch(() => ({ data: [] }));
       
       // Fetch user payments
-      const paymentsRes = await axios.get('/payments/user').catch(() => ({ data: [] }));
+      const paymentsRes = await axios.get('/users/payments').catch(() => ({ data: [] }));
       
       // Fetch nutrition logs
-      const nutritionRes = await axios.get('/nutrition-plans/logs').catch(() => ({ data: { nutritionLogs: [] } }));
+      const nutritionRes = await axios.get('/users/nutrition-logs').catch(() => ({ data: { nutritionLogs: [] } }));
       
       // Fetch user goals
-      const goalsRes = await axios.get('/goals/user').catch(() => ({ data: [] }));
+      const goalsRes = await axios.get('/users/goals').catch(() => ({ data: [] }));
       
       // Fetch progress data
-      const progressRes = await axios.get('/progress/user').catch(() => ({ data: [] }));
+      const progressRes = await axios.get('/users/progress').catch(() => ({ data: [] }));
       
       setDashboardData({
         trainer: trainerData,
@@ -256,7 +257,45 @@ const UserDashboard = () => {
 
       {/* MAIN CONTENT GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 flex-1 overflow-y-auto">
-        
+        {/* MESSAGES CARD */}
+<div className={`rounded-2xl shadow-lg p-6 border backdrop-blur-sm ${
+  isDark 
+    ? "bg-slate-800/80 border-slate-700" 
+    : "bg-white/80 border-teal-200"
+}`}>
+  <div className="flex items-center justify-between mb-4">
+    <h2 className={`text-lg font-bold flex items-center ${
+      isDark ? "text-white" : "text-slate-900"
+    }`}>
+      <div className={`p-2 rounded-xl mr-3 ${
+        isDark ? "bg-green-500/20" : "bg-green-100"
+      }`}>
+        <MessageCircle className={`w-5 h-5 ${isDark ? "text-green-400" : "text-green-600"}`} />
+      </div>
+      Messages
+    </h2>
+    <Link 
+      to="/user/messages" 
+      className={`text-sm font-medium px-3 py-1 rounded-lg transition-colors ${
+        isDark 
+          ? "text-green-400 hover:bg-green-500/20" 
+          : "text-green-600 hover:bg-green-50"
+      }`}
+    >
+      Open Chat
+    </Link>
+  </div>
+  
+  <div className={`text-center py-8 ${isDark ? "text-slate-400" : "text-slate-600"}`}>
+    <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+    <p className="text-sm">Chat with your trainer</p>
+    {trainer ? (
+      <p className="text-xs mt-2 opacity-75">Connected with {trainer.name}</p>
+    ) : (
+      <p className="text-xs mt-2 opacity-75">Book a trainer to start messaging</p>
+    )}
+  </div>
+</div>
         {/* WORKOUTS */}
         <div className={`rounded-2xl shadow-lg p-6 border backdrop-blur-sm ${
           isDark 

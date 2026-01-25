@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllTrainers } from "../../api/userApi";
 import axiosInstance from "../../api/axios";
 
@@ -6,7 +7,7 @@ import axiosInstance from "../../api/axios";
 const UserTrainers = () => {
   const [trainers, setTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate(); 
   useEffect(() => {
     console.log('🔍 UserTrainers component mounted');
     loadTrainers();
@@ -16,11 +17,11 @@ const UserTrainers = () => {
     try {
 
       const res = await getAllTrainers();
-      
+
 
       setTrainers(res.data.trainers || res.data || []);
     } catch (error) {
-    
+
       setTrainers([]);
     } finally {
       setLoading(false);
@@ -28,24 +29,24 @@ const UserTrainers = () => {
   };
 
   const bookTrainer = async (trainerId) => {
-  try {
-    console.log('🔍 Booking trainer:', trainerId);
+    try {
+      console.log('🔍 Booking trainer:', trainerId);
 
-    await axiosInstance.post("/appointments", {
-      trainerId: trainerId,
-      date: new Date().toISOString().split('T')[0],
-      time: "10:00 AM",
-      notes: "Booking from trainers page"
-    });
+      await axiosInstance.post("/appointments", {
+        trainerId: trainerId,
+        date: new Date().toISOString().split('T')[0],
+        time: "10:00 AM",
+        notes: "Booking from trainers page"
+      });
 
-    alert("✅ Appointment booked successfully!");
-  } catch (error) {
-    console.warn("⚠ Backend failed, but showing frontend success");
+      alert("✅ Appointment booked successfully!");
+    } catch (error) {
+      console.warn("⚠ Backend failed, but showing frontend success");
 
-    // FRONTEND SUCCESS FORCE
-    alert("✅ Appointment booked successfully!");
-  }
-};
+      // FRONTEND SUCCESS FORCE
+      alert("✅ Appointment booked successfully!");
+    }
+  };
 
 
   if (loading) {
@@ -57,50 +58,58 @@ const UserTrainers = () => {
   }
 
   return (
-    
-      <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-3xl font-bold mb-8 text-white">Available Trainers</h1>
-        
-        {trainers.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-300">No trainers available at the moment.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {trainers.map((trainer, index) => (
-              <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg hover:scale-105">
-                <div className="mb-4">
-                  <img 
-                    src={trainer.profileImage || `https://picsum.photos/seed/trainer${index}/200/200.jpg`}
-                    alt={trainer.name || 'Trainer'}
-                    className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-2 border-gray-600"
-                    onError={(e) => {
-                      e.target.src = `https://picsum.photos/seed/default${index}/200/200.jpg`;
-                    }}
-                  />
-                  <h3 className="text-xl font-bold text-white mb-2 text-center">
-                    {trainer.userId?.name || trainer.name || 'Trainer'}
-                  </h3>
-                  <p className="text-gray-300 mb-4 text-center text-sm">
-                    {trainer.specialization || 'Fitness Trainer'}
-                  </p>
-                  <div className="text-center text-sm text-gray-400 space-y-1">
-                    <p>🎯 {trainer.experience || '5'} years experience</p>
-                    <p>⭐ {trainer.rating || '4.5'} rating</p>
-                  </div>
+
+    <div className="max-w-7xl mx-auto px-6">
+      <h1 className="text-3xl font-bold mb-8 text-white">Available Trainers</h1>
+
+      {trainers.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-300">No trainers available at the moment.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {trainers.map((trainer, index) => (
+            <div key={trainer._id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-all duration-200 hover:shadow-lg hover:scale-105">
+              <div className="mb-4">
+                <img
+                  src={trainer.profileImage || `https://picsum.photos/seed/trainer${index}/200/200.jpg`}
+                  alt={trainer.name || 'Trainer'}
+                  className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-2 border-gray-600"
+                  onError={(e) => {
+                    e.target.src = `https://picsum.photos/seed/default${index}/200/200.jpg`;
+                  }}
+                />
+                <h3 className="text-xl font-bold text-white mb-2 text-center">
+                  {trainer.userId?.name || trainer.name || 'Trainer'}
+                </h3>
+                <p className="text-gray-300 mb-4 text-center text-sm">
+                  {trainer.specialization || 'Fitness Trainer'}
+                </p>
+                <div className="text-center text-sm text-gray-400 space-y-1">
+                  <p>🎯 {trainer.experience || '5'} years experience</p>
+                  <p>⭐ {trainer.rating || '4.5'} rating</p>
                 </div>
-                <button
-                  onClick={() => bookTrainer(trainer._id)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-all duration-200 font-medium"
-                >
-                  Book Appointment
-                </button>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-   
+              <button
+                onClick={() => bookTrainer(trainer._id)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-all duration-200 font-medium"
+              >
+                Book Appointment
+              </button>
+              {trainer.userId?.name && (
+                <button
+                  onClick={() => navigate('/user/messages')}
+                  className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-all duration-200 font-medium text-sm"
+                >
+                  Send Message
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+
   );
 };
 

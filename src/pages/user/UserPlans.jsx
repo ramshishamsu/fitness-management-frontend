@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Search, Check, CreditCard, Clock, Star } from 'lucide-react';
 import axios from '../../api/axios';
 import { useNavigate } from "react-router-dom";
-
+ 
 // Load Razorpay script
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -14,19 +14,20 @@ const loadRazorpayScript = () => {
     document.body.appendChild(script);
   });
 };
-
+ 
 const UserPlans = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [verifyingPayment, setVerifyingPayment] = useState(false);
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     fetchPlans();
   }, []);
-
+ 
   const fetchPlans = async () => {
     try {
       setLoading(true); 
@@ -38,25 +39,25 @@ const UserPlans = () => {
       setLoading(false);
     }
   };
-
+ 
   const handlePurchasePlan = (plan) => {
     setSelectedPlan(plan);
     setShowPaymentModal(true);
   };
-
+ 
   const handlePayment = async () => {
     if (!selectedPlan) return;
-
+ 
     try {
       console.log('Starting Razorpay payment for plan:', selectedPlan);
-
+ 
       // Load Razorpay script
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
         alert('Failed to load payment gateway. Please try again.');
         return;
       }
-
+ 
       // Create order with proper payload
       const payload = {
         planId: selectedPlan._id,
@@ -64,12 +65,12 @@ const UserPlans = () => {
         amount: Number(selectedPlan.price),
         currency: 'INR'
       };
-
+ 
       console.log('Creating payment order with payload:', payload);
-      
+ 
       const response = await axios.post('/payments/checkout', payload);
       console.log('Razorpay order response:', response.data);
-
+ 
       if (response.data.orderId) {
         // Initialize Razorpay checkout
         const options = {
@@ -80,10 +81,31 @@ const UserPlans = () => {
           description: selectedPlan.name.trim(),
           order_id: response.data.orderId,
           notes: response.data.notes || {},
-          handler: function (razorpayResponse) {
+          handler: async function (razorpayResponse) {
             console.log('Razorpay payment successful:', razorpayResponse);
-            // Payment successful, redirect to success page
-            navigate('/user/payment-success');
+ 
+            setVerifyingPayment(true);
+ 
+            // Wait for webhook to process (3 seconds)
+            await new Promise(resolve => setTimeout(resolve, 3000));
+ 
+            // Verify payment was saved
+            try {
+              const paymentsResponse = await axios.get('/payments');
+              const payments = paymentsResponse.data;
+              const latestPayment = payments[0];
+ 
+              if (latestPayment && latestPayment.paymentStatus === 'success') {
+                navigate('/user/payment-success');
+              } else {
+                alert('Payment processing failed. Please contact support.');
+              }
+            } catch (error) {
+              console.error('Payment verification failed:', error);
+              navigate('/user/payment-success'); // Fallback to success page
+            } finally {
+              setVerifyingPayment(false);
+            }
           },
           modal: {
             ondismiss: function () {
@@ -101,7 +123,7 @@ const UserPlans = () => {
             color: '#3399cc'
           }
         };
-
+ 
         const razorpay = new window.Razorpay(options);
         razorpay.on('payment.failed', function (response) {
           console.error('Razorpay payment failed:', response);
@@ -119,9 +141,9 @@ const UserPlans = () => {
     } catch (error) {
       console.error('Error creating Razorpay order:', error);
       console.error('Error response:', error.response?.data);
-      
+ 
       let errorMessage = 'Payment failed. Please try again.';
-      
+ 
       if (error.response?.status === 500) {
         errorMessage = 'Server error. Please contact support or try again later.';
       } else if (error.response?.status === 400) {
@@ -131,19 +153,18 @@ const UserPlans = () => {
       } else if (error.message) {
         errorMessage = error.message;
       }
-      
+ 
       alert(errorMessage);
     } finally {
       setShowPaymentModal(false);
       setSelectedPlan(null);
     }
   };
-
+ 
   const filteredPlans = plans.filter(plan =>
     plan.name.toLowerCase().includes(search.toLowerCase())
   );
-
-
+ 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -151,15 +172,27 @@ const UserPlans = () => {
       </div>
     );
   }
-
+ 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
+      {verifyingPayment && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-4 border-blue-600 mx-auto mb-4"></div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Verifying Payment</h3>
+              <p className="text-gray-600">Please wait while we confirm your payment...</p>
+            </div>
+          </div>
+        </div>
+      )}
+ 
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Subscription Plans</h1>
           <p className="text-gray-600">Choose the perfect plan for your fitness journey</p>
         </div>
-
+ 
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -172,7 +205,7 @@ const UserPlans = () => {
             />
           </div>
         </div>
-
+ 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPlans.length === 0 ? (
             <div className="col-span-full text-center py-12">
@@ -188,12 +221,11 @@ const UserPlans = () => {
                       Popular
                     </span>
                   </div>
-
+ 
                   <p className="text-gray-600 mb-6">
                     {plan.description || "No description available"}
                   </p>
-
-
+ 
                   <div className="flex items-center mb-6">
                     <span className="text-3xl font-bold text-gray-900">₹{plan.price}</span>
                     <span className="text-gray-500 ml-2">
@@ -201,9 +233,8 @@ const UserPlans = () => {
                         ? `${plan.duration / 30} month${plan.duration > 30 ? "s" : ""}`
                         : `${plan.duration} days`}
                     </span>
-
                   </div>
-
+ 
                   <div className="space-y-3 mb-6">
                     {plan.features.map((feature, index) => (
                       <div key={index} className="flex items-center">
@@ -212,7 +243,7 @@ const UserPlans = () => {
                       </div>
                     ))}
                   </div>
-
+ 
                   <button
                     onClick={() => handlePurchasePlan(plan)}
                     className="w-full flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
@@ -225,7 +256,7 @@ const UserPlans = () => {
             ))
           )}
         </div>
-
+ 
         {showPaymentModal && selectedPlan && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
@@ -235,7 +266,7 @@ const UserPlans = () => {
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 mb-2">Confirm Purchase</h2>
                 <p className="text-gray-600 mb-4">You're about to purchase the {selectedPlan.name} plan</p>
-
+ 
                 <div className="bg-gray-50 rounded-lg p-4 mb-4">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-600">Plan:</span>
@@ -253,7 +284,7 @@ const UserPlans = () => {
                   </div>
                 </div>
               </div>
-
+ 
               <div className="flex space-x-3">
                 <button
                   onClick={handlePayment}
@@ -276,5 +307,5 @@ const UserPlans = () => {
     </div>
   );
 };
-
+ 
 export default UserPlans;

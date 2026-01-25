@@ -10,6 +10,7 @@ const TrainerProfile = () => {
 
   const [profileImage, setProfileImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [uploadLoading, setUploadLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [docs, setDocs] = useState([]);
   const [docFile, setDocFile] = useState(null);
@@ -21,16 +22,16 @@ const TrainerProfile = () => {
     axios.get("/trainers/profile").then((res) => {
       const trainer = res.data;
       if (trainer.profileImage) {
-        const avatarUrl = `http://localhost:5003/${trainer.profileImage}?t=${Date.now()}`;
-        // Save to localStorage for navbar
+        const avatarUrl = trainer.profileImage;
         localStorage.setItem("trainerAvatar", avatarUrl);
+        setPreview(avatarUrl);
       }
+
       if (trainer.documents) {
         setDocs(trainer.documents);
       }
     }).catch(err => console.error('Failed to load trainer profile', err));
-}, []);
-
+  }, []);
 
   /* ================= HANDLERS ================= */
   const handleChange = (e) => {
@@ -41,7 +42,6 @@ const TrainerProfile = () => {
     const file = e.target.files[0];
     setProfileImage(file);
 
-    // 👀 preview (THIS proves file is detected)
     if (file) {
       setPreview(URL.createObjectURL(file));
     }
@@ -59,16 +59,33 @@ const TrainerProfile = () => {
       });
 
       if (profileImage) {
-        formData.append("profileImage", profileImage);
-      }
+        setUploadLoading(true);
+        try {
+          // Upload image to Cloudinary
+          const imageFormData = new FormData();
+          imageFormData.append("image", profileImage);
 
+          const uploadRes = await axios.post("/upload/profile-image", imageFormData);
+          const imageUrl = uploadRes.data.imageUrl;
+
+          // Update trainer profile with Cloudinary URL
+          await axios.put("/trainers/profile-image", { profileImage: imageUrl });
+
+          // Update localStorage with Cloudinary URL
+          localStorage.setItem("trainerAvatar", imageUrl);
+          setPreview(imageUrl);
+
+        } catch (error) {
+          console.error("Image upload failed:", error);
+          alert("Image upload failed ❌");
+          return;
+        } finally {
+          setUploadLoading(false);
+        }
+      }
+      
+      // Update other profile fields
       await axios.put("/trainers/profile", formData);
-
-      // Update localStorage for navbar if profile image was uploaded
-      if (profileImage) {
-        const newAvatarUrl = `http://localhost:5003/${profileImage.name}?t=${Date.now()}`;
-        localStorage.setItem("trainerAvatar", newAvatarUrl);
-      }
 
       alert("Profile updated successfully ✅");
     } catch (err) {
@@ -86,6 +103,28 @@ const TrainerProfile = () => {
       {/* PROFILE IMAGE */}
       <div className="mb-6">
         <label className="text-sm block mb-2">Profile Photo</label>
+        
+        <label
+          htmlFor="profileImage"
+          className={`flex items-center justify-between border rounded px-4 py-3 cursor-pointer transition ${
+            uploadLoading
+              ? 'border-yellow-500 bg-yellow-500/10'
+              : 'bg-neutral-900 border-neutral-800 hover:border-emerald-500'
+          }`}
+        >
+          <span className="text-neutral-400">
+            {uploadLoading
+              ? "Uploading..."
+              : profileImage
+                ? profileImage.name
+                : "Choose profile image"
+            }
+          </span>
+
+          <span className="bg-neutral-800 px-3 py-1 rounded text-sm">
+            {uploadLoading ? "⏳" : "Browse"}
+          </span>
+        </label>
 
         {/* Preview */}
         {preview && (
@@ -104,20 +143,6 @@ const TrainerProfile = () => {
           accept="image/*"
           onChange={handleImageChange}
         />
-
-        {/* Custom bar */}
-        <label
-          htmlFor="profileImage"
-          className="flex items-center justify-between bg-neutral-900 border border-neutral-800 rounded px-4 py-3 cursor-pointer hover:border-emerald-500 transition"
-        >
-          <span className="text-neutral-400">
-            {profileImage ? profileImage.name : "Choose profile image"}
-          </span>
-
-          <span className="bg-neutral-800 px-3 py-1 rounded text-sm">
-            Browse
-          </span>
-        </label>
       </div>
 
       {/* FIELDS */}
@@ -231,10 +256,14 @@ const TrainerProfile = () => {
 
       <button
         type="submit"
-        disabled={loading}
-        className="bg-emerald-500 text-black px-5 py-2 rounded font-semibold mt-6"
+        disabled={loading || uploadLoading}
+        className={`px-5 py-2 rounded font-semibold mt-6 ${
+          loading || uploadLoading
+            ? 'bg-gray-600 cursor-not-allowed'
+            : 'bg-emerald-500 text-black hover:bg-emerald-600'
+        }`}
       >
-        {loading ? "Saving..." : "Save Changes"}
+        {loading || uploadLoading ? "Saving..." : "Save Changes"}
       </button>
     </form>
   );

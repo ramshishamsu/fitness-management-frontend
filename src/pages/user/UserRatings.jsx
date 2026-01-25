@@ -32,7 +32,7 @@ const UserRatings = () => {
     try {
       const [ratingsRes, feedbackRes] = await Promise.all([
         axiosInstance.get("/ratings/my"),
-        axiosInstance.get("/feedback/my")
+        axiosInstance.get("/ratings/feedback")
       ]);
       
       setRatings(ratingsRes.data);
@@ -70,7 +70,7 @@ const UserRatings = () => {
 
     setSubmitting(true);
     try {
-      const res = await axiosInstance.post("/feedback", newFeedback);
+            const res = await axiosInstance.post("/ratings", newFeedback);
       setFeedback([res.data, ...feedback]);
       setNewFeedback({ trainerId: "", service: "", rating: 5, comment: "" });
       setShowFeedbackForm(false);
