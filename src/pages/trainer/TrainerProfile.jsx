@@ -58,31 +58,57 @@ const TrainerProfile = () => {
         formData.append(key, value);
       });
 
-      if (profileImage) {
-        setUploadLoading(true);
-        try {
-          // Upload image to Cloudinary
-          const imageFormData = new FormData();
-          imageFormData.append("image", profileImage);
+     // In your handleSubmit function, for profile image upload:
+if (profileImage) {
+  setUploadLoading(true);
+  try {
+    // Upload image to Cloudinary
+    const imageFormData = new FormData();
+    imageFormData.append("image", profileImage);
 
-          const uploadRes = await axios.post("/upload/profile-image", imageFormData);
-          const imageUrl = uploadRes.data.imageUrl;
+    const uploadRes = await axios.post("/upload/profile-image", imageFormData);
+    const imageUrl = uploadRes.data.imageUrl;
 
-          // Update trainer profile with Cloudinary URL
-          await axios.put("/trainers/profile-image", { profileImage: imageUrl });
+    // Update trainer profile with Cloudinary URL
+    await axios.put("/trainers/profile-image", { profileImage: imageUrl });
 
-          // Update localStorage with Cloudinary URL
-          localStorage.setItem("trainerAvatar", imageUrl);
-          setPreview(imageUrl);
+    // Update localStorage with Cloudinary URL
+    localStorage.setItem("trainerAvatar", imageUrl);
+    setPreview(imageUrl);
 
-        } catch (error) {
-          console.error("Image upload failed:", error);
-          alert("Image upload failed ❌");
-          return;
-        } finally {
-          setUploadLoading(false);
-        }
-      }
+  } catch (error) {
+    console.error("Image upload failed:", error);
+    alert("Image upload failed ❌");
+    return;
+  } finally {
+    setUploadLoading(false);
+  }
+}
+
+// For document upload (you already have this, but make sure it uses the correct endpoint):
+const uploadDocument = async () => {
+  if (!docFile) return alert('Please choose a file first');
+  try {
+    setDocLoading(true);
+    const fd = new FormData();
+    fd.append('document', docFile); // Use 'document' field name
+    fd.append('type', docType);
+
+    const res = await axios.post('/upload/document', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+
+    // Update your documents list with the response
+    setDocs((d) => [res.data, ...d]);
+    setDocFile(null);
+    alert('Document uploaded ✅');
+  } catch (err) {
+    console.error(err);
+    alert('Upload failed ❌');
+  } finally {
+    setDocLoading(false);
+  }
+};
       
       // Update other profile fields
       await axios.put("/trainers/profile", formData);

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axios";
-import { Send, MessageCircle, User } from "lucide-react";
+import { Send, MessageCircle, User, ArrowLeft } from "lucide-react";
 import UserLayout from "../../components/common/UserLayout";
 
 const UserMessages = () => {
+  const { trainerId } = useParams();
+  const navigate = useNavigate();
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -17,6 +20,19 @@ const UserMessages = () => {
     loadConversations();
   }, []);
 
+  // Auto-select conversation if trainerId is provided
+  useEffect(() => {
+    if (trainerId && conversations.length > 0) {
+      const trainerConv = conversations.find(conv => conv.trainer._id === trainerId);
+      if (trainerConv) {
+        setSelectedConversation(trainerConv);
+      } else {
+        // Create new conversation with trainer
+        createConversationWithTrainer(trainerId);
+      }
+    }
+  }, [trainerId, conversations]);
+
   // Load messages when conversation is selected
   useEffect(() => {
     if (selectedConversation) {
@@ -27,7 +43,7 @@ const UserMessages = () => {
   const loadConversations = async () => {
     try {
       const res = await axiosInstance.get("/messages/conversations");
-      setConversations(res.data);
+      setConversations(res.data || []);
       console.log("✅ Conversations loaded:", res.data);
     } catch (err) {
       console.error("Failed to load conversations:", err);
@@ -37,10 +53,26 @@ const UserMessages = () => {
     }
   };
 
+  const createConversationWithTrainer = async (trainerId) => {
+    try {
+      const res = await axiosInstance.post("/messages/conversation", {
+        trainerId: trainerId
+      });
+      
+      const newConv = res.data;
+      setConversations(prev => [...prev, newConv]);
+      setSelectedConversation(newConv);
+      console.log("✅ New conversation created:", newConv);
+    } catch (err) {
+      console.error("Failed to create conversation:", err);
+      setError("Failed to start conversation");
+    }
+  };
+
   const loadMessages = async (conversationId) => {
     try {
       const res = await axiosInstance.get(`/messages/conversation/${conversationId}`);
-      setMessages(res.data);
+      setMessages(res.data || []);
       console.log("✅ Messages loaded:", res.data);
     } catch (err) {
       console.error("Failed to load messages:", err);
@@ -59,7 +91,7 @@ const UserMessages = () => {
         receiverId: selectedConversation.trainer._id
       });
 
-      setMessages([...messages, res.data]);
+      setMessages(prev => [...prev, res.data]);
       setNewMessage("");
       console.log("✅ Message sent:", res.data);
     } catch (err) {
@@ -80,14 +112,26 @@ const UserMessages = () => {
   return (
     <UserLayout>
       <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
         <div className="mb-8">
+          <div className="flex items-center gap-4 mb-2">
+            {trainerId && (
+              <button
+                onClick={() => navigate('/user/messages')}
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition"
+              >
+                <ArrowLeft size={20} />
+                Back to all messages
+              </button>
+            )}
+          </div>
           <h1 className="text-4xl font-bold mb-2 text-white">Messages</h1>
           <p className="text-neutral-400">Communicate securely with your trainers</p>
         </div>
 
         {loading ? (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
             <p className="text-neutral-400 mt-4">Loading conversations...</p>
           </div>
         ) : error ? (
@@ -103,9 +147,12 @@ const UserMessages = () => {
               <h2 className="text-xl font-semibold mb-4 text-white">Conversations</h2>
               <div className="space-y-2">
                 {conversations.length === 0 ? (
-                  <p className="text-neutral-500 text-center py-8">
-                    No conversations yet. Book an appointment to start messaging!
-                  </p>
+                  <div className="text-center py-8">
+                    <MessageCircle className="mx-auto mb-4 text-gray-600" size={48} />
+                    <p className="text-neutral-500 text-sm">
+                      No conversations yet. Book an appointment to start messaging!
+                    </p>
+                  </div>
                 ) : (
                   conversations.map((conv) => (
                     <div
@@ -113,7 +160,7 @@ const UserMessages = () => {
                       onClick={() => setSelectedConversation(conv)}
                       className={`p-4 rounded-lg cursor-pointer transition-all ${
                         selectedConversation?._id === conv._id
-                          ? "bg-primary text-white"
+                          ? "bg-blue-600 text-white"
                           : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
                       }`}
                     >
@@ -125,7 +172,7 @@ const UserMessages = () => {
                           <h3 className="font-medium text-sm">
                             {conv.trainer?.userId?.name || 'Trainer'}
                           </h3>
-                          <p className="text-xs opacity-75">
+                          <p className="text-xs opacity-75 truncate">
                             {conv.lastMessage?.content || 'Start conversation'}
                           </p>
                         </div>
@@ -149,7 +196,7 @@ const UserMessages = () => {
                   {/* Conversation Header */}
                   <div className="p-4 border-b border-neutral-700">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                      <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                         <User size={20} className="text-white" />
                       </div>
                       <div>
@@ -166,9 +213,12 @@ const UserMessages = () => {
                   {/* Messages List */}
                   <div className="flex-1 overflow-y-auto p-4 space-y-3">
                     {messages.length === 0 ? (
-                      <p className="text-center text-neutral-500 py-8">
-                        No messages yet. Start the conversation!
-                      </p>
+                      <div className="text-center py-8">
+                        <MessageCircle className="mx-auto mb-4 text-gray-600" size={32} />
+                        <p className="text-neutral-500 text-sm">
+                          No messages yet. Start the conversation!
+                        </p>
+                      </div>
                     ) : (
                       messages.map((message) => (
                         <div
@@ -183,7 +233,7 @@ const UserMessages = () => {
                             className={`max-w-xs px-4 py-2 rounded-lg ${
                               message.sender._id === selectedConversation.trainer._id
                                 ? "bg-neutral-800 text-white"
-                                : "bg-primary text-white"
+                                : "bg-blue-600 text-white"
                             }`}
                           >
                             <p className="text-sm">{message.content}</p>
@@ -213,13 +263,13 @@ const UserMessages = () => {
                           }
                         }}
                         placeholder="Type your message..."
-                        className="flex-1 px-4 py-2 bg-neutral-800 text-white rounded-lg border border-neutral-700 focus:border-primary focus:outline-none"
+                        className="flex-1 px-4 py-2 bg-neutral-800 text-white rounded-lg border border-neutral-700 focus:border-blue-500 focus:outline-none"
                         disabled={sendingMessage}
                       />
                       <button
                         onClick={sendMessage}
                         disabled={sendingMessage || !newMessage.trim()}
-                        className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
                       >
                         {sendingMessage ? (
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

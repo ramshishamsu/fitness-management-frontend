@@ -64,7 +64,7 @@ const UserSidebar = ({ sidebarOpen, setSidebarOpen }) => {
           <SideLink to="/user/my-workouts" label="My Workouts" />
           <SideLink to="/user/nutrition-tracker" label="Nutrition" />
           <SideLink to="/user/goals" label="Goals" />
-          <SideLink to="/user/appointments" label="Appointments" />
+          <SideLink to="/user/messages" label="Messages" />
           <SideLink to="/user/payments" label="Payments" />
         </nav>
 
