@@ -5,13 +5,17 @@ import {
   Dumbbell,
   IndianRupee,
   Apple,
-  LogOut
+  LogOut,
+  MessageCircle
 } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
 
 const TrainerSidebar = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+
+ // later you can fetch unread count
+  const unreadMessages = 0;
 
   const handleLogout = () => {
     logout();
@@ -26,6 +30,7 @@ const TrainerSidebar = () => {
         <SidebarLink to="/trainer/dashboard" icon={<LayoutDashboard />} text="Dashboard" />
         <SidebarLink to="/trainer/users" icon={<Users />} text="Clients" />
         <SidebarLink to="/trainer/users" icon={<Dumbbell />} text="Assign Workout" />
+        <SidebarLink to="/trainer/messages" icon={<MessageCircle/>} text="Messages"/>
         <SidebarLink to="/trainer/nutrition" icon={<Apple />} text="Nutrition Plans" />
         <SidebarLink to="/trainer/earnings" icon={<IndianRupee />} text="Earnings" />
 
