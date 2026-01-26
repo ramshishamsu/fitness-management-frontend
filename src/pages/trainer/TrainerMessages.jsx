@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axios";
-import { Send, MessageCircle, User, ArrowLeft } from "lucide-react";
+import { Send, MessageCircle, User } from "lucide-react";
 
 const POLL_INTERVAL = 3000;
 
-const UserMessages = () => {
-  const { trainerId } = useParams();
+const TrainerMessages = () => {
   const navigate = useNavigate();
 
   const [conversations, setConversations] = useState([]);
@@ -27,23 +26,6 @@ const UserMessages = () => {
   useEffect(() => {
     fetchConversations();
   }, []);
-
-  /* ----------------------------------
-     AUTO SELECT / CREATE CONVERSATION
-  ---------------------------------- */
-  useEffect(() => {
-    if (!trainerId || conversations.length === 0) return;
-
-    const existing = conversations.find(
-      (c) => c.trainer._id === trainerId
-    );
-
-    if (existing) {
-      setSelectedConversation(existing);
-    } else {
-      createConversation(trainerId);
-    }
-  }, [trainerId, conversations]);
 
   /* ----------------------------------
      POLLING MESSAGES
@@ -81,18 +63,6 @@ const UserMessages = () => {
     }
   };
 
-  const createConversation = async (trainerId) => {
-    try {
-      const res = await axiosInstance.post("/messages/conversation", {
-        trainerId
-      });
-      setConversations((prev) => [...prev, res.data]);
-      setSelectedConversation(res.data);
-    } catch {
-      setError("Failed to create conversation");
-    }
-  };
-
   const loadMessages = async (conversationId) => {
     try {
       const res = await axiosInstance.get(
@@ -115,7 +85,7 @@ const UserMessages = () => {
 
       const res = await axiosInstance.post("/messages", {
         conversationId: selectedConversation._id,
-        receiverId: selectedConversation.trainer.userId._id,
+        receiverId: selectedConversation.lastMessage.sender._id,
         content: newMessage.trim()
       });
 
@@ -142,7 +112,7 @@ const UserMessages = () => {
   ---------------------------------- */
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-white">
+      <div className="min-h-screen flex items-center justify-center text-white bg-neutral-900">
         Loading messages...
       </div>
     );
@@ -152,15 +122,10 @@ const UserMessages = () => {
     <div className="min-h-screen bg-neutral-900 text-white">
       <div className="max-w-7xl mx-auto px-6 py-6">
         <div className="mb-6">
-          {trainerId && (
-            <button
-              onClick={() => navigate("/user/messages")}
-              className="flex items-center gap-2 text-gray-400 hover:text-white mb-2"
-            >
-              <ArrowLeft size={18} /> Back
-            </button>
-          )}
-          <h1 className="text-3xl font-bold">Messages</h1>
+          <h1 className="text-3xl font-bold">Client Messages</h1>
+          <p className="text-sm text-neutral-400">
+            Chat with your clients
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -173,31 +138,42 @@ const UserMessages = () => {
                 No conversations yet
               </div>
             ) : (
-              conversations.map((conv) => (
-                <div
-                  key={conv._id}
-                  onClick={() => setSelectedConversation(conv)}
-                  className={`p-3 rounded-lg cursor-pointer mb-2 ${
-                    selectedConversation?._id === conv._id
-                      ? "bg-blue-600"
-                      : "bg-neutral-800 hover:bg-neutral-700"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
-                      <User size={18} />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-sm">
-                        {conv.trainer.name}
-                      </p>
-                      <p className="text-xs opacity-70 truncate">
-                        {conv.lastMessage?.content || "Start chatting"}
-                      </p>
+              conversations.map((conv) => {
+                const client =
+                  conv.lastMessage.sender._id ===
+                  conv.trainer.userId._id
+                    ? conv.lastMessage.receiver
+                    : conv.lastMessage.sender;
+
+                return (
+                  <div
+                    key={conv._id}
+                    onClick={() => setSelectedConversation(conv)}
+                    className={`p-3 rounded-lg cursor-pointer mb-2 ${
+                      selectedConversation?._id === conv._id
+                        ? "bg-blue-600"
+                        : "bg-neutral-800 hover:bg-neutral-700"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
+                        <User size={18} />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">
+                          {client?.name || "Client"}
+                        </p>
+                        <p className="text-xs opacity-70 truncate">
+                          {conv.lastMessage?.content}
+                        </p>
+                      </div>
+                      <div className="text-xs opacity-60">
+                        {formatTime(conv.lastMessage.createdAt)}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
@@ -212,11 +188,8 @@ const UserMessages = () => {
                 {/* HEADER */}
                 <div className="p-4 border-b border-neutral-700">
                   <h3 className="font-semibold">
-                    {selectedConversation.trainer.name}
+                    Client Conversation
                   </h3>
-                  <p className="text-sm opacity-70">
-                    {selectedConversation.trainer.specialization}
-                  </p>
                 </div>
 
                 {/* MESSAGES */}
@@ -230,14 +203,14 @@ const UserMessages = () => {
                       <div
                         key={msg._id}
                         className={`flex ${
-                          isTrainer ? "justify-start" : "justify-end"
+                          isTrainer ? "justify-end" : "justify-start"
                         }`}
                       >
                         <div
                           className={`px-4 py-2 rounded-lg max-w-xs ${
                             isTrainer
-                              ? "bg-neutral-700"
-                              : "bg-blue-600"
+                              ? "bg-blue-600"
+                              : "bg-neutral-700"
                           }`}
                         >
                           <p className="text-sm">{msg.content}</p>
@@ -282,4 +255,4 @@ const UserMessages = () => {
   );
 };
 
-export default UserMessages;
+export default TrainerMessages;

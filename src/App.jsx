@@ -32,6 +32,7 @@ import UserGoals from "./pages/user/UserGoals";
 import UserPlans from "./pages/user/UserPlans";
 import UserPaymentSuccess from "./pages/user/UserPaymentSuccess";
 import UserPaymentCancel from "./pages/user/UserPaymentCancel";
+import UserMessages from "./pages/user/UserMessages";
 
 /* ================= TRAINER ================= */
 import TrainerPending from "./pages/trainerStatus/TrainerPending";
@@ -59,92 +60,95 @@ const App = () => {
     <ThemeProvider>
       <Routes>
 
-      {/* ========== PUBLIC ========== */}
-      <Route element={<PublicLayout />}>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password/:token" element={<ResetPassword />} />
-      </Route>
-      {/* ========== USER ========== */}
-      <Route
-        path="/user"
-        element={
-          <ProtectedRoute roles={["user"]}>
-            <UserLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<UserDashboard />} />
-        <Route path="dashboard" element={<UserDashboard />} />
-        <Route path="profile" element={<UserProfile />} />
-        <Route path="trainers" element={<UserTrainers />} />
-        <Route path="plans" element={<UserPlans />} />
-        <Route path="checkout/:planId" element={<UserCheckout />} />
+        {/* ========== PUBLIC ========== */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+        </Route>
+        {/* ========== USER ========== */}
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute roles={["user"]}>
+              <UserLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<UserDashboard />} />
+          <Route path="dashboard" element={<UserDashboard />} />
+          <Route path="profile" element={<UserProfile />} />
+          <Route path="trainers" element={<UserTrainers />} />
+          <Route path="plans" element={<UserPlans />} />
+          <Route path="checkout/:planId" element={<UserCheckout />} />
 
-        {/* WORKOUTS */}
-        <Route path="my-workouts" element={<MyWorkouts />} />
-        <Route path="workouts/:id" element={<WorkoutDetails />} />
+          {/* WORKOUTS */}
+          <Route path="my-workouts" element={<MyWorkouts />} />
+          <Route path="workouts/:id" element={<WorkoutDetails />} />
 
-        {/* NUTRITION */}
-        <Route path="nutrition-tracker" element={<UserNutritionTracker />} />
-        <Route path="nutrition-log/:planId" element={<UserNutritionTracker />} />
+          {/* NUTRITION */}
+          <Route path="nutrition-tracker" element={<UserNutritionTracker />} />
+          <Route path="nutrition-log/:planId" element={<UserNutritionTracker />} />
 
-        {/* GOALS */}
-        <Route path="goals" element={<UserGoals />} />
+          {/* GOALS */}
+          <Route path="goals" element={<UserGoals />} />
 
-        {/* PAYMENTS */}
-        <Route path="payments" element={<UserPayments />} />
-        <Route path="payment-success" element={<UserPaymentSuccess />} />
-        <Route path="payment-cancel" element={<UserPaymentCancel />} />
-      </Route>
+          {/* PAYMENTS */}
+          <Route path="payments" element={<UserPayments />} />
+          <Route path="payment-success" element={<UserPaymentSuccess />} />
+          <Route path="payment-cancel" element={<UserPaymentCancel />} />
 
-      {/* ========== TRAINER ========== */}
-      <Route path="/trainer/pending" element={<TrainerPending />} />
+          {/* MESSAGES */}
+          <Route path="messages" element={<UserMessages />} />
+          <Route path="messages/:trainerId" element={<UserMessages />} />
+        </Route>
+        {/* ========== TRAINER ========== */}
+        <Route path="/trainer/pending" element={<TrainerPending />} />
 
-      <Route
-        path="/trainer"
-        element={
-          <TrainerProtectedRoute>
-            <TrainerLayout />
-          </TrainerProtectedRoute>
-        }
-      >
-        <Route index element={<TrainerDashboard />} />
-        <Route path="dashboard" element={<TrainerDashboard />} />
-        <Route path="profile" element={<TrainerProfile />} />
-        <Route path="users" element={<TrainerUsers />} />
-        <Route path="users/:id" element={<TrainerViewUserProfile />} />
-        <Route path="assign-workout/:id" element={<AssignWorkout />} />
-        <Route path="nutrition" element={<TrainerNutritionManager />} />
-        <Route path="nutrition-plans" element={<TrainerNutritionManager />} />
-        <Route path="earnings" element={<TrainerEarnings />} />
-      </Route>
+        <Route
+          path="/trainer"
+          element={
+            <TrainerProtectedRoute>
+              <TrainerLayout />
+            </TrainerProtectedRoute>
+          }
+        >
+          <Route index element={<TrainerDashboard />} />
+          <Route path="dashboard" element={<TrainerDashboard />} />
+          <Route path="profile" element={<TrainerProfile />} />
+          <Route path="users" element={<TrainerUsers />} />
+          <Route path="users/:id" element={<TrainerViewUserProfile />} />
+          <Route path="assign-workout/:id" element={<AssignWorkout />} />
+          <Route path="nutrition" element={<TrainerNutritionManager />} />
+          <Route path="nutrition-plans" element={<TrainerNutritionManager />} />
+          <Route path="earnings" element={<TrainerEarnings />} />
+        </Route>
 
-      {/* ========== ADMIN ========== */}
-      <Route
-        path="/admin"
-        element={
-          <AdminProtectedRoute>
-            <AdminLayout />
-          </AdminProtectedRoute>
-        }
-      >
-        <Route index element={<AdminDashboard />} />
-        <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="users" element={<AdminUsers />} />
-        <Route path="trainer-details/:id" element={<AdminTrainerDetails />} />
-        <Route path="trainers" element={<TrainerApproval />} />
-        <Route path="appointments" element={<AdminAppointments />} />
-        <Route path="payments" element={<AdminPayments />} />
-        <Route path="withdrawals" element={<AdminWithdrawals />} />
-        <Route path="plans" element={<AdminPlans />} />
-        <Route path="assign-plan" element={<AdminAssignPlan />} />
-      </Route>
+        {/* ========== ADMIN ========== */}
+        <Route
+          path="/admin"
+          element={
+            <AdminProtectedRoute>
+              <AdminLayout />
+            </AdminProtectedRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="trainer-details/:id" element={<AdminTrainerDetails />} />
+          <Route path="trainers" element={<TrainerApproval />} />
+          <Route path="appointments" element={<AdminAppointments />} />
+          <Route path="payments" element={<AdminPayments />} />
+          <Route path="withdrawals" element={<AdminWithdrawals />} />
+          <Route path="plans" element={<AdminPlans />} />
+          <Route path="assign-plan" element={<AdminAssignPlan />} />
+        </Route>
 
-      {/* ========== FALLBACK ========== */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+        {/* ========== FALLBACK ========== */}
+        <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>
     </ThemeProvider>
