@@ -168,9 +168,8 @@ const UserTrainers = () => {
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         onClick={() => navigate(`/user/messages/${trainer._id}`)}
-                        className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-xl transition-all duration-200 font-medium text-sm flex items-center justify-center gap-2"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                       >
-                        <MessageCircle size={16} />
                         Message
                       </button>
                       <button
