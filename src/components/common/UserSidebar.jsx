@@ -1,5 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
+import { useState, useEffect } from "react";
+import axiosInstance from "../../api/axios";
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,25 @@ import { useAuth } from "../../context/useAuth";
 const UserSidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Fetch unread message count
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const res = await axiosInstance.get("/messages/conversations");
+        const conversations = res.data || [];
+        // Count conversations with unread messages (simplified - you may need to implement unread logic)
+        setUnreadCount(conversations.length > 0 ? conversations.length : 0);
+      } catch (err) {
+        console.error("Failed to fetch unread count:", err);
+      }
+    };
+    
+    fetchUnreadCount();
+    const interval = setInterval(fetchUnreadCount, 30000); // Check every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogout = () => {
     logout(); // clear context + localStorage
@@ -64,7 +85,7 @@ const UserSidebar = ({ sidebarOpen, setSidebarOpen }) => {
           <SideLink to="/user/my-workouts" label="My Workouts" />
           <SideLink to="/user/nutrition-tracker" label="Nutrition" />
           <SideLink to="/user/goals" label="Goals" />
-          <SideLink to="/user/messages" label="Messages" />
+          <SideLink to="/user/messages" label="Messages" badge={unreadCount} />
           <SideLink to="/user/payments" label="Payments" />
         </nav>
 
@@ -92,11 +113,11 @@ export default UserSidebar;
    NAV LINK STYLE
 ================================ */
 
-const SideLink = ({ to, label }) => (
+const SideLink = ({ to, label, badge }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
-      `block px-4 py-2 rounded-lg transition font-medium
+      `block px-4 py-2 rounded-lg transition font-medium relative
        ${
          isActive
            ? "bg-[#00E676] text-black"
@@ -105,5 +126,10 @@ const SideLink = ({ to, label }) => (
     }
   >
     {label}
+    {badge > 0 && (
+      <span className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+        {badge > 99 ? "99+" : badge}
+      </span>
+    )}
   </NavLink>
 );

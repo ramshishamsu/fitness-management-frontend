@@ -43,6 +43,7 @@ import TrainerViewUserProfile from "./pages/trainer/TrainerViewUserProfile";
 import AssignWorkout from "./pages/trainer/AssignWorkout";
 import TrainerNutritionManager from "./pages/trainer/TrainerNutritionManager";
 import TrainerEarnings from "./pages/trainer/TrainerEarnings";
+import TrainerMessages from "./pages/trainer/TrainerMessages";
 
 /* ================= ADMIN ================= */
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -124,6 +125,8 @@ const App = () => {
           <Route path="nutrition" element={<TrainerNutritionManager />} />
           <Route path="nutrition-plans" element={<TrainerNutritionManager />} />
           <Route path="earnings" element={<TrainerEarnings />} />
+          <Route path="messages" element={<TrainerMessages />} />
+          
         </Route>
 
         {/* ========== ADMIN ========== */}
