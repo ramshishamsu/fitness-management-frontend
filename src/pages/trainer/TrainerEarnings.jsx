@@ -25,23 +25,23 @@ const TrainerEarnings = () => {
   }
 
   return (
-    <div className={`${isDark ? 'bg-neutral-950 text-white' : 'bg-gray-50 text-gray-900'} min-h-screen p-6`}>
-      <div className="max-w-6xl mx-auto">
+    <div className={`${isDark ? 'bg-neutral-950 text-white' : 'bg-gray-50 text-gray-900'} min-h-screen p-4 sm:p-6`}>
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">
             My Earnings 💰
           </h1>
-          <p className={`${isDark ? 'text-neutral-400' : 'text-gray-600'}`}>
+          <p className={`${isDark ? 'text-neutral-400' : 'text-gray-600'} text-sm sm:text-base`}>
             Track your total earnings and financial performance
           </p>
         </div>
 
         {/* Earnings Card */}
-        <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-8 shadow-lg`}>
+        <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 sm:p-8 shadow-lg`}>
           <div className="text-center">
-            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-4`}>Total Earnings</p>
-            <h2 className={`text-5xl font-bold ${isDark ? 'text-teal-400' : 'text-teal-600'} mb-2`}>
+            <p className={`text-sm sm:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-4`}>Total Earnings</p>
+            <h2 className={`text-4xl sm:text-5xl font-bold ${isDark ? 'text-teal-400' : 'text-teal-600'} mb-2`}>
               ₹{total.toLocaleString()}
             </h2>
             <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>

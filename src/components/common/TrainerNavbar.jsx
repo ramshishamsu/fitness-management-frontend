@@ -16,10 +16,10 @@ const TrainerNavbar = () => {
   }, []);
 
   return (
-    <header className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} flex justify-between items-center px-6 py-4`}>
-      <h1 className={`font-semibold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>Trainer Dashboard</h1>
+    <header className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4`}>
+      <h1 className={`font-semibold text-base sm:text-lg ${isDark ? 'text-white' : 'text-gray-900'} truncate`}>Trainer Dashboard</h1>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4">
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
@@ -31,23 +31,23 @@ const TrainerNavbar = () => {
           title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
           {isDark ? (
-            <Sun className="w-5 h-5" />
+            <Sun className="w-4 h-4 sm:w-5 sm:h-5" />
           ) : (
-            <Moon className="w-5 h-5" />
+            <Moon className="w-4 h-4 sm:w-5 sm:h-5" />
           )}
         </button>
 
         {/* Profile */}
         <div
-          className="flex items-center gap-3 cursor-pointer"
+          className="flex items-center gap-2 sm:gap-3 cursor-pointer"
           onClick={() => navigate("/trainer/profile")}
         >
           <img
             src={avatar || "/avatar.png"}
             alt="trainer"
-            className="w-9 h-9 rounded-full object-cover border border-neutral-700"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-neutral-700"
           />
-          <span className={`text-sm ${isDark ? 'text-neutral-300' : 'text-gray-600'}`}>My Profile</span>
+          <span className={`text-xs sm:text-sm ${isDark ? 'text-neutral-300' : 'text-gray-600'} hidden sm:block`}>My Profile</span>
         </div>
       </div>
     </header>

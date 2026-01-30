@@ -17,7 +17,10 @@ const UserTrainers = () => {
   const loadTrainers = async () => {
     try {
       const res = await getAllTrainers();
-      setTrainers(res.data.trainers || res.data || []);
+      console.log('API Response:', res.data);
+      const trainersData = res.data.trainers || res.data || [];
+      console.log('Trainers data:', trainersData);
+      setTrainers(trainersData);
     } catch (error) {
       console.error("Failed to load trainers:", error);
       setTrainers([]);
@@ -84,12 +87,9 @@ const UserTrainers = () => {
                 {/* Trainer Profile Image - LARGE */}
                 <div className="relative h-64 bg-gradient-to-br from-blue-600 to-purple-600">
                   <img
-                    src={trainer.profileImage || `https://picsum.photos/seed/trainer${index}/400/400.jpg`}
+                    src={trainer.profileImage || "/placeholder-avatar.png"}
                     alt={trainer.userId?.name || trainer.name || 'Trainer'}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.src = `https://picsum.photos/seed/default${index}/400/400.jpg`;
-                    }}
                   />
 
                   {/* Status Badge */}

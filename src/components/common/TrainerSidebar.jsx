@@ -6,7 +6,9 @@ import {
   IndianRupee,
   Apple,
   LogOut,
-  MessageCircle
+  MessageCircle,
+  Menu,
+  X
 } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
 import { useState, useEffect } from "react";
@@ -16,6 +18,7 @@ const TrainerSidebar = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
  // Fetch unread message count
   useEffect(() => {
@@ -41,25 +44,48 @@ const TrainerSidebar = () => {
   };
 
   return (
-    <aside className="w-64 bg-neutral-900 border-r border-neutral-800 p-5">
-      <h2 className="text-xl font-bold mb-8">Trainer Panel</h2>
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-neutral-900 text-white rounded-lg shadow-lg"
+      >
+        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
 
-      <nav className="space-y-4">
-        <SidebarLink to="/trainer/dashboard" icon={<LayoutDashboard />} text="Dashboard" />
-        <SidebarLink to="/trainer/users" icon={<Users />} text="Clients" />
-        <SidebarLink to="/trainer/users" icon={<Dumbbell />} text="Assign Workout" />
-        <SidebarLink to="/trainer/messages" icon={<MessageCircle/>} text="Messages" badge={unreadCount}/>
-        <SidebarLink to="/trainer/nutrition" icon={<Apple />} text="Nutrition Plans" />
-        <SidebarLink to="/trainer/earnings" icon={<IndianRupee />} text="Earnings" />
+      {/* Sidebar */}
+      <aside className={`
+        fixed lg:static inset-y-0 left-0 z-40 w-64 bg-neutral-900 border-r border-neutral-800 p-5 
+        transform transition-transform duration-300 ease-in-out
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        <h2 className="text-xl font-bold mb-8">Trainer Panel</h2>
 
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 text-red-400 hover:text-red-300 mt-8"
-        >
-          <LogOut size={18} /> Logout
-        </button>
-      </nav>
-    </aside>
+        <nav className="space-y-4">
+          <SidebarLink to="/trainer/dashboard" icon={<LayoutDashboard />} text="Dashboard" />
+          <SidebarLink to="/trainer/users" icon={<Users />} text="Clients" />
+          <SidebarLink to="/trainer/users" icon={<Dumbbell />} text="Assign Workout" />
+          <SidebarLink to="/trainer/messages" icon={<MessageCircle/>} text="Messages" badge={unreadCount}/>
+          <SidebarLink to="/trainer/nutrition" icon={<Apple />} text="Nutrition Plans" />
+          <SidebarLink to="/trainer/earnings" icon={<IndianRupee />} text="Earnings" />
+
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 text-red-400 hover:text-red-300 mt-8"
+          >
+            <LogOut size={18} /> Logout
+          </button>
+        </nav>
+      </aside>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+    </>
   );
 };
 

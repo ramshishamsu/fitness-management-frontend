@@ -123,84 +123,85 @@ const uploadDocument = async () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl">
-      <h2 className="text-2xl font-bold mb-6">Edit Profile</h2>
+    <div className={`bg-neutral-950 text-white min-h-screen p-4 sm:p-6`}>
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+        <h2 className="text-xl sm:text-2xl font-bold mb-6">Edit Profile</h2>
 
-      {/* PROFILE IMAGE */}
-      <div className="mb-6">
-        <label className="text-sm block mb-2">Profile Photo</label>
-        
-        <label
-          htmlFor="profileImage"
-          className={`flex items-center justify-between border rounded px-4 py-3 cursor-pointer transition ${
-            uploadLoading
-              ? 'border-yellow-500 bg-yellow-500/10'
-              : 'bg-neutral-900 border-neutral-800 hover:border-emerald-500'
-          }`}
-        >
-          <span className="text-neutral-400">
-            {uploadLoading
-              ? "Uploading..."
-              : profileImage
-                ? profileImage.name
-                : "Choose profile image"
-            }
-          </span>
+        {/* PROFILE IMAGE */}
+        <div className="mb-6">
+          <label className="text-sm block mb-2">Profile Photo</label>
+          
+          <label
+            htmlFor="profileImage"
+            className={`flex items-center justify-between border rounded px-3 sm:px-4 py-3 cursor-pointer transition ${
+              uploadLoading
+                ? 'border-yellow-500 bg-yellow-500/10'
+                : 'bg-neutral-900 border-neutral-800 hover:border-emerald-500'
+            }`}
+          >
+            <span className="text-neutral-400 text-sm sm:text-base truncate">
+              {uploadLoading
+                ? "Uploading..."
+                : profileImage
+                  ? profileImage.name
+                  : "Choose profile image"
+              }
+            </span>
 
-          <span className="bg-neutral-800 px-3 py-1 rounded text-sm">
-            {uploadLoading ? "⏳" : "Browse"}
-          </span>
-        </label>
+            <span className="bg-neutral-800 px-2 sm:px-3 py-1 rounded text-xs sm:text-sm whitespace-nowrap">
+              {uploadLoading ? "⏳" : "Browse"}
+            </span>
+          </label>
 
-        {/* Preview */}
-        {preview && (
-          <img
-            src={preview}
-            alt="preview"
-            className="w-24 h-24 rounded-full mb-3 object-cover border border-neutral-700"
+          {/* Preview */}
+          {preview && (
+            <img
+              src={preview}
+              alt="preview"
+              className="w-20 h-20 sm:w-24 sm:h-24 rounded-full mb-3 object-cover border border-neutral-700"
+            />
+          )}
+
+          {/* Hidden input */}
+          <input
+            type="file"
+            id="profileImage"
+            className="hidden"
+            accept="image/*"
+            onChange={handleImageChange}
           />
-        )}
+        </div>
 
-        {/* Hidden input */}
+        {/* FIELDS */}
         <input
-          type="file"
-          id="profileImage"
-          className="hidden"
-          accept="image/*"
-          onChange={handleImageChange}
+          name="specialization"
+          value={form.specialization}
+          onChange={handleChange}
+          placeholder="Specialization"
+          className="w-full mb-3 bg-neutral-900 border border-neutral-800 p-3 rounded text-sm sm:text-base"
         />
-      </div>
 
-      {/* FIELDS */}
-      <input
-        name="specialization"
-        value={form.specialization}
-        onChange={handleChange}
-        placeholder="Specialization"
-        className="w-full mb-3 bg-neutral-900 border border-neutral-800 p-3 rounded"
-      />
+        <input
+          name="experience"
+          value={form.experience}
+          onChange={handleChange}
+          placeholder="Experience (years)"
+          className="w-full mb-3 bg-neutral-900 border border-neutral-800 p-3 rounded text-sm sm:text-base"
+        />
 
-      <input
-        name="experience"
-        value={form.experience}
-        onChange={handleChange}
-        placeholder="Experience (years)"
-        className="w-full mb-3 bg-neutral-900 border border-neutral-800 p-3 rounded"
-      />
+        <input
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
+          placeholder="Phone"
+          className="w-full mb-3 bg-neutral-900 border border-neutral-800 p-3 rounded text-sm sm:text-base"
+        />
 
-      <input
-        name="phone"
-        value={form.phone}
-        onChange={handleChange}
-        placeholder="Phone"
-        className="w-full mb-3 bg-neutral-900 border border-neutral-800 p-3 rounded"
-      />
-
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold mb-3">Verification Documents</h3>
-
-        {/* Upload controls */}
-        <div className="mb-3 grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+        {/* DOCUMENT UPLOAD */}
+        <div className="mt-8">
+          <h3 className="text-lg font-semibold mb-4">Documents</h3>
+          
+          <div className="mb-3 grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
           <select
             value={docType}
             onChange={(e) => setDocType(e.target.value)}
@@ -283,7 +284,7 @@ const uploadDocument = async () => {
       <button
         type="submit"
         disabled={loading || uploadLoading}
-        className={`px-5 py-2 rounded font-semibold mt-6 ${
+        className={`w-full sm:w-auto px-5 py-2 rounded font-semibold mt-6 ${
           loading || uploadLoading
             ? 'bg-gray-600 cursor-not-allowed'
             : 'bg-emerald-500 text-black hover:bg-emerald-600'
@@ -292,7 +293,9 @@ const uploadDocument = async () => {
         {loading || uploadLoading ? "Saving..." : "Save Changes"}
       </button>
     </form>
+    </div>
   );
+
 };
 
 export default TrainerProfile;

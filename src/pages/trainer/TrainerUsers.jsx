@@ -34,19 +34,19 @@ const TrainerUsers = () => {
   }, []);
 
   const UserCard = ({ user, showClientBadge = false }) => (
-    <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} p-6 rounded-xl hover:${isDark ? 'border-neutral-700' : 'border-gray-300'} transition-all duration-200`}>
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className={`w-12 h-12 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center`}>
-            <User className="w-6 h-6 text-white" />
+    <div className={`${isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-gray-200'} p-4 sm:p-6 rounded-xl hover:${isDark ? 'border-neutral-700' : 'border-gray-300'} transition-all duration-200`}>
+      <div className="flex items-start justify-between mb-3 sm:mb-4">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center`}>
+            <User className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
-          <div>
-            <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{user.name}</h3>
-            <p className={`${isDark ? 'text-neutral-400' : 'text-gray-600'} text-sm`}>{user.email}</p>
+          <div className="min-w-0 flex-1">
+            <h3 className={`font-semibold text-sm sm:text-base ${isDark ? 'text-white' : 'text-gray-900'} truncate`}>{user.name}</h3>
+            <p className={`${isDark ? 'text-neutral-400' : 'text-gray-600'} text-xs sm:text-sm truncate`}>{user.email}</p>
           </div>
         </div>
         {showClientBadge && (
-          <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">
+          <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full whitespace-nowrap">
             Client
           </span>
         )}
@@ -105,14 +105,14 @@ const TrainerUsers = () => {
   }
 
   return (
-    <div className={`space-y-8 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+    <div className={`space-y-6 sm:space-y-8 ${isDark ? 'text-white' : 'text-gray-900'} p-4 sm:p-6`}>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>User Management</h1>
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h1 className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>User Management</h1>
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
               activeTab === 'all' 
                 ? 'bg-emerald-600 text-white' 
                 : isDark
@@ -124,7 +124,7 @@ const TrainerUsers = () => {
           </button>
           <button
             onClick={() => setActiveTab('clients')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
               activeTab === 'clients' 
                 ? 'bg-emerald-600 text-white' 
                 : isDark
@@ -152,7 +152,7 @@ const TrainerUsers = () => {
               <p className={`${isDark ? 'text-neutral-400' : 'text-gray-500'}`}>No users found in system.</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {allUsers.map((user) => (
                 <UserCard 
                   key={user._id} 
@@ -193,7 +193,7 @@ const TrainerUsers = () => {
               </Link>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {myClients.map((client) => (
                 <UserCard 
                   key={client._id} 
