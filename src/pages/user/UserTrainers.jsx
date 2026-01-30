@@ -85,11 +85,11 @@ const UserTrainers = () => {
                 className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 overflow-hidden group"
               >
                 {/* Trainer Profile Image - LARGE */}
-                <div className="relative h-64 bg-gradient-to-br from-blue-600 to-purple-600">
+                <div className="relative h-64 bg-gradient-to-br from-blue-600 to-purple-600 overflow-hidden">
                   <img
                     src={trainer.profileImage || "/placeholder-avatar.png"}
                     alt={trainer.userId?.name || trainer.name || 'Trainer'}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
 
                   {/* Status Badge */}
