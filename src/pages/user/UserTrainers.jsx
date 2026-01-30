@@ -84,7 +84,7 @@ const UserTrainers = () => {
                 key={trainer._id}
                 className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 overflow-hidden group"
               >
-                {/* Trainer Profile Image - LARGE */}
+                {/* Trainer Profile Image */}
                 <div className="relative h-64 bg-gradient-to-br from-blue-600 to-purple-600 overflow-hidden">
                   <img
                     src={trainer.profileImage || "/placeholder-avatar.png"}
@@ -165,20 +165,12 @@ const UserTrainers = () => {
                       Book Appointment
                     </button>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => navigate(`/user/messages/${trainer._id}`)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                      >
-                        Message
-                      </button>
-                      <button
-                        onClick={() => navigate(`/user/trainer/${trainer._id}`)}
-                        className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-xl transition-all duration-200 font-medium text-sm"
-                      >
-                        View Profile
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => navigate(`/user/messages/${trainer._id}`)}
+                      className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                    >
+                      Message
+                    </button>
                   </div>
                 </div>
               </div>
