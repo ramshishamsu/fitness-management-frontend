@@ -174,7 +174,7 @@ const TrainerApproval = () => {
                           <div className="flex flex-col gap-2">
                             {t.documents.map((doc) => (
                               <div key={doc._id || doc.url} className="flex items-center justify-between">
-                                <a href={doc.url} target="_blank" rel="noreferrer" className="text-sm text-emerald-500">{doc.type}</a>
+                                <a href={doc.url} target="_blank" rel="noreferrer" className="text-sm text-emerald-500">{doc.type || 'Document'}</a>
                                 <div className="flex gap-2">
                                   {!doc.verified && (
                                     <>
@@ -202,7 +202,9 @@ const TrainerApproval = () => {
                             ))}
                           </div>
                         ) : (
-                          <span className="text-sm text-neutral-400">No documents</span>
+                          <span className="text-gray-400 text-sm">
+                            {t.hasProfile ? 'No documents' : 'No profile'}
+                          </span>
                         )}
                       </td>
 
