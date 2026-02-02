@@ -83,26 +83,53 @@ const UserPlans = () => {
           notes: response.data.notes || {},
           handler: async function (razorpayResponse) {
             console.log('Razorpay payment successful:', razorpayResponse);
- 
+
             setVerifyingPayment(true);
- 
-            // Wait for webhook to process (3 seconds)
-            await new Promise(resolve => setTimeout(resolve, 3000));
- 
-            // Verify payment was saved
+
             try {
-              const paymentsResponse = await axios.get('/payments');
-              const payments = paymentsResponse.data;
-              const latestPayment = payments[0];
- 
-              if (latestPayment && latestPayment.paymentStatus === 'success') {
+              // Verify payment directly with backend
+              const verifyResponse = await axios.post('/payments/verify', {
+                razorpay_payment_id: razorpayResponse.razorpay_payment_id,
+                razorpay_order_id: razorpayResponse.razorpay_order_id,
+                razorpay_signature: razorpayResponse.razorpay_signature
+              });
+
+              console.log('Payment verification response:', verifyResponse.data);
+
+              if (verifyResponse.data.success) {
                 navigate('/user/payment-success');
               } else {
-                alert('Payment processing failed. Please contact support.');
+                // Fallback to manual activation
+                console.log('Verification failed, trying manual activation...');
+                const manualResponse = await axios.post('/payments/manual-activate', {
+                  planId: selectedPlan._id
+                });
+                
+                if (manualResponse.data.success) {
+                  navigate('/user/payment-success');
+                } else {
+                  alert('Payment processing failed. Please contact support.');
+                }
               }
             } catch (error) {
               console.error('Payment verification failed:', error);
-              navigate('/user/payment-success'); // Fallback to success page
+              
+              // Try manual activation as fallback
+              try {
+                console.log('Trying manual activation as fallback...');
+                const manualResponse = await axios.post('/payments/manual-activate', {
+                  planId: selectedPlan._id
+                });
+                
+                if (manualResponse.data.success) {
+                  navigate('/user/payment-success');
+                } else {
+                  alert('Payment processing failed. Please contact support.');
+                }
+              } catch (manualError) {
+                console.error('Manual activation failed:', manualError);
+                alert('Payment processing failed. Please contact support.');
+              }
             } finally {
               setVerifyingPayment(false);
             }
